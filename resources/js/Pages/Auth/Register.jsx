@@ -12,6 +12,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        role: 'user', 
     });
 
     useEffect(() => {
@@ -22,7 +23,7 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-
+        console.log('Submitting form with data:', data); // Log form data before submission
         post(route('register'));
     };
 
@@ -63,6 +64,27 @@ export default function Register() {
                     />
 
                     <InputError message={errors.email} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="role" value="Role" />
+
+                    <select
+                        id="role"
+                        name="role"
+                        value={data.role}
+                        className="mt-1 block w-full"
+                        onChange={(e) => {
+                            setData('role', e.target.value);
+                            console.log('Selected role:', e.target.value); // Log the selected role
+                        }}
+                        required
+                    >
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <InputError message={errors.role} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
