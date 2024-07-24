@@ -5,9 +5,7 @@ import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-
 function Test({ auth }) {
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -26,9 +24,15 @@ function Test({ auth }) {
                             Welcome, {auth.user.name}!
                         </div>
 
-                        <div style={{ margin: '20px' }}>
-                            Something
-                        </div>                        
+                        <div style={{ margin: "20px" }}>
+                            Name: {auth.user.name}
+                            <br />
+                            ID: {auth.user.id}
+                            <br />
+                            Email: {auth.user.email}
+                            <br />
+                            Role: {auth.user.role}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,15 +43,11 @@ function Test({ auth }) {
                         <div className="p-6 text-gray-900">
                             Welcome, {auth.user.name}!
                         </div>
-                        
-                        <div style={{ margin: '20px' }}>
-                            Something
-                        </div>                        
+
+                        <div style={{ margin: "20px" }}>Something</div>
                     </div>
                 </div>
             </div>
-
-
         </AuthenticatedLayout>
     );
 }

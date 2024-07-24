@@ -43,6 +43,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/groceries', function () {
         return Inertia::render('groceries/NewGroceries');
     })->name('grocery-component');
+
+    Route::get('/myorders', function () {
+        return Inertia::render('orders/myOrders/MyOrders');
+    })->name('myorder-component');
+
+    Route::get('/reuseorder/{orderId}', function ($orderId) {
+        return Inertia::render('ReuseOrder', [
+            'orderId' => $orderId,
+        ]);
+    })->name('reuseorder');
 });
 
 // HTTP request

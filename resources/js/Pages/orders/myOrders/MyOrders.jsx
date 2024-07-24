@@ -1,4 +1,9 @@
 import React from "react";
+import { Inertia } from "@inertiajs/inertia";
+
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+
 import { useState } from "react";
 
 import { useEffect } from "react";
@@ -8,10 +13,9 @@ import { Button, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
-import Header from "../../../Header";
-import axiosClient from "../../../../axios-client";
+// import axiosClient from "../../../../axios-client";
 import DetailViewOrder from "../allOrders/DetailViewOrder";
 
 import {
@@ -26,17 +30,18 @@ import {
     TableContainer,
 } from "@chakra-ui/react";
 
-
-function MyOrders() {
+function MyOrders({ auth }) {
     const [orders, setOrders] = React.useState([]);
     const [searchByPurpose, setSearchByPurpose] = React.useState("");
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
-    const [currentPage, setCurrentPage] = useState(1);      // Pagination
-    const itemsPerPage = 10;                                // Pagination
+    const [currentPage, setCurrentPage] = useState(1); // Pagination
+    const itemsPerPage = 10; // Pagination
 
     const getOrdersById = (id) => {
+        //Inertia.get(`/orders/${id}`);
+        /*
         axiosClient
             .get(`/orders/${id}`)
             .then((response) => {
@@ -45,10 +50,19 @@ function MyOrders() {
             .catch((error) => {
                 console.log(error);
             });
+            */
     };
 
     const deleteOrderById = (order) => {
-        if (window.confirm("Are you sure to delete the order with ID " + order.id + " ? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete the order with ID " +
+                    order.id +
+                    " ? \nYou can't undo this action afterwards."
+            )
+        ) {
+            Inertia.delete(`/orders/${order.id}`);
+            /*
             axiosClient
                 .delete(`/orders/${order.id}`)
                 .then((response) => {
@@ -58,11 +72,18 @@ function MyOrders() {
                 .catch((error) => {
                     console.log(error);
                 });
+                */
         }
     };
 
     const deleteAllOrders = () => {
-        if (window.confirm("Are you sure to delete all orders? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete all orders? \nYou can't undo this action afterwards."
+            )
+        ) {
+            Inertia.delete(`/orders`);
+            /*
             axiosClient
                 .delete("/orders")
                 .then((response) => {
@@ -72,11 +93,13 @@ function MyOrders() {
                 .catch((error) => {
                     console.log(error);
                 });
+                */
         }
     };
 
     const navigateToReuseOrder = (orderId) => {
-        navigate(`/reuseorder/${orderId}`);
+        Inertia.visit(`/reuseorder/${orderId}`);
+        // navigate(`/reuseorder/${orderId}`);
     };
 
     const formatDate = (dateString) => {
@@ -98,8 +121,9 @@ function MyOrders() {
         });
     };
 
-
-    const filteredOrders = orders.filter(order => order.purpose.startsWith(searchByPurpose));
+    const filteredOrders = orders.filter((order) =>
+        order.purpose.startsWith(searchByPurpose)
+    );
 
     // Pagination
     const pages = [];
@@ -107,14 +131,21 @@ function MyOrders() {
         pages.push(i);
     }
 
-
     useEffect(() => {
-        getOrdersById(1);   ////////////////// CHANGE THE USER ID //////////////////
+        getOrdersById(1); ////////////////// CHANGE THE USER ID //////////////////
     }, []);
 
-
     return (
-        <div>
+        <AuthenticatedLayout
+            user={auth.user}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    MY ORDERS
+                </h2>
+            }
+        >
+            <Head title="MyOrders" />
+
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -129,92 +160,149 @@ function MyOrders() {
                 transition={Bounce}
             />
 
-            <Header title="My Orders" />
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "50px", marginTop:"50px" }}>
-                <Input
-                    variant="outline"
-                    placeholder="Search by purpose ..."
-                    style={{ width: "30%" }}
-                    onChange={(e) => {
-                        setSearchByPurpose(e.target.value)
-                        setCurrentPage(1);            // reset pagination
-                    }}
-                />
+            <div className="py-2 mt-10">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900">
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginBottom: "50px",
+                                    marginTop: "50px",
+                                }}
+                            >
+                                <Input
+                                    variant="outline"
+                                    placeholder="Search by purpose ..."
+                                    style={{ width: "30%" }}
+                                    onChange={(e) => {
+                                        setSearchByPurpose(e.target.value);
+                                        setCurrentPage(1); // reset pagination
+                                    }}
+                                />
+                            </div>
+
+                            <TableContainer>
+                                <Table variant="striped" colorScheme="teal">
+                                    <TableCaption>My orders</TableCaption>
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Id::</Th>
+                                            <Th>Info:</Th>
+                                            <Th>Purpose:</Th>
+                                            <Th>Date:</Th>
+                                            <Th>Time:</Th>
+                                            <Th>Class:</Th>
+                                            <Th>Reuse:</Th>
+                                            <Th>Delete:</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {filteredOrders
+                                            .slice(
+                                                (currentPage - 1) *
+                                                    itemsPerPage,
+                                                currentPage * itemsPerPage
+                                            ) // Pagination
+                                            .map((order) => (
+                                                <Tr key={order.id}>
+                                                    <Td>{order.id}</Td>
+                                                    <Td>
+                                                        <DetailViewOrder
+                                                            order={order}
+                                                        />
+                                                    </Td>
+                                                    <Td>{order.purpose}</Td>
+                                                    <Td>
+                                                        {formatDate(order.date)}
+                                                    </Td>
+                                                    <Td>{order.time}</Td>
+                                                    <Td>{order.schoolClass}</Td>
+                                                    <Td>
+                                                        <Button
+                                                            colorScheme="blue"
+                                                            onClick={() =>
+                                                                navigateToReuseOrder(
+                                                                    order.id
+                                                                )
+                                                            }
+                                                        >
+                                                            Reuse
+                                                        </Button>
+                                                    </Td>
+                                                    <Td>
+                                                        {/* isDisabled */}
+                                                        <Button
+                                                            colorScheme="red"
+                                                            onClick={() =>
+                                                                deleteOrderById(
+                                                                    order
+                                                                )
+                                                            }
+                                                        >
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+
+                            {/* Pagination */}
+                            <div
+                                style={{
+                                    marginLeft: "20px",
+                                    marginRight: "20px",
+                                }}
+                            >
+                                <Text fontSize="lg" mb={"20px"} mr={"20px"}>
+                                    Page: {currentPage} of {pages.length}
+                                </Text>
+                                <Text
+                                    as="b"
+                                    fontSize="lg"
+                                    mb={"20px"}
+                                    mr={"20px"}
+                                >
+                                    Pagination, Select your page:
+                                </Text>
+                                {pages.map((number) => (
+                                    <Button
+                                        key={number}
+                                        onClick={() => setCurrentPage(number)}
+                                        style={{
+                                            marginRight: "10px",
+                                            marginBottom: "10px",
+                                        }}
+                                    >
+                                        {number}
+                                    </Button>
+                                ))}
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginBottom: "50px",
+                                }}
+                            >
+                                <Button
+                                    isDisabled
+                                    colorScheme="red"
+                                    onClick={deleteAllOrders}
+                                >
+                                    DELETE ALL
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <TableContainer>
-                <Table variant="striped" colorScheme="teal">
-                    <TableCaption>My orders</TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Id::</Th>
-                            <Th>Info:</Th>
-                            <Th>Purpose:</Th>
-                            <Th>Date:</Th>
-                            <Th>Time:</Th>
-                            <Th>Class:</Th>
-                            <Th>Reuse:</Th>
-                            <Th>Delete:</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {filteredOrders
-                            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) // Pagination
-                            .map((order) => (
-                                <Tr key={order.id}>
-                                    <Td>{order.id}</Td>
-                                    <Td>
-                                        <DetailViewOrder order={order} />
-                                    </Td>
-                                    <Td>{order.purpose}</Td>
-                                    <Td>{formatDate(order.date)}</Td>
-                                    <Td>{order.time}</Td>
-                                    <Td>{order.schoolClass}</Td>
-                                    <Td>
-                                        <Button
-                                            colorScheme="blue"
-                                            onClick={() => navigateToReuseOrder(order.id)}
-                                        >
-                                            Reuse
-                                        </Button>
-                                    </Td>
-                                    <Td>
-                                        {/* isDisabled */}
-                                        <Button 
-                                            colorScheme="red"  
-                                            onClick={() => deleteOrderById(order)}
-                                        >
-                                            <DeleteIcon />
-                                        </Button>
-                                    </Td>
-                                </Tr>
-                            ))
-                        }
-                    </Tbody>
-                </Table>
-            </TableContainer>
-
-            {/* Pagination */}
-            <div style={{marginLeft: "20px", marginRight: "20px"}}>
-                <Text fontSize='lg' mb={"20px"} mr={"20px"}>
-                    Page: {currentPage} of {pages.length}
-                </Text>
-                <Text as='b' fontSize='lg' mb={"20px"} mr={"20px"}>Pagination, Select your page:</Text>         
-                {pages.map((number) => (
-                    <Button key={number} onClick={() => setCurrentPage(number)} style={{ marginRight: '10px', marginBottom: '10px' }}>
-                        {number}
-                    </Button>
-                ))}
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
-                <Button isDisabled colorScheme="red" onClick={deleteAllOrders}>
-                    DELETE ALL
-                </Button>
-            </div>
-
-        </div>
+        </AuthenticatedLayout>
     );
-}   
+}
 
 export default MyOrders;

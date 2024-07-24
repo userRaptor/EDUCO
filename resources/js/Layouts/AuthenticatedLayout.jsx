@@ -32,7 +32,7 @@ export default function Authenticated({ user, header, children }) {
                                     NewOrder
                                 </NavLink>
 
-                                <NavLink href={route('test-component')} active={route().current('test-component')}>
+                                <NavLink href={route('myorder-component')} active={route().current('myorder-component')}>
                                     MyOrders
                                 </NavLink>
 
