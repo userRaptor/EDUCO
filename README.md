@@ -9,5 +9,5 @@ React Router zum Projekt hinzufügen:
  - npm install react-router-dom
 
 
-Inertja isntall:
+Inertia install:
  - npm install @inertiajs/inertia-react

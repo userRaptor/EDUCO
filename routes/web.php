@@ -39,6 +39,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/test', function () {
         return Inertia::render('Test');
     })->name('test-component');
+
+    Route::get('/groceries', function () {
+        return Inertia::render('groceries/NewGroceries');
+    })->name('grocery-component');
+});
+
+// HTTP request
+Route::middleware('auth')->group(function () {
+    Route::post('/groceries', [GroceriesController::class, 'store']);
+    Route::post('/groceriescsv', [GroceriesController::class, 'importCsv']);
 });
 
 

@@ -6,7 +6,6 @@ import { ChevronDownIcon, AddIcon, InfoOutlineIcon} from "@chakra-ui/icons";
 import CSVReader from 'react-csv-reader';
 
 import GetGroceries from "./GetGroceries";
-import Header from "../../Header";
 
 
 import { ToastContainer, toast } from "react-toastify";
@@ -173,8 +172,6 @@ function NewGroceries() {
     //////////////////////////////////////////////////////////////////////////////////////////////
     return (
         <div>
-            <Header title="New Groceries" />
-
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -378,8 +375,7 @@ function NewGroceries() {
                     <Button backgroundColor="#FFA500" onClick={handleSendCsvData}>Import <AddIcon style={{marginLeft: '10px'}} /></Button>     
                 </div>
 
-                <GetGroceries key={renderKey} />
-
+                
                 {/*<GetGroceries key={renderKey} />*/}
             </div>
         </div>
