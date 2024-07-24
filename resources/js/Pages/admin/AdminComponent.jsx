@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import Test from '../Test';
 
 export default function AdminComponent({ auth }) {
     return (
@@ -17,6 +18,8 @@ export default function AdminComponent({ auth }) {
                     </div>
                 </div>
             </div>
+
+            <Test />
         </AuthenticatedLayout>
     );
 }

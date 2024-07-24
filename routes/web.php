@@ -28,12 +28,23 @@ Route::middleware('auth')->group(function () {
 /// My custom routes
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('adminDashboard');
+    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin-dashboard');
+
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/user/dashboard', function () {
+        return Inertia::render('normalUser/UserComponent');
+    })->name('user-dashboard');
+});
+
+
+/*
 Route::get('/user/dashboard', function () {
     return Inertia::render('normalUser/UserComponent');
-});
+})->middleware(['auth', 'verified'])->name('user-dashboard');
+*/
+
 
 require __DIR__.'/auth.php';
 
