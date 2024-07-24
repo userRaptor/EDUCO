@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Inertia } from '@inertiajs/inertia';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+
 
 import { Input, Text } from "@chakra-ui/react";
 import { Button, Box } from "@chakra-ui/react";
@@ -53,7 +56,7 @@ import {
 
 import { Bounce } from "react-toastify";
 
-function NewGroceries() {
+function NewGroceries({ auth }) {
     const [groceriesName, setGroceriesName] = React.useState("");
     const [groceriesUnit, setGroceriesUnit] = React.useState("");
     const [groceriesCategory, setGroceriesCategory] = React.useState("");
@@ -169,7 +172,11 @@ function NewGroceries() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div>
+        <AuthenticatedLayout
+            user={auth.user}
+        >
+            <Head title="New Groceries" />
+
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -376,7 +383,7 @@ function NewGroceries() {
                 
                 {/*<GetGroceries key={renderKey} />*/}
             </div>
-        </div>
+        </AuthenticatedLayout>
     );
 }
 

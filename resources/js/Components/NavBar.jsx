@@ -62,7 +62,6 @@ function NavBar() {
                     <DrawerCloseButton />
                     <DrawerHeader>Menu</DrawerHeader>
                     <DrawerBody style={{ marginTop: '10px' }}>
-                        <Link href={route('test-component')} className="link-hover" style={linkStyle}>Test</Link>
                         <Link href={route('test-component')} className="link-hover" style={linkStyle}>New Order</Link>
                         <Link href={route('test-component')} className="link-hover" style={linkStyle}>My Orders</Link>
                         <Link href={route('test-component')} className="link-hover" style={linkStyle}>All Orders</Link>

@@ -5,8 +5,6 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 
-import NavBar from '@/Components/NavBar';
-
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
@@ -17,7 +15,7 @@ export default function Authenticated({ user, header, children }) {
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             
-                            <NavBar />
+                            {/* <NavBar /> */}
                             
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
@@ -30,11 +28,31 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
 
+                                <NavLink href={route('test-component')} active={route().current('dashboard')}>
+                                    NewOrder
+                                </NavLink>
+
+                                <NavLink href={route('test-component')} active={route().current('dashboard')}>
+                                    MyOrders
+                                </NavLink>
+
+
                                 {user.role === 'admin' && (
-                                    <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                        UserManagment
-                                    </NavLink>
+                                    <>
+                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                            AllOrders
+                                        </NavLink>
+
+                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                            Groceries
+                                        </NavLink>
+
+                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                            UserManagment
+                                        </NavLink>
+                                    </>
                                 )}
+                                
                             </div>
                         </div>
 

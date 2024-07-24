@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GroceriesController;
 
 
@@ -32,7 +31,7 @@ Route::middleware('auth')->group(function () {
 /// My custom routes ########################################################################
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin-dashboard');
+    //Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin-dashboard');
 
 });
 
@@ -57,8 +56,3 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
-
-
-
-
-// Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'admin']);
