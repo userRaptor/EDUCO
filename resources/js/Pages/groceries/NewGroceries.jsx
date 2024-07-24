@@ -9,7 +9,7 @@ import { ChevronDownIcon, AddIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 
 import CSVReader from "react-csv-reader";
 
-//import GetGroceries from "./GetGroceries";
+import GetGroceries from "./GetGroceries";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
