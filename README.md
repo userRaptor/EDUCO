@@ -7,3 +7,7 @@ Install Chakra-UI:
 
 React Router zum Projekt hinzufügen:
  - npm install react-router-dom
+
+
+Inertja isntall:
+ - npm install @inertiajs/inertia-react

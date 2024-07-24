@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from '@inertiajs/inertia-react';
 
 import {
     Drawer,
@@ -15,11 +16,9 @@ import { useDisclosure } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-
 function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef();
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     return (
@@ -31,7 +30,7 @@ function NavBar() {
                 variant="ghost"
                 onClick={onOpen}
                 marginRight="20px"
-                marginTop="15px"  
+                marginTop="15px"
             />
 
             <Drawer
@@ -41,14 +40,13 @@ function NavBar() {
                 finalFocusRef={btnRef}
             >
                 <DrawerOverlay />
-                <DrawerContent style={{ backgroundColor: 'orange' }}>
+                <DrawerContent style={{ backgroundColor: "orange" }}>
                     <DrawerCloseButton />
                     <DrawerHeader>Menu</DrawerHeader>
-                <DrawerBody>
-
-                </DrawerBody>
-                    <DrawerFooter>
-                    </DrawerFooter>
+                    <DrawerBody>
+                        <Link href={route('test-component')}>Test</Link>
+                    </DrawerBody>
+                    <DrawerFooter></DrawerFooter>
                 </DrawerContent>
             </Drawer>
         </div>

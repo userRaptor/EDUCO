@@ -1,5 +1,8 @@
 import React from "react";
 
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+
 import {
     Drawer,
     DrawerBody,
@@ -14,12 +17,16 @@ import { Button } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 
-function Test() {
+function Test({ auth }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef();
 
     return (
-        <div>
+        <AuthenticatedLayout
+            user={auth.user}
+        >
+            <Head title="Testing" />
+
             <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
                 Open
             </Button>
@@ -46,7 +53,7 @@ function Test() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-        </div>
+        </AuthenticatedLayout>
     );
 }
 
