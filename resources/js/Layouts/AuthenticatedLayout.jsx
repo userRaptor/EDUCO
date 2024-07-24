@@ -28,26 +28,26 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink href={route('test-component')} active={route().current('dashboard')}>
+                                <NavLink href={route('test-component')} active={route().current('test-component')}>
                                     NewOrder
                                 </NavLink>
 
-                                <NavLink href={route('test-component')} active={route().current('dashboard')}>
+                                <NavLink href={route('test-component')} active={route().current('test-component')}>
                                     MyOrders
                                 </NavLink>
 
 
                                 {user.role === 'admin' && (
                                     <>
-                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                        <NavLink href={route('test-component')} active={route().current('test-component')}>
                                             AllOrders
                                         </NavLink>
 
-                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                        <NavLink href={route('grocery-component')} active={route().current('grocery-component')}>
                                             Groceries
                                         </NavLink>
 
-                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                        <NavLink href={route('test-component')} active={route().current('test-component')}>
                                             UserManagment
                                         </NavLink>
                                     </>

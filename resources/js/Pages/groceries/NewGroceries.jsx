@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Inertia } from '@inertiajs/inertia';
+import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-
 import { Input, Text } from "@chakra-ui/react";
 import { Button, Box } from "@chakra-ui/react";
-import { ChevronDownIcon, AddIcon, InfoOutlineIcon} from "@chakra-ui/icons";
+import { ChevronDownIcon, AddIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 
-
-
-import CSVReader from 'react-csv-reader';
+import CSVReader from "react-csv-reader";
 
 //import GetGroceries from "./GetGroceries";
-
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -41,7 +37,6 @@ import {
     MenuDivider,
 } from "@chakra-ui/react";
 
-
 import {
     Popover,
     PopoverTrigger,
@@ -52,7 +47,7 @@ import {
     PopoverArrow,
     PopoverCloseButton,
     PopoverAnchor,
-  } from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
 import { Bounce } from "react-toastify";
 
@@ -83,22 +78,22 @@ function NewGroceries({ auth }) {
             supplier: groceriesSupplier,
         };
 
-        if(groceriesName === ""){
+        if (groceriesName === "") {
             errorAlert("Name field cannot be empty!");
-        } else if(groceriesUnit === ""){
+        } else if (groceriesUnit === "") {
             errorAlert("Unit field cannot be empty!");
-        } else if(groceriesCategory === ""){
+        } else if (groceriesCategory === "") {
             errorAlert("Category field cannot be empty!");
-        } else if(groceriesSupplier === ""){
+        } else if (groceriesSupplier === "") {
             errorAlert("Supplier field cannot be empty!");
         } else {
-            Inertia.post('/groceries', payload, {
+            Inertia.post("/groceries", payload, {
                 onSuccess: () => {
                     successAlert("The product was added successfully!");
                 },
                 onError: (errors) => {
                     console.log(errors);
-                }
+                },
             });
         }
     };
@@ -106,18 +101,11 @@ function NewGroceries({ auth }) {
     const handleCsvInput = (data, fileInfo) => {
         //console.log(data);
         setCsvData(data);
-    }
+    };
 
     const handleSendCsvData = () => {
         if (csvData) {
-            Inertia.post('/groceriescsv', { csv: csvData }, {
-                onSuccess: () => {
-                    successAlert("The csv file was imported successfully!");
-                },
-                onError: (errors) => {
-                    console.log(errors);
-                }
-            });
+            Inertia.post("/groceriescsv");
             setCsvData(null);
         } else {
             warningAlert("No csv file was selected!");
@@ -150,8 +138,8 @@ function NewGroceries({ auth }) {
             progress: undefined,
             theme: "colored",
             transition: Bounce,
-            onClose: () => setIsAlertOpen(false)
-            });
+            onClose: () => setIsAlertOpen(false),
+        });
     };
 
     const warningAlert = (infoWarning) => {
@@ -165,7 +153,7 @@ function NewGroceries({ auth }) {
             progress: undefined,
             theme: "colored",
             transition: Bounce,
-            });
+        });
     };
 
     useEffect(() => {}, []);
@@ -174,6 +162,11 @@ function NewGroceries({ auth }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    EDIT GROCERIES:
+                </h2>
+            }
         >
             <Head title="New Groceries" />
 
@@ -192,195 +185,259 @@ function NewGroceries({ auth }) {
             />
 
             <div>
-                <Text
-                    style={{
-                        marginTop: "50px",
-                        marginLeft: "70px",
-                        marginBottom: "20px",
-                    }}
-                    fontSize="2xl"
-                >
-                    ADD NEW GROCERIES:
-                </Text>
+                <div className="py-2 mt-10">
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div className="p-6 text-gray-600">
+                                <InfoOutlineIcon /> When creating new groceries,
+                                please always include the name first. This can
+                                be followed by further details such as: Carrots
+                                small. This makes it easier to find products
+                                using the built-in search function.
+                            </div>
+                            <div style={{ margin: "20px" }}>
+                                <TableContainer>
+                                    <Table variant="simple">
+                                        <Thead>
+                                            <Tr>
+                                                <Th>Product name:</Th>
+                                                <Th>Unit:</Th>
+                                                <Th>Category:</Th>
+                                                <Th>Supplier:</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            <Tr>
+                                                <Td>
+                                                    <Input
+                                                        value={groceriesName}
+                                                        onChange={(event) => {
+                                                            if (!isAlertOpen) {
+                                                                setGroceriesName(
+                                                                    event.target
+                                                                        .value
+                                                                );
+                                                            }
+                                                        }}
+                                                        placeholder="Name ..."
+                                                    />
+                                                </Td>
+                                                <Td>
+                                                    <Menu>
+                                                        <MenuButton
+                                                            as={Button}
+                                                            rightIcon={
+                                                                <ChevronDownIcon />
+                                                            }
+                                                        >
+                                                            {groceriesUnit !==
+                                                            ""
+                                                                ? groceriesUnit
+                                                                : "Unit"}
+                                                        </MenuButton>
+                                                        <MenuList>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "kg"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Kilogramm
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "g"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Gramm
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "Stück"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Stück
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "l"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Liter
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "ml"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Milliliter
+                                                            </MenuItem>
+                                                        </MenuList>
+                                                    </Menu>
+                                                </Td>
+                                                <Td>
+                                                    <Menu>
+                                                        <MenuButton
+                                                            as={Button}
+                                                            rightIcon={
+                                                                <ChevronDownIcon />
+                                                            }
+                                                        >
+                                                            {groceriesCategory !==
+                                                            ""
+                                                                ? groceriesCategory
+                                                                : "Category"}
+                                                        </MenuButton>
+                                                        <MenuList>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "Obst"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Obst
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "Milchprodukte"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Milchprodukte
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "Tiefkühl"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Tiefkühl
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "Gemüse"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Gemüse
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "Fleisch"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Fleisch
+                                                            </MenuItem>
+                                                        </MenuList>
+                                                    </Menu>
+                                                </Td>
+                                                <Td>
+                                                    <Input
+                                                        value={
+                                                            groceriesSupplier
+                                                        }
+                                                        onChange={(event) =>
+                                                            setGroceriesSupplier(
+                                                                event.target
+                                                                    .value
+                                                            )
+                                                        }
+                                                        placeholder="Supplier ..."
+                                                    />
+                                                </Td>
+                                                <Td>
+                                                    <Button
+                                                        colorScheme="blue"
+                                                        onClick={saveGroceries}
+                                                    >
+                                                        ADD
+                                                    </Button>
+                                                </Td>
+                                            </Tr>
+                                        </Tbody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <Text
-                    style={{marginLeft: "70px", marginRight: '70px', marginBottom: "30px", color: 'grey'}}
-                >
-                    <InfoOutlineIcon /> When creating new groceries, please always include the name first. This can be followed by further details such as: Carrots small. This makes it easier to find products using the built-in search function.
-                </Text>
-
-
-                <TableContainer>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th>Product name:</Th>
-                                <Th>Unit:</Th>
-                                <Th>Category:</Th>
-                                <Th>Supplier:</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>
-                                    <Input
-                                        value={groceriesName}
-                                        onChange={(event) => {
-                                            if (!isAlertOpen) {
-                                                setGroceriesName(event.target.value);
-                                            }
-                                        }}
-                                        placeholder="Name ..."
-                                    />
-                                </Td>
-                                <Td>
-                                    <Menu>
-                                        <MenuButton
-                                            as={Button}
-                                            rightIcon={<ChevronDownIcon />}
-                                        >
-                                            {groceriesUnit !== ""
-                                                ? groceriesUnit
-                                                : "Unit"}
-                                        </MenuButton>
-                                        <MenuList>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeUnit("kg")
-                                                }
+                <div className="py-2">
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div className="p-6 text-gray-900">
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "25px",
+                                        marginLeft: "20px",
+                                    }}
+                                >
+                                    <Text fontSize="md" as="b">
+                                        Import groceries with a CSV-File:
+                                    </Text>
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <Button
+                                                bgColor="transparent"
+                                                color="black"
                                             >
-                                                Kilogramm
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeUnit("g")
-                                                }
-                                            >
-                                                Gramm
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeUnit("Stück")
-                                                }
-                                            >
-                                                Stück
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeUnit("l")
-                                                }
-                                            >
-                                                Liter
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeUnit("ml")
-                                                }
-                                            >
-                                                Milliliter
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Menu>
-                                </Td>
-                                <Td>
-                                    <Menu>
-                                        <MenuButton
-                                            as={Button}
-                                            rightIcon={<ChevronDownIcon />}
-                                        >
-                                            {groceriesCategory !== ""
-                                                ? groceriesCategory
-                                                : "Category"}
-                                        </MenuButton>
-                                        <MenuList>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeCategory("Obst")
-                                                }
-                                            >
-                                                Obst
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeCategory(
-                                                        "Milchprodukte"
-                                                    )
-                                                }
-                                            >
-                                                Milchprodukte
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeCategory("Tiefkühl")
-                                                }
-                                            >
-                                                Tiefkühl
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeCategory("Gemüse")
-                                                }
-                                            >
-                                                Gemüse
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    handleChangeCategory("Fleisch")
-                                                }
-                                            >
-                                                Fleisch
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Menu>
-                                </Td>
-                                <Td>
-                                    <Input
-                                        value={groceriesSupplier}
-                                        onChange={(event) =>
-                                            setGroceriesSupplier(event.target.value)
-                                        }
-                                        placeholder="Supplier ..."
-                                    />
-                                </Td>
-                                <Td>
+                                                <InfoOutlineIcon boxSize={5} />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverCloseButton />
+                                            <PopoverHeader>
+                                                Structure of the CSV file!
+                                            </PopoverHeader>
+                                            <PopoverBody>
+                                                The csv file must have the
+                                                following structure: <br />{" "}
+                                                <strong>
+                                                    name,unit,category,supplier
+                                                </strong>
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <CSVReader onFileLoaded={handleCsvInput} />
                                     <Button
                                         colorScheme="blue"
-                                        onClick={saveGroceries}
+                                        onClick={handleSendCsvData}
                                     >
-                                        ADD
+                                        {/*backgroundColor="#FFA500"*/}
+                                        Import{" "}
+                                        <AddIcon
+                                            style={{ marginLeft: "10px" }}
+                                        />
                                     </Button>
-                                    
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/**Trennlinie waagerecht */}
                 <div style={{ marginTop: "50px", marginBottom: "50px" }}>
                     <Box height="5px" backgroundColor="black" />
                 </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginLeft: "20px" }}>
-                    <Text fontSize='lg' as='b'>Import groceries with a CSV-File:</Text>
-                    <Popover>
-                        <PopoverTrigger>
-                            <Button bgColor="transparent" color="black">
-                                <InfoOutlineIcon  boxSize={20} />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverCloseButton />
-                            <PopoverHeader>Structure of the CSV file!</PopoverHeader>
-                            <PopoverBody>The csv file must have the following structure: <br /> <strong>name,unit,category,supplier</strong></PopoverBody>
-                        </PopoverContent>
-                    </Popover>
-                    <CSVReader onFileLoaded={handleCsvInput} />
-                    <Button backgroundColor="#FFA500" onClick={handleSendCsvData}>Import <AddIcon style={{marginLeft: '10px'}} /></Button>     
-                </div>
 
-                
                 {/*<GetGroceries key={renderKey} />*/}
             </div>
         </AuthenticatedLayout>
