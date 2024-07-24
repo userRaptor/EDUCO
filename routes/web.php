@@ -25,14 +25,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('dashboard');
-});
+/// My custom routes
 
-require __DIR__.'/auth.php';
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('adminDashboard');
+});
 
 Route::get('/user/dashboard', function () {
     return Inertia::render('normalUser/UserComponent');
 });
+
+require __DIR__.'/auth.php';
+
+
+
+
 
 // Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'admin']);

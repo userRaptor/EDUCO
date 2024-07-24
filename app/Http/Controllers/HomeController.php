@@ -12,4 +12,5 @@ class HomeController extends Controller
         //return view('admin.dashboard');
         return Inertia::render('admin/AdminComponent');
     }
+
 }
