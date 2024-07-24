@@ -9,33 +9,30 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Log as FacadesLog;
-use Log;
+use Inertia\Inertia;
+
 
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * getAllOrders
-     */
     public function getAllOrders()
     {
-        //return Order::query()->orderBy('id', 'desc')->get();
-        //return Order::with('groceries')->orderBy('id', 'desc')->get();
         return Order::with(['groceries', 'user'])->orderBy('id', 'desc')->get();
     }
 
     public function getOrdersByUserId($userId)
     {
-        return Order::with(['groceries', 'user'])
+        $orders = Order::with(['groceries', 'user'])
                     ->where('user_id', $userId)
                     ->orderBy('id', 'desc')
                     ->get();
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+        return inertia('orders/myOrders/MyOrders', [
+            'orders' => $orders
+        ]);
+    } 
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -54,22 +51,12 @@ class OrderController extends Controller
         return response()->json($order, 201);
     }
 
-
-    /**
-     * Display the specified resource.
-     */
+    
     public function show(Order $order)
     {
         return $order->load('groceries');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        //
-    }
 
     public function updateIncludeSummary(Request $request, $orderId)
     {

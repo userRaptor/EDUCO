@@ -1,5 +1,7 @@
 import React from "react";
 import { Inertia } from "@inertiajs/inertia";
+import { usePage } from '@inertiajs/react';
+
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
@@ -13,9 +15,7 @@ import { Button, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-//import { useNavigate } from "react-router-dom";
 
-// import axiosClient from "../../../../axios-client";
 import DetailViewOrder from "../allOrders/DetailViewOrder";
 
 import {
@@ -31,26 +31,20 @@ import {
 } from "@chakra-ui/react";
 
 function MyOrders({ auth }) {
-    const [orders, setOrders] = React.useState([]);
     const [searchByPurpose, setSearchByPurpose] = React.useState("");
 
-    //const navigate = useNavigate();
+    const { orders = [] } = usePage().props; // Zugriff auf die vom Controller übergebenen Daten (Inertia || axios)
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
     const itemsPerPage = 10; // Pagination
 
     const getOrdersById = (id) => {
-        //Inertia.get(`/orders/${id}`);
-        /*
-        axiosClient
-            .get(`/orders/${id}`)
-            .then((response) => {
-                setOrders(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-            */
+        try {
+            const response = axios.get(`/orders/${id}`);
+            console.log('Axios response:', response);
+        } catch (error) {
+            console.log('Axios error:', error);
+        }
     };
 
     const deleteOrderById = (order) => {
@@ -62,17 +56,6 @@ function MyOrders({ auth }) {
             )
         ) {
             Inertia.delete(`/orders/${order.id}`);
-            /*
-            axiosClient
-                .delete(`/orders/${order.id}`)
-                .then((response) => {
-                    getOrdersById(1);   ////////////////// CHANGE THE USER ID //////////////////
-                    successAlert("Order has been deleted successfully!");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                */
         }
     };
 
@@ -83,17 +66,7 @@ function MyOrders({ auth }) {
             )
         ) {
             Inertia.delete(`/orders`);
-            /*
-            axiosClient
-                .delete("/orders")
-                .then((response) => {
-                    getOrdersById(1);   ////////////////// CHANGE THE USER ID //////////////////
-                    successAlert("All orders have been deleted successfully!");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-                */
+
         }
     };
 
@@ -132,7 +105,8 @@ function MyOrders({ auth }) {
     }
 
     useEffect(() => {
-        getOrdersById(1); ////////////////// CHANGE THE USER ID //////////////////
+        getOrdersById(2); ////////////////// CHANGE THE USER ID //////////////////
+        //getOrdersById(auth.user.id);
     }, []);
 
     return (

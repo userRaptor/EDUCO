@@ -6,6 +6,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroceriesController;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -55,10 +56,15 @@ Route::middleware('auth')->group(function () {
     })->name('reuseorder');
 });
 
+
 // HTTP request
 Route::middleware('auth')->group(function () {
     Route::post('/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
     Route::post('/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
+
+
+    Route::get('/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
+    Route::get('/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
 });
 
 
