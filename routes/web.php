@@ -1,10 +1,14 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GroceriesController;
+
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -47,8 +51,8 @@ Route::middleware('auth')->group(function () {
 
 // HTTP request
 Route::middleware('auth')->group(function () {
-    Route::post('/groceries', [GroceriesController::class, 'store']);
-    Route::post('/groceriescsv', [GroceriesController::class, 'importCsv']);
+    Route::post('/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
+    Route::post('/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
 });
 
 

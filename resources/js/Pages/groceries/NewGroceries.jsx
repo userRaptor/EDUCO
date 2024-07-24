@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { Inertia } from '@inertiajs/inertia';
+
 import { Input, Text } from "@chakra-ui/react";
 import { Button, Box } from "@chakra-ui/react";
 import { ChevronDownIcon, AddIcon, InfoOutlineIcon} from "@chakra-ui/icons";
 
+
+
 import CSVReader from 'react-csv-reader';
 
-import GetGroceries from "./GetGroceries";
+//import GetGroceries from "./GetGroceries";
 
 
 import { ToastContainer, toast } from "react-toastify";
@@ -47,7 +51,6 @@ import {
     PopoverAnchor,
   } from '@chakra-ui/react'
 
-import axiosClient from "../../../axios-client";
 import { Bounce } from "react-toastify";
 
 function NewGroceries() {
@@ -86,18 +89,14 @@ function NewGroceries() {
         } else if(groceriesSupplier === ""){
             errorAlert("Supplier field cannot be empty!");
         } else {
-            axiosClient
-                .post("/groceries", payload)
-                .then((response) => {
-                    setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
-                    setTimeout(() => {
-                        successAlert("The product was added successfully!");
-                    }, 1000);
-                    
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            Inertia.post('/groceries', payload, {
+                onSuccess: () => {
+                    successAlert("The product was added successfully!");
+                },
+                onError: (errors) => {
+                    console.log(errors);
+                }
+            });
         }
     };
 
@@ -108,20 +107,19 @@ function NewGroceries() {
 
     const handleSendCsvData = () => {
         if (csvData) {
-            axiosClient
-                .post("/groceriescsv", csvData)
-                .then((response) => {
-                    setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
+            Inertia.post('/groceriescsv', { csv: csvData }, {
+                onSuccess: () => {
                     successAlert("The csv file was imported successfully!");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                },
+                onError: (errors) => {
+                    console.log(errors);
+                }
+            });
             setCsvData(null);
         } else {
             warningAlert("No csv file was selected!");
         }
-    }
+    };
 
     const successAlert = (infoSuccess) => {
         toast.success(infoSuccess, {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Groceries;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreGroceriesRequest;
-use App\Http\Resources\GroceriesResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Psy\Readline\Hoa\Console;
@@ -17,16 +16,24 @@ class GroceriesController extends Controller
      */
     public function index()
     {
-        //return DB::select('select * from groceries');
+        $groceries = Groceries::query()->orderBy('id', 'desc')->get();
 
-        return GroceriesResource::collection(
-            Groceries::query()->orderBy('id', 'desc')->get()
-        );
+        return Inertia::render('Groceries/Index', [
+            'groceries' => $groceries,
+        ]);
     }
 
     public function getByID($id)
     {
-        return new GroceriesResource(Groceries::find($id));
+        $grocery = Groceries::find($id);
+
+        if ($grocery) {
+            return Inertia::render('Groceries/Show', [
+                'grocery' => $grocery,
+            ]);
+        } else {
+            return Inertia::render('Errors/NotFound');
+        }
     }
 
 
@@ -39,17 +46,19 @@ class GroceriesController extends Controller
             'supplier' => 'required',
         ]);
 
-        $grocery = Groceries::create($validatedData);
 
-        return new GroceriesResource($grocery);
+        $grocery = Groceries::create($validatedData);
+        return redirect()->route('groceries.store')
+            ->with('success', 'Grocery item created successfully.');
     }
 
-    public function uploadCsv(Request $request)
-    {
-        $data = $request->all();
+    public function importCsv(Request $request)
+{
+    try {
+        $data = $request->input('csv');
 
         foreach ($data as $row) {
-            if (count($row) >= 4) {
+            if (is_array($row) && count($row) >= 4) {
                 Groceries::create([
                     'name' => $row[0],
                     'unit' => $row[1],
@@ -58,47 +67,44 @@ class GroceriesController extends Controller
                 ]);
             }
         }
-        
 
-        return response()->json(null, 204);
+        return redirect()->back()->with('success_message', 'imported successfully');
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error_message', 'Error importing data');
     }
+}
 
 
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Groceries $groceries)
     {
-        return new GroceriesResource($groceries);
+        return response()->json($groceries);
+
+        /*
+        return Inertia::render('Groceries/Show', [
+            'grocery' => $groceries
+        ]);
+        */
     }
-
-    /*
-    public function destroy(Groceries $groceries)
-    {
-        // Daten werden in die log-Datei von Laravel geschrieben (storage/logs/laravel.log)
-        Log::info('Destroy method called with groceries id: '.$groceries->id);
-
-        $groceries->delete();
-
-        Log::info('Groceries with id: '.$groceries->id.' deleted successfully');
-
-        return response()->json(null, 204);
-    }
-    */
 
     public function deleteByID($id)
     {
         $grocery = Groceries::find($id);
-        $grocery->delete();
-
-        return response()->json(null, 204);
+        if ($grocery) {
+            $grocery->delete();
+            return redirect()->route('groceries.index')
+                ->with('success', 'Grocery item deleted successfully.');
+        } else {
+            return Inertia::render('Errors/NotFound');
+        }
     }
 
     public function deleteAll()
     {
         Groceries::query()->delete();
 
-        return response()->json(null, 204);
+        return redirect()->route('groceries.index')
+            ->with('success', 'All groceries deleted successfully.');
     }
 }

@@ -9,5 +9,22 @@ React Router zum Projekt hinzufügen:
  - npm install react-router-dom
 
 
-Inertia install:
+Inertia install: (anstelle von axiosClient)
  - npm install @inertiajs/inertia-react
+
+Install Toastify (alert):
+ - npm install --save react-toastify
+
+
+install CSVReader from 'react-csv-reader':
+ - npm install react-csv-reader
+
+
+
+
+DEBUGGING:
+```
+$data = $request->all();
+// Debugging: Überprüfen, was in $data enthalten ist
+dd($data);
+```
