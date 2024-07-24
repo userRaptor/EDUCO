@@ -36,9 +36,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/user/dashboard', function () {
-        return Inertia::render('normalUser/UserComponent');
-    })->name('user-dashboard');
     Route::get('/test', function () {
         return Inertia::render('Test');
     })->name('test-component');

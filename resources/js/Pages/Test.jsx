@@ -1,9 +1,9 @@
 import React from "react";
 
+import { Inertia } from "@inertiajs/inertia";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-
-
 
 
 function Test({ auth }) {
