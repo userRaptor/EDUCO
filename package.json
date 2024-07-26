@@ -26,6 +26,7 @@
         "@emotion/styled": "^11.13.0",
         "@inertiajs/inertia-react": "^0.8.1",
         "framer-motion": "^11.3.12",
+        "react-calendar": "^5.0.0",
         "react-csv-reader": "^4.0.0",
         "react-router-dom": "^6.25.1",
         "react-toastify": "^10.0.5"

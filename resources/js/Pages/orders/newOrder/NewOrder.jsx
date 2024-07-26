@@ -1,13 +1,24 @@
 import React, { useEffect } from "react";
+import axios from "axios";
+import { Inertia } from "@inertiajs/inertia";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+
 import { Input, Text } from "@chakra-ui/react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { useState } from "react";
 import { Divider } from "@chakra-ui/react";
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
-import { toast, ToastContainer, Bounce } from "react-toastify";
 
-import {InfoOutlineIcon} from "@chakra-ui/icons";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import "react-calendar/dist/Calendar.css";
+
+import BarrierForCollection from "./BarrierForCollection";
+
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 import {
     Table,
@@ -21,19 +32,17 @@ import {
     TableContainer,
 } from "@chakra-ui/react";
 
-
-
-import "react-calendar/dist/Calendar.css";
-import axiosClient from "../../../../axios-client";
-import BarrierForCollection from "./BarrierForCollection";
-
-function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
+function NewOrder({
+    setOrderAlreadyExistsToParent,
+    setActualOrderIdToParent,
+    auth,
+}) {
     const [selectedDate, setSelectedDate] = React.useState("");
     const [internationalDate, setInternationalDate] = React.useState("");
     const [weekday, setWeekday] = React.useState("");
     const [time, setTime] = React.useState("");
-    const [minDate, setMinDate] = useState(''); // minDate to realize that the user can only select a date from the next Wednesday on
-    
+    const [minDate, setMinDate] = useState(""); // minDate to realize that the user can only select a date from the next Wednesday on
+
     const [schoolClass, setSchoolClass] = React.useState("");
     const [location, setLocation] = React.useState("");
     const [purpose, setPurpose] = React.useState("");
@@ -73,36 +82,35 @@ function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
             includeSummary: true,
         };
 
-        if(selectedDate === ""){
+        if (selectedDate === "") {
             emptyFieldAlert("Date and Time");
-        } else if(time === ""){
+        } else if (time === "") {
             emptyFieldAlert("Time");
-        } else if (schoolClass === ""){
+        } else if (schoolClass === "") {
             emptyFieldAlert("Class");
-        } else if (location === ""){
+        } else if (location === "") {
             emptyFieldAlert("Location");
-        } else if (purpose === ""){
+        } else if (purpose === "") {
             emptyFieldAlert("Purpose");
         } else {
-            axiosClient
-            .post("/orders", payload)
-            .then((response) => {
-                //console.log(response);
-                setOrderID(response.id);
+            axios
+                .post("/orders", payload)
+                .then((response) => {
+                    //console.log(response);
+                    setOrderID(response.id);
 
-                setOrderAlreadyExists(true);
-                setOrderAlreadyExistsToParent();
-                setActualOrderIdToParent(response.id);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                    setOrderAlreadyExists(true);
+                    setOrderAlreadyExistsToParent();
+                    setActualOrderIdToParent(response.id);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-        
     };
 
     const emptyFieldAlert = (fieldName) => {
-        toast.error(fieldName + ' field cannot be empty!', {
+        toast.error(fieldName + " field cannot be empty!", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -113,13 +121,12 @@ function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
             theme: "colored",
             transition: Bounce,
         });
-    }
-
+    };
 
     const calculateMinDate = () => {
         const date = new Date(); // get current date
         //const date = new Date('2024-06-10T09:00:00');   // For testing purposes
-        
+
         const day = date.getDay(); // Sunday - Saturday : 0 - 6
         const hours = date.getHours();
 
@@ -148,16 +155,21 @@ function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
         setMinDate(minDeliveryDate.toISOString().substr(0, 16));
     };
 
-    
-
-   
     useEffect(() => {
         calculateMinDate();
     }, []);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div>
+        <AuthenticatedLayout
+            user={auth.user}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    New Order
+                </h2>
+            }
+        >
+            <Head title="New Order" />
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -172,21 +184,32 @@ function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
                 transition={Bounce}
             />
 
-            <div
-                style={{
-                    marginTop: "10px",
-                    marginLeft: "30px",
-                    marginRight: "10px",
-                    marginBottom: "30px",
-                }}
-            >
+            <div className="py-2 mt-10">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-500">
+                            <BarrierForCollection />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <BarrierForCollection />
-                
-                <Text
-                    style={{marginLeft: "10px", marginTop:"20px", marginBottom: "10px", color: 'grey'}}
+            <div className="py-2 mt-0">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div style={{ margin: "20px" }}>
+                        <Text
+                    style={{
+                        marginLeft: "10px",
+                        marginTop: "20px",
+                        marginBottom: "10px",
+                        color: "grey",
+                    }}
                 >
-                    <InfoOutlineIcon /> Note: Certain dates are unavailable for selection because all orders are collected every Wednesday at 09:00 AM. Therefore, delivery dates are calculated based on this schedule.
+                    <InfoOutlineIcon /> Note: Certain dates are unavailable for
+                    selection because all orders are collected every Wednesday
+                    at 09:00 AM. Therefore, delivery dates are calculated based
+                    on this schedule.
                 </Text>
 
                 <TableContainer>
@@ -252,16 +275,24 @@ function NewOrder({ setOrderAlreadyExistsToParent, setActualOrderIdToParent }) {
                         </Tbody>
                     </Table>
                 </TableContainer>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+
+
+
+
+            <div>
+                
+
+                
+            </div>
             {/**Trennlinie Waagerecht*/}
             <div style={{ borderTop: "5px solid orange", h: "100%" }} />{" "}
-            
-        </div>
+        </AuthenticatedLayout>
     );
 }
 
 export default NewOrder;
-
-// ADD NEW USER: (We need this that we can use the foreignKey in the orders table)
-// INSERT INTO users (name, email, password, created_at, updated_at) VALUES ('Max Mustermann', 'max@example.com', 'password', NOW(), NOW());

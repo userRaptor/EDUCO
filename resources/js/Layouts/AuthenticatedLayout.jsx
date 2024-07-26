@@ -28,7 +28,7 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink href={route('test-component')} active={route().current('test-component')}>
+                                <NavLink href={route('neworder-component')} active={route().current('neworder-component')}>
                                     NewOrder
                                 </NavLink>
 

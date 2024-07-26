@@ -33,10 +33,6 @@ import {
 
 function MyOrders({ auth }) {
     const [searchByPurpose, setSearchByPurpose] = React.useState("");
-
-    //const { orders = [] } = usePage().props; // Zugriff auf die vom Controller übergebenen Daten (Inertia || axios)
-    //console.log('Orders:', orders);
-
     const [orders, setOrders] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
@@ -111,8 +107,8 @@ function MyOrders({ auth }) {
     }
 
     useEffect(() => {
-        getOrdersById(2); ////////////////// CHANGE THE USER ID //////////////////
-        //getOrdersById(auth.user.id);
+        //getOrdersById(2); ////////////////// CHANGE THE USER ID //////////////////
+        getOrdersById(auth.user.id);
     }, []);
 
     return (

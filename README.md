@@ -32,3 +32,14 @@ dd($data);
 
 Zwei der am häufigsten verwendeten Bibliotheken für HTTP-Anfragen in React sind axios und die eingebaute fetch-API. 
 Ich verwende die Bibliothek axios.
+
+
+Install:   import "react-calendar/dist/Calendar.css";
+npm install react-calendar
+
+
+React-Toastify:
+npm install --save react-toastify
+imports:
+import { toast, ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';

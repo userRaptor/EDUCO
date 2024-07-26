@@ -41,6 +41,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Test');
     })->name('test-component');
 
+    Route::get('newOrder', function () {
+        return Inertia::render('orders/newOrder/NewOrder');
+    })->name('neworder-component');
+
     Route::get('/groceries', function () {
         return Inertia::render('groceries/NewGroceries');
     })->name('grocery-component');
@@ -65,6 +69,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
     Route::get('/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
+
+
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 
 

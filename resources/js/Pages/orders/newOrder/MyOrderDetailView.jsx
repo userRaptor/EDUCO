@@ -30,7 +30,7 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react'
 
-import axiosClient from "../../../../axios-client";
+import axios from 'axios'; 
 
 function MyOrderDetailView ({ orderId, booleanUpdateGroceriesOrder }) {
     const [groceriesOrders, setGroceriesOrders] = useState([]);
