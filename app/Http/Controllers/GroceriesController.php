@@ -85,18 +85,17 @@ class GroceriesController extends Controller
         $grocery = Groceries::find($id);
         if ($grocery) {
             $grocery->delete();
-            return redirect()->route('groceries.index')
-                ->with('success', 'Grocery item deleted successfully.');
+            return response()->json(['success' => 'Grocery item deleted successfully.']);
         } else {
-            return Inertia::render('Errors/NotFound');
+            return response()->json(['error' => 'Grocery item not found.'], 404);
         }
     }
-
+    
     public function deleteAll()
     {
         Groceries::query()->delete();
-
-        return redirect()->route('groceries.index')
-            ->with('success', 'All groceries deleted successfully.');
+        return response()->json(['success' => 'All groceries deleted successfully.']);
     }
+
+
 }

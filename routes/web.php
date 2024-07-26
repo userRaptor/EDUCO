@@ -71,6 +71,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
 
 
+    Route::delete('/api/groceries/{id}', [GroceriesController::class, 'deleteByID'])->name('groceries.delete');
+    Route::delete('/api/groceries', [GroceriesController::class, 'deleteAll'])->name('orders.delete');
+
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 

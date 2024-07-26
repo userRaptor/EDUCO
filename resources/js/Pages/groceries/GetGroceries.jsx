@@ -25,9 +25,9 @@ import {
 function GetGroceries() {
     const [groceries, setGroceries] = React.useState([]);
     const [search, setSearch] = React.useState("");
-    
-    const [currentPage, setCurrentPage] = useState(1);      // Pagination
-    const itemsPerPage = 20;                                // Pagination
+
+    const [currentPage, setCurrentPage] = useState(1); // Pagination
+    const itemsPerPage = 20; // Pagination
 
     const fetchGroceries = () => {
         axios
@@ -42,9 +42,13 @@ function GetGroceries() {
     };
 
     const deleteGroceriesById = (grocery) => {
-        if (window.confirm("Are you sure to delete this grocery? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete this grocery? \nYou can't undo this action afterwards."
+            )
+        ) {
             axios
-                .delete(`/groceries/${grocery.id}`)
+                .delete(`/api/groceries/${grocery.id}`)
                 .then((response) => {
                     fetchGroceries();
                     successAlert("Grocery has been deleted successfully.");
@@ -56,12 +60,18 @@ function GetGroceries() {
     };
 
     const deleteAll = () => {
-        if (window.confirm("Are you sure to delete all groceries? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete all groceries? \nYou can't undo this action afterwards."
+            )
+        ) {
             axios
-                .delete("/groceries")
+                .delete("/api/groceries")
                 .then((response) => {
                     fetchGroceries();
-                    successAlert("All groceries have been deleted successfully.");
+                    successAlert(
+                        "All groceries have been deleted successfully."
+                    );
                 })
                 .catch((error) => {
                     console.log(error);
@@ -69,11 +79,17 @@ function GetGroceries() {
         }
     };
 
-    const filteredGroceries = groceries.filter(grocery => grocery.name.startsWith(search));
+    const filteredGroceries = groceries.filter((grocery) =>
+        grocery.name.startsWith(search)
+    );
 
     // Pagination
     const pages = [];
-    for (let i = 1; i <= Math.ceil(filteredGroceries.length / itemsPerPage); i++) {
+    for (
+        let i = 1;
+        i <= Math.ceil(filteredGroceries.length / itemsPerPage);
+        i++
+    ) {
         pages.push(i);
     }
 
@@ -112,74 +128,126 @@ function GetGroceries() {
                 transition={Bounce}
             />
 
-            <div style={{ marginTop: "50px", marginBottom: "50px" }}>
-                <Box height="5px" backgroundColor="orange" />
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
-                <Input
-                    variant="outline"
-                    placeholder="Search by name..."
-                    style={{ width: "30%" }}
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setCurrentPage(1); // reset pagination
-                    }}
-                />
-            </div>
+            <div className="py-2 mt-0">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div style={{ margin: "20px" }}>
+                            <Text fontSize='2xl'> All Groceries:</Text>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginBottom: "50px",
+                                }}
+                            >
+                                <Input
+                                    variant="outline"
+                                    placeholder="Search by name..."
+                                    style={{ width: "30%" }}
+                                    value={search}
+                                    onChange={(e) => {
+                                        setSearch(e.target.value);
+                                        setCurrentPage(1); // reset pagination
+                                    }}
+                                />
+                            </div>
 
-            <TableContainer>
-                <Table variant="striped" colorScheme="teal">
-                    <TableCaption></TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Id:</Th>
-                            <Th>Product name:</Th>
-                            <Th>Unit:</Th>
-                            <Th>Category:</Th>
-                            <Th>Supplier:</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {filteredGroceries
-                            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) // Pagination
-                            .map((grocery) => (
-                              <Tr key={grocery.id}>
-                                <Td>{grocery.id}</Td>
-                                <Td>{grocery.name}</Td>
-                                <Td>{grocery.unit}</Td>
-                                <Td>{grocery.category}</Td>
-                                <Td>{grocery.supplier}</Td>
-                                <Td>
-                                  <Button colorScheme="red" onClick={() => deleteGroceriesById(grocery)}>
-                                    Delete
-                                  </Button>
-                                </Td>
-                              </Tr>
-                            ))
-                        }
-                    </Tbody>
-                </Table>
-            </TableContainer>
+                            <TableContainer>
+                                <Table variant="striped" colorScheme="teal">
+                                    <TableCaption></TableCaption>
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Id:</Th>
+                                            <Th>Product name:</Th>
+                                            <Th>Unit:</Th>
+                                            <Th>Category:</Th>
+                                            <Th>Supplier:</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {filteredGroceries
+                                            .slice(
+                                                (currentPage - 1) *
+                                                    itemsPerPage,
+                                                currentPage * itemsPerPage
+                                            ) // Pagination
+                                            .map((grocery) => (
+                                                <Tr key={grocery.id}>
+                                                    <Td>{grocery.id}</Td>
+                                                    <Td>{grocery.name}</Td>
+                                                    <Td>{grocery.unit}</Td>
+                                                    <Td>{grocery.category}</Td>
+                                                    <Td>{grocery.supplier}</Td>
+                                                    <Td>
+                                                        <Button
+                                                            colorScheme="red"
+                                                            onClick={() =>
+                                                                deleteGroceriesById(
+                                                                    grocery
+                                                                )
+                                                            }
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
 
-            {/* Pagination */}
-            <div style={{marginLeft: "20px", marginRight: "20px"}}>
-                <Text fontSize='lg' mb={"20px"} mr={"20px"}>
-                    Page: {currentPage} of {pages.length}
-                </Text>
-                <Text as='b' fontSize='lg' mb={"20px"} mr={"20px"}>Pagination, Select your page:</Text>         
-                {pages.map((number) => (
-                    <Button key={number} onClick={() => setCurrentPage(number)} style={{ marginRight: '10px', marginBottom: '10px' }}>
-                        {number}
-                    </Button>
-                ))}
-            </div>
+                            {/* Pagination */}
+                            <div
+                                style={{
+                                    marginLeft: "20px",
+                                    marginRight: "20px",
+                                }}
+                            >
+                                <Text fontSize="lg" mb={"20px"} mr={"20px"}>
+                                    Page: {currentPage} of {pages.length}
+                                </Text>
+                                <Text
+                                    as="b"
+                                    fontSize="lg"
+                                    mb={"20px"}
+                                    mr={"20px"}
+                                >
+                                    Pagination, Select your page:
+                                </Text>
+                                {pages.map((number) => (
+                                    <Button
+                                        key={number}
+                                        onClick={() => setCurrentPage(number)}
+                                        style={{
+                                            marginRight: "10px",
+                                            marginBottom: "10px",
+                                        }}
+                                    >
+                                        {number}
+                                    </Button>
+                                ))}
+                            </div>
 
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
-                {/* isDisabled */}
-                <Button mt={"20px"} colorScheme="red" onClick={deleteAll}>
-                    DELETE ALL
-                </Button>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginBottom: "50px",
+                                }}
+                            >
+                                {/* isDisabled */}
+                                <Button
+                                    mt={"20px"}
+                                    colorScheme="red"
+                                    onClick={deleteAll}
+                                    isDisabled
+                                >
+                                    DELETE ALL
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
