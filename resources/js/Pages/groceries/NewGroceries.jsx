@@ -87,14 +87,14 @@ function NewGroceries({ auth }) {
         } else if (groceriesSupplier === "") {
             errorAlert("Supplier field cannot be empty!");
         } else {
-            Inertia.post("/groceries", payload, {
-                onSuccess: () => {
+            axios
+                .post("/groceries", payload)
+                .then((response) => {
                     successAlert("The product was added successfully!");
-                },
-                onError: (errors) => {
-                    console.log(errors);
-                },
-            });
+                })
+                .catch((error) => {
+                    console.log(error.response?.data || error.message);
+                });
         }
     };
 
@@ -438,7 +438,7 @@ function NewGroceries({ auth }) {
                     <Box height="5px" backgroundColor="black" />
                 </div>
 
-                {/*<GetGroceries key={renderKey} />*/}
+                <GetGroceries key={renderKey} />
             </div>
         </AuthenticatedLayout>
     );

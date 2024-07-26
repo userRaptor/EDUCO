@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
     Route::post('/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
 
-    //Route::get('/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
+    Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
     Route::get('/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
     Route::get('/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
 

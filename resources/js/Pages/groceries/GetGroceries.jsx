@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from "axios";
 
 import { useEffect } from "react";
 
@@ -30,10 +30,10 @@ function GetGroceries() {
     const itemsPerPage = 20;                                // Pagination
 
     const fetchGroceries = () => {
-        axiosClient
-            .get("/groceries")
+        axios
+            .get("/api/groceries")
             .then((response) => {
-                //console.log(response.data);
+                console.log(response.data);
                 setGroceries(response.data);
             })
             .catch((error) => {
@@ -43,7 +43,7 @@ function GetGroceries() {
 
     const deleteGroceriesById = (grocery) => {
         if (window.confirm("Are you sure to delete this grocery? \nYou can't undo this action afterwards.")) {
-            axiosClient
+            axios
                 .delete(`/groceries/${grocery.id}`)
                 .then((response) => {
                     fetchGroceries();
@@ -57,7 +57,7 @@ function GetGroceries() {
 
     const deleteAll = () => {
         if (window.confirm("Are you sure to delete all groceries? \nYou can't undo this action afterwards.")) {
-            axiosClient
+            axios
                 .delete("/groceries")
                 .then((response) => {
                     fetchGroceries();
