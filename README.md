@@ -28,3 +28,7 @@ $data = $request->all();
 // Debugging: Überprüfen, was in $data enthalten ist
 dd($data);
 ```
+
+
+Zwei der am häufigsten verwendeten Bibliotheken für HTTP-Anfragen in React sind axios und die eingebaute fetch-API. 
+Ich verwende die Bibliothek axios.

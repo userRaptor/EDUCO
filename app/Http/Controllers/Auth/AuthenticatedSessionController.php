@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('dashboard');
 
-        /* with accaepted roles 
+        /* with accepted roles 
         if ($request->user()->role === 'admin') {
             return redirect('dashboard');
         }

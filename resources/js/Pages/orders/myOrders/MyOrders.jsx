@@ -1,6 +1,7 @@
 import React from "react";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
+import axios from 'axios'; 
 
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -33,19 +34,24 @@ import {
 function MyOrders({ auth }) {
     const [searchByPurpose, setSearchByPurpose] = React.useState("");
 
-    const { orders = [] } = usePage().props; // Zugriff auf die vom Controller übergebenen Daten (Inertia || axios)
+    //const { orders = [] } = usePage().props; // Zugriff auf die vom Controller übergebenen Daten (Inertia || axios)
+    //console.log('Orders:', orders);
+
+    const [orders, setOrders] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
     const itemsPerPage = 10; // Pagination
 
-    const getOrdersById = (id) => {
+    
+    const getOrdersById = async (id) => {
         try {
-            const response = axios.get(`/orders/${id}`);
-            console.log('Axios response:', response);
+            const response = await axios.get(`/orders/${id}`);
+            setOrders(response.data);
         } catch (error) {
-            console.log('Axios error:', error);
+            console.error('Error fetching orders:', error);
         }
     };
+    
 
     const deleteOrderById = (order) => {
         if (

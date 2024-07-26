@@ -27,11 +27,8 @@ class OrderController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
 
-
-        return inertia('orders/myOrders/MyOrders', [
-            'orders' => $orders
-        ]);
-    } 
+        return response()->json($orders);
+    }
 
     public function store(Request $request)
     {
