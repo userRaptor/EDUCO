@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axiosClient from "../../../../axios-client";
+import axios from "axios";
 
 import { useEffect } from "react";
 import { Button, Divider, Heading, SimpleGrid, Text } from "@chakra-ui/react";
@@ -36,7 +36,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
 
 
     const fetchGroceries = () => {
-        axiosClient
+        axios
             .get("/groceries")
             .then((response) => {
                 setGroceries(response.data);
@@ -62,7 +62,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
             toast.dismiss();
             setIsLoadingToSendData(true);
             setTimeout(() => {
-                axiosClient
+                axios
                 .post("/groceries_order", payload)
                 .then((response) => {
                     setBooleanUpdateGroceriesOrder();

@@ -18,22 +18,14 @@ class GroceriesController extends Controller
     {
         $groceries = Groceries::query()->orderBy('id', 'desc')->get();
 
-        return Inertia::render('Groceries/Index', [
-            'groceries' => $groceries,
-        ]);
+        return response()->json($groceries);
     }
 
     public function getByID($id)
     {
         $grocery = Groceries::find($id);
 
-        if ($grocery) {
-            return Inertia::render('Groceries/Show', [
-                'grocery' => $grocery,
-            ]);
-        } else {
-            return Inertia::render('Errors/NotFound');
-        }
+        return response()->json($grocery);
     }
 
 
@@ -48,8 +40,8 @@ class GroceriesController extends Controller
 
 
         $grocery = Groceries::create($validatedData);
-        return redirect()->route('groceries.store')
-            ->with('success', 'Grocery item created successfully.');
+
+        return response()->json($grocery);
     }
 
     public function importCsv(Request $request)

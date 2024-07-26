@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Inertia } from "@inertiajs/inertia";
+import axios from "axios";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";

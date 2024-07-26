@@ -5,7 +5,9 @@ import { Button } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Center } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
+import Inertia from "@inertiajs/inertia";
+
 import { useDisclosure } from '@chakra-ui/react';
 
 import {
@@ -36,10 +38,8 @@ function MyOrderDetailView ({ orderId, booleanUpdateGroceriesOrder }) {
     const [groceriesOrders, setGroceriesOrders] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const navigate = useNavigate();
-
     const fetchGroceriesOrders = () => {
-        axiosClient
+        axios
             .get(`/groceries_order/${orderId}`)
             .then((response) => {
                 //console.log(response);
@@ -52,7 +52,7 @@ function MyOrderDetailView ({ orderId, booleanUpdateGroceriesOrder }) {
 
 
     const navigateMyOrders = () => {
-        navigate("/myorders");
+        Inertia.visit("/myorders");
     };
 
     const navigateNewOrder = () => {
@@ -60,7 +60,7 @@ function MyOrderDetailView ({ orderId, booleanUpdateGroceriesOrder }) {
     };
 
     const deleteGroceriesOrderById = (groceriesOrder) => {
-        axiosClient
+        axios
             .delete(`/groceries_order/${groceriesOrder.id}`)
             .then((response) => {
                 fetchGroceriesOrders();

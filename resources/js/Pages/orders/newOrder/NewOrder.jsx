@@ -34,8 +34,7 @@ import {
 
 function NewOrder({
     setOrderAlreadyExistsToParent,
-    setActualOrderIdToParent,
-    auth,
+    setActualOrderIdToParent
 }) {
     const [selectedDate, setSelectedDate] = React.useState("");
     const [internationalDate, setInternationalDate] = React.useState("");
@@ -161,14 +160,7 @@ function NewOrder({
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    New Order
-                </h2>
-            }
-        >
+        <div>
             <Head title="New Order" />
             <ToastContainer
                 position="bottom-right"
@@ -183,7 +175,6 @@ function NewOrder({
                 theme="colored"
                 transition={Bounce}
             />
-
             <div className="py-2 mt-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -193,105 +184,113 @@ function NewOrder({
                     </div>
                 </div>
             </div>
-
             <div className="py-2 mt-0">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div style={{ margin: "20px" }}>
-                        <Text
-                    style={{
-                        marginLeft: "10px",
-                        marginTop: "20px",
-                        marginBottom: "10px",
-                        color: "grey",
-                    }}
-                >
-                    <InfoOutlineIcon /> Note: Certain dates are unavailable for
-                    selection because all orders are collected every Wednesday
-                    at 09:00 AM. Therefore, delivery dates are calculated based
-                    on this schedule.
-                </Text>
+                            <Text
+                                style={{
+                                    marginLeft: "10px",
+                                    marginTop: "20px",
+                                    marginBottom: "10px",
+                                    color: "grey",
+                                }}
+                            >
+                                <InfoOutlineIcon /> Note: Certain dates are
+                                unavailable for selection because all orders are
+                                collected every Wednesday at 09:00 AM.
+                                Therefore, delivery dates are calculated based
+                                on this schedule.
+                            </Text>
 
-                <TableContainer>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th>Date and Time:</Th>
-                                <Th>Class:</Th>
-                                <Th>Location:</Th>
-                                <Th>Purpose:</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>
-                                    <Input
-                                        placeholder="Select Date and Time"
-                                        type="datetime-local"
-                                        min={minDate}
-                                        disabled={orderAlreadyExists}
-                                        onChange={handleDateTimeChange}
-                                    />
-                                </Td>
-                                <Td>
-                                    <Input
-                                        placeholder="Class ..."
-                                        disabled={orderAlreadyExists}
-                                        onChange={(event) =>
-                                            setSchoolClass(event.target.value)
-                                        }
-                                    />
-                                </Td>
-                                <Td>
-                                    <Input
-                                        placeholder="Location ..."
-                                        disabled={orderAlreadyExists}
-                                        onChange={(event) =>
-                                            setLocation(event.target.value)
-                                        }
-                                    />
-                                </Td>
-                                <Td>
-                                    <Input
-                                        placeholder="Purpose ..."
-                                        disabled={orderAlreadyExists}
-                                        onChange={(event) =>
-                                            setPurpose(event.target.value)
-                                        }
-                                    />
-                                </Td>
+                            <TableContainer>
+                                <Table variant="simple">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Date and Time:</Th>
+                                            <Th>Class:</Th>
+                                            <Th>Location:</Th>
+                                            <Th>Purpose:</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                            <Td>
+                                                <Input
+                                                    placeholder="Select Date and Time"
+                                                    type="datetime-local"
+                                                    min={minDate}
+                                                    disabled={
+                                                        orderAlreadyExists
+                                                    }
+                                                    onChange={
+                                                        handleDateTimeChange
+                                                    }
+                                                />
+                                            </Td>
+                                            <Td>
+                                                <Input
+                                                    placeholder="Class ..."
+                                                    disabled={
+                                                        orderAlreadyExists
+                                                    }
+                                                    onChange={(event) =>
+                                                        setSchoolClass(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </Td>
+                                            <Td>
+                                                <Input
+                                                    placeholder="Location ..."
+                                                    disabled={
+                                                        orderAlreadyExists
+                                                    }
+                                                    onChange={(event) =>
+                                                        setLocation(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </Td>
+                                            <Td>
+                                                <Input
+                                                    placeholder="Purpose ..."
+                                                    disabled={
+                                                        orderAlreadyExists
+                                                    }
+                                                    onChange={(event) =>
+                                                        setPurpose(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </Td>
 
-                                <Td>
-                                    {/**isDisabled={orderAlreadyExists} */}
-                                    <Button
-                                        colorScheme="blue"
-                                        onClick={createNewOrder}
-                                        isDisabled={orderAlreadyExists}
-                                    >
-                                        Add groceries
-                                    </Button>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                                            <Td>
+                                                {/**isDisabled={orderAlreadyExists} */}
+                                                <Button
+                                                    colorScheme="blue"
+                                                    onClick={createNewOrder}
+                                                    isDisabled={
+                                                        orderAlreadyExists
+                                                    }
+                                                >
+                                                    Add groceries
+                                                </Button>
+                                            </Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-            <div>
-                
-
-                
-            </div>
             {/**Trennlinie Waagerecht*/}
             <div style={{ borderTop: "5px solid orange", h: "100%" }} />{" "}
-        </AuthenticatedLayout>
+        </div>
     );
 }
 
