@@ -1,12 +1,12 @@
 import React from "react";
+import { Inertia } from "@inertiajs/inertia";
+
 import { useState, useRef } from "react";
 import { useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Center } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
-//import { useNavigate } from "react-router-dom";
-import Inertia from "@inertiajs/inertia";
 
 import { useDisclosure } from "@chakra-ui/react";
 
@@ -51,7 +51,8 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
     };
 
     const navigateMyOrders = () => {
-        Inertia.visit("/myorders");
+        Inertia.visit("/myorders");     // Leads to a short-term error code 409     
+        //Inertia.visit(route('myorder-component'));
     };
 
     const navigateNewOrder = () => {
@@ -59,8 +60,9 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
     };
 
     const deleteGroceriesOrderById = (groceriesOrder) => {
+        console.log(groceriesOrder);
         axios
-            .delete(`/groceries_order/${groceriesOrder.id}`)
+            .delete(`/api/groceries_order/${groceriesOrder.id}`)
             .then((response) => {
                 fetchGroceriesOrders();
             })

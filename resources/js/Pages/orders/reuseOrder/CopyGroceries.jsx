@@ -7,9 +7,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { Bounce } from "react-toastify";
 
 
-
-import axiosClient from '../../../../axios-client';
-
 function CopyGroceries({toCopyOrderId, actualOrderId}) {
 
     const copyItemsToAnotherOrder = () => {
@@ -19,8 +16,8 @@ function CopyGroceries({toCopyOrderId, actualOrderId}) {
             to_order_id: actualOrderId
         };
 
-        axiosClient
-            .post("/copyitems", payload)
+        axios
+            .post("/api/copyitems", payload)
             .then((response) => {
                 //console.log(response);   
                 successAlert("Items copied successfully!");

@@ -104,9 +104,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json(['success' => 'Items copied successfully']);
-               
-        
+        return response()->json(['success' => 'Items copied successfully']);  
     }
 
 

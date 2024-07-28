@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Test');
     })->name('test-component');
 
-    Route::get('newOrder', function () {
+    Route::get('/newOrder', function () {
         return Inertia::render('orders/newOrder/MainNewOrderGroceries');
     })->name('neworder-component');
 
@@ -55,10 +55,11 @@ Route::middleware('auth')->group(function () {
     })->name('myorder-component');
 
     Route::get('/reuseorder/{orderId}', function ($orderId) {
-        return Inertia::render('ReuseOrder', [
+        return Inertia::render('orders/reuseOrder/MainReuseOrder', [
             'orderId' => $orderId,
         ]);
     })->name('reuseorder');
+    
 });
 
 
@@ -67,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
     Route::post('/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
     Route::post('/api/groceries_order', [GroceriesOrderController::class, 'store'])->name('addGroceriesToOrder');
+    Route::post('/api/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::post('/api/copyitems', [OrderController::class, 'copyItems'])->name('copyItems');
 
     Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
     Route::get('/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
@@ -78,7 +81,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
     Route::delete('/api/orders', [OrderController::class, 'deleteAll'])->name('orders.deleteAll');
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
-    Route::post('/api/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 
 
