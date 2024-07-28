@@ -34,10 +34,9 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
     const [currentPage, setCurrentPage] = useState(1);      // Pagination
     const itemsPerPage = 20;                                // Pagination
 
-
     const fetchGroceries = () => {
         axios
-            .get("/groceries")
+            .get("/api/groceries")
             .then((response) => {
                 setGroceries(response.data);
             })
@@ -63,7 +62,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
             setIsLoadingToSendData(true);
             setTimeout(() => {
                 axios
-                .post("/groceries_order", payload)
+                .post("/api/groceries_order", payload)
                 .then((response) => {
                     setBooleanUpdateGroceriesOrder();
                     setIsLoadingToSendData(false);

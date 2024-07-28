@@ -33,6 +33,7 @@ import {
 } from "@chakra-ui/react";
 
 function NewOrder({
+    auth,
     setOrderAlreadyExistsToParent,
     setActualOrderIdToParent
 }) {
@@ -71,7 +72,7 @@ function NewOrder({
         event.preventDefault();
 
         const payload = {
-            user_id: 1,
+            user_id: auth.user.id,
             date: internationalDate,
             weekday: weekday,
             time: time,
@@ -93,14 +94,15 @@ function NewOrder({
             emptyFieldAlert("Purpose");
         } else {
             axios
-                .post("/orders", payload)
+                .post("/api/orders", payload)
                 .then((response) => {
-                    //console.log(response);
-                    setOrderID(response.id);
+                    //console.log("response: " + response.data);
+
+                    setOrderID(response.data.id);
 
                     setOrderAlreadyExists(true);
                     setOrderAlreadyExistsToParent();
-                    setActualOrderIdToParent(response.id);
+                    setActualOrderIdToParent(response.data.id);
                 })
                 .catch((error) => {
                     console.log(error);

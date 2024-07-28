@@ -44,14 +44,14 @@ function GetGroceries() {
     const deleteGroceriesById = (grocery) => {
         if (
             window.confirm(
-                "Are you sure to delete this grocery? \nYou can't undo this action afterwards."
+                `Are you sure to delete this grocery with ID: ${grocery.id}? \nYou can't undo this action afterwards.`
             )
         ) {
             axios
                 .delete(`/api/groceries/${grocery.id}`)
                 .then((response) => {
                     fetchGroceries();
-                    successAlert("Grocery has been deleted successfully.");
+                    successAlert(`Grocery ${grocery.id} has been deleted successfully.`);
                 })
                 .catch((error) => {
                     console.log(error);

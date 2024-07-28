@@ -18,6 +18,8 @@ import { Input } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 import DetailViewOrder from "../allOrders/DetailViewOrder";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import {
     Table,
@@ -50,25 +52,30 @@ function MyOrders({ auth }) {
     
 
     const deleteOrderById = (order) => {
-        if (
-            window.confirm(
-                "Are you sure to delete the order with ID " +
-                    order.id +
-                    " ? \nYou can't undo this action afterwards."
-            )
-        ) {
-            Inertia.delete(`/orders/${order.id}`);
+        if (window.confirm("Are you sure to delete the order with ID " + order.id + " ? \nYou can't undo this action afterwards.")) {
+            axios
+                .delete(`/api/orders/${order.id}`)
+                .then((response) => {
+                    getOrdersById(auth.user.id); 
+                    successAlert(`Order ${order.id} has been deleted successfully!`);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 
     const deleteAllOrders = () => {
-        if (
-            window.confirm(
-                "Are you sure to delete all orders? \nYou can't undo this action afterwards."
-            )
-        ) {
-            Inertia.delete(`/orders`);
-
+        if (window.confirm("Are you sure to delete all orders? \nYou can't undo this action afterwards.")) {
+            axios
+                .delete("/api/orders")
+                .then((response) => {
+                    getOrdersById(auth.user.id);
+                    successAlert("All orders have been deleted successfully!");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 
@@ -116,7 +123,7 @@ function MyOrders({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    MY ORDERS
+                    MY ORDERS:
                 </h2>
             }
         >
@@ -145,7 +152,6 @@ function MyOrders({ auth }) {
                                     display: "flex",
                                     justifyContent: "center",
                                     marginBottom: "50px",
-                                    marginTop: "50px",
                                 }}
                             >
                                 <Input

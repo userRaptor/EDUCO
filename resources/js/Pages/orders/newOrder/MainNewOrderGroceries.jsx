@@ -30,13 +30,14 @@ function MainNewOrderGroceries({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    New Order
+                    NEW ORDER:
                 </h2>
             }
         >
             <Head title="NewOrder" />
 
             <NewOrder
+                auth={auth}
                 setOrderAlreadyExistsToParent={handleOrderAlreadyExists}
                 setActualOrderIdToParent={handleActualOrderId}
             />
@@ -56,15 +57,23 @@ function MainNewOrderGroceries({ auth }) {
                     />
                 </div>
             ) : (
-                <Box padding="6" boxShadow="lg" bg="white">
-                    <SkeletonCircle size="10" />
-                    <SkeletonText
-                        mt="4"
-                        noOfLines={4}
-                        spacing="4"
-                        skeletonHeight="2"
-                    />
-                </Box>
+                <div className="py-2 mt-0">
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div style={{ margin: "20px" }}>
+                                <Box padding="6" boxShadow="lg" bg="white">
+                                    <SkeletonCircle size="10" />
+                                    <SkeletonText
+                                        mt="4"
+                                        noOfLines={4}
+                                        spacing="4"
+                                        skeletonHeight="2"
+                                    />
+                                </Box>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </AuthenticatedLayout>
     );
