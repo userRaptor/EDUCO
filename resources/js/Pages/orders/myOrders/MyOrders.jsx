@@ -20,7 +20,6 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import DetailViewOrder from "../allOrders/DetailViewOrder";
 import 'react-toastify/dist/ReactToastify.css';
 
-
 import {
     Table,
     Thead,

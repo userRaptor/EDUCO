@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/groceries', [GroceriesController::class, 'deleteAll'])->name('groceries.delete');
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
     Route::delete('/api/orders', [OrderController::class, 'deleteAll'])->name('orders.deleteAll');
-
+    Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
     Route::post('/api/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 
