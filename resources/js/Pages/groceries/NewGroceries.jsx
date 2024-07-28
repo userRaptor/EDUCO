@@ -90,6 +90,7 @@ function NewGroceries({ auth }) {
             axios
                 .post("/groceries", payload)
                 .then((response) => {
+                    setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
                     successAlert("The product was added successfully!");
                 })
                 .catch((error) => {
@@ -105,12 +106,22 @@ function NewGroceries({ auth }) {
 
     const handleSendCsvData = () => {
         if (csvData) {
-            Inertia.post("/groceriescsv");
+            axios
+                .post("/groceriescsv", { csv: csvData })
+                .then((response) => {
+                    setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
+                    successAlert("The csv file was imported successfully!");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    errorAlert("Error importing data");
+                });
             setCsvData(null);
         } else {
             warningAlert("No csv file was selected!");
         }
     };
+    
 
     const successAlert = (infoSuccess) => {
         toast.success(infoSuccess, {

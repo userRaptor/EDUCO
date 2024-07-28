@@ -45,39 +45,32 @@ class GroceriesController extends Controller
     }
 
     public function importCsv(Request $request)
-{
-    try {
-        $data = $request->input('csv');
-
-        foreach ($data as $row) {
-            if (is_array($row) && count($row) >= 4) {
-                Groceries::create([
-                    'name' => $row[0],
-                    'unit' => $row[1],
-                    'category' => $row[2],
-                    'supplier' => $row[3],
-                ]);
+    {
+        try {
+            $data = $request->input('csv');
+    
+            foreach ($data as $row) {
+                if (is_array($row) && count($row) >= 4) {
+                    Groceries::create([
+                        'name' => $row[0],
+                        'unit' => $row[1],
+                        'category' => $row[2],
+                        'supplier' => $row[3],
+                    ]);
+                }
             }
+    
+            return response()->json(['message' => 'imported successfully'], 200);
+    
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error importing data', 'error' => $e->getMessage()], 500);
         }
-
-        return redirect()->back()->with('success_message', 'imported successfully');
-
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error_message', 'Error importing data');
     }
-}
-
-
+    
 
     public function show(Groceries $groceries)
     {
         return response()->json($groceries);
-
-        /*
-        return Inertia::render('Groceries/Show', [
-            'grocery' => $groceries
-        ]);
-        */
     }
 
     public function deleteByID($id)
