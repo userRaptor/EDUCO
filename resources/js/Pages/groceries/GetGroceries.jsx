@@ -33,7 +33,6 @@ function GetGroceries() {
         axios
             .get("/api/groceries")
             .then((response) => {
-                console.log(response.data);
                 setGroceries(response.data);
             })
             .catch((error) => {
@@ -240,7 +239,6 @@ function GetGroceries() {
                                     mt={"20px"}
                                     colorScheme="red"
                                     onClick={deleteAll}
-                                    isDisabled
                                 >
                                     DELETE ALL
                                 </Button>

@@ -105,6 +105,7 @@ function NewGroceries({ auth }) {
     };
 
     const handleSendCsvData = () => {
+        //toast.dismiss();
         if (csvData) {
             axios
                 .post("/groceriescsv", { csv: csvData })
@@ -116,7 +117,7 @@ function NewGroceries({ auth }) {
                     console.error(error);
                     errorAlert("Error importing data");
                 });
-            setCsvData(null);
+            //setCsvData(null);
         } else {
             warningAlert("No csv file was selected!");
         }
