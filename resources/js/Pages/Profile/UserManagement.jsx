@@ -6,8 +6,9 @@ import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-import { Button } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
+import { Button, Input, Text } from "@chakra-ui/react";
+
+import RegisterNewUser from "../Auth/RegisterNewUser";
 
 import {
     Table,
@@ -26,7 +27,13 @@ function UserManagement({ auth }) {
     const [searchByName, setSearchByName] = React.useState("");
 
     const deleteUserById = (userId) => {
-        if (window.confirm("Are you sure to delete the user with ID " + userId + "? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete the user with ID " +
+                    userId +
+                    "? \nYou can't undo this action afterwards."
+            )
+        ) {
             axios
                 .delete(`/api/users/${userId}`)
                 .then((response) => {
@@ -81,7 +88,7 @@ function UserManagement({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div style={{ margin: "20px" }}>
-                            <Button>Create User:</Button>
+                            <RegisterNewUser />
                         </div>
                     </div>
                 </div>
@@ -90,7 +97,16 @@ function UserManagement({ auth }) {
             <div className="py-2 mt-0">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div style={{ margin: "20px" }}>
+                        <div
+                            style={{
+                                margin: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Text fontSize="xl" style={{ marginRight: "30px" }}>
+                                Registered users:
+                            </Text>
                             <Input
                                 variant="outline"
                                 placeholder="Search by username ..."

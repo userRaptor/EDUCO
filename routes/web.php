@@ -72,6 +72,11 @@ Route::middleware('auth')->group(function () {
 
 
 // HTTP request
+Route::middleware(['auth', 'admin'])->group(function () {
+    
+
+});
+
 Route::middleware('auth')->group(function () {
     Route::post('/api/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
     Route::post('/api/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
@@ -94,7 +99,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
     Route::delete('/api/users/{id}', [UserController::class, 'destroyUserById'])->name('users.deleteByID');
 
+    Route::post('/api/register', [UserController::class, 'storeNewUser'])->name('registerNewUser');
 });
+
+
 
 
 require __DIR__.'/auth.php';
