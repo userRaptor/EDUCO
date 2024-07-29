@@ -8,7 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroceriesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\GroceriesOrderController;
-
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -85,12 +85,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
     Route::get('/api/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
     Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder');
+    Route::get('/api/users', [UserController::class, 'getAllUsers'])->name('users.all');
 
     Route::delete('/api/groceries/{id}', [GroceriesController::class, 'deleteByID'])->name('groceries.delete');
     Route::delete('/api/groceries', [GroceriesController::class, 'deleteAll'])->name('groceries.delete');
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
     Route::delete('/api/orders', [OrderController::class, 'deleteAll'])->name('orders.deleteAll');
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
+    Route::delete('/api/users/{id}', [UserController::class, 'destroyUserById'])->name('users.deleteByID');
+
 });
 
 
