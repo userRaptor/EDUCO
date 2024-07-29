@@ -39,7 +39,7 @@ export default function Authenticated({ user, header, children }) {
 
                                 {user.role === 'admin' && (
                                     <>
-                                        <NavLink href={route('allorder-component')} active={route().current('test-component')}>
+                                        <NavLink href={route('allorder-component')} active={route().current('allorder-component')}>
                                             AllOrders
                                         </NavLink>
 
@@ -47,8 +47,8 @@ export default function Authenticated({ user, header, children }) {
                                             Groceries
                                         </NavLink>
 
-                                        <NavLink href={route('test-component')} active={route().current('test-component')}>
-                                            UserManagment
+                                        <NavLink href={route('usermanagement-component')} active={route().current('usermanagement-component')}>
+                                            UserManagement
                                         </NavLink>
                                     </>
                                 )}

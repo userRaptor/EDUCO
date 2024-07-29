@@ -63,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/allOrders', function () {
         return Inertia::render('orders/allOrders/AllOrdersMain');
     })->name('allorder-component');
+
+    Route::get('/userManagement', function () {
+        return Inertia::render('Profile/UserManagement');
+    })->name('usermanagement-component');
     
 });
 
