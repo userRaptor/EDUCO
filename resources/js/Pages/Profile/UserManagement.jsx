@@ -69,6 +69,10 @@ function UserManagement({ auth }) {
         return `${day}.${month}.${year}`;
     };
 
+    const handleNewUserRegistered = () => {
+        fetchUsers();
+    };
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -88,7 +92,7 @@ function UserManagement({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div style={{ margin: "20px" }}>
-                            <RegisterNewUser />
+                            <RegisterNewUser onUserRegistered={handleNewUserRegistered} />
                         </div>
                     </div>
                 </div>

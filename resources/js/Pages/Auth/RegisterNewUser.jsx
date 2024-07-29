@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Button, Text } from "@chakra-ui/react";
 
-export default function Register() {
+export default function Register({ onUserRegistered }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         email: "",
@@ -30,6 +30,7 @@ export default function Register() {
         axios
             .post("/api/register", data)
             .then((response) => {
+                if (onUserRegistered) onUserRegistered();
                 successAlert("User registered successfully!");
             })
             .catch((error) => {
