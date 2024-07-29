@@ -39,7 +39,7 @@ export default function Authenticated({ user, header, children }) {
 
                                 {user.role === 'admin' && (
                                     <>
-                                        <NavLink href={route('test-component')} active={route().current('test-component')}>
+                                        <NavLink href={route('allorder-component')} active={route().current('test-component')}>
                                             AllOrders
                                         </NavLink>
 

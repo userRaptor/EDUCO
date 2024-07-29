@@ -38,15 +38,16 @@ function MyOrders({ auth }) {
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
     const itemsPerPage = 10; // Pagination
-
     
-    const getOrdersById = async (id) => {
-        try {
-            const response = await axios.get(`/orders/${id}`);
-            setOrders(response.data);
-        } catch (error) {
-            console.error('Error fetching orders:', error);
-        }
+    const getOrdersById = (userId) => {
+        axios
+            .get(`/api/orders/${userId}`)
+            .then((response) => {
+                setOrders(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
     
 
@@ -113,7 +114,6 @@ function MyOrders({ auth }) {
     }
 
     useEffect(() => {
-        //getOrdersById(2); ////////////////// CHANGE THE USER ID //////////////////
         getOrdersById(auth.user.id);
     }, []);
 

@@ -58,22 +58,28 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('orders/reuseOrder/MainReuseOrder', [
             'orderId' => $orderId,
         ]);
-    })->name('reuseorder');
+    })->name('reuseorder-component');
+
+    Route::get('/allOrders', function () {
+        return Inertia::render('orders/allOrders/AllOrdersMain');
+    })->name('allorder-component');
     
 });
 
 
 // HTTP request
 Route::middleware('auth')->group(function () {
-    Route::post('/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
-    Route::post('/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
+    Route::post('/api/groceries', [GroceriesController::class, 'store'])->name('groceries.store');
+    Route::post('/api/groceriescsv', [GroceriesController::class, 'importCsv'])->name('groceriescsv.store');
     Route::post('/api/groceries_order', [GroceriesOrderController::class, 'store'])->name('addGroceriesToOrder');
     Route::post('/api/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::post('/api/copyitems', [OrderController::class, 'copyItems'])->name('copyItems');
 
+    Route::put('/api/orders/{orderid}', [OrderController::class, 'updateIncludeSummary'])->name('orders.updateIncludeSummary');
+
     Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
-    Route::get('/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
-    Route::get('/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
+    Route::get('/api/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
+    Route::get('/api/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
     Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder');
 
     Route::delete('/api/groceries/{id}', [GroceriesController::class, 'deleteByID'])->name('groceries.delete');

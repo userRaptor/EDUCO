@@ -43,3 +43,8 @@ npm install --save react-toastify
 imports:
 import { toast, ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+
+import { jsPDF } from "jspdf"; und import autoTable from "jspdf-autotable";
+install:  npm install jspdf jspdf-autotable
+
