@@ -232,7 +232,7 @@ function UserManagement({ auth }) {
                                                             onOpen(user)
                                                         }
                                                     >
-                                                        Edit
+                                                        Change Password
                                                     </Button>
 
                                                     <Button
@@ -286,7 +286,7 @@ function UserManagement({ auth }) {
                             </Text>
                         )}
 
-                        <Flex align="center" mt={8}>
+                        <Flex align="center" mt={8} mb={5}>
                             <Button onClick={handleSave} colorScheme="teal">
                                 Save
                             </Button>
@@ -297,12 +297,6 @@ function UserManagement({ auth }) {
                             )}
                         </Flex>
                     </ModalBody>
-
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </AuthenticatedLayout>
