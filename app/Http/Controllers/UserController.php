@@ -16,7 +16,7 @@ class UserController extends Controller
     public function storeNewUser(Request $request)
     {
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['message' => 'Email already in use'], 409);
+            return response()->json(['message' => 'Email already in use!'], 409);
         }
 
         $request->validate([

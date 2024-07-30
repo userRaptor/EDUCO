@@ -35,8 +35,9 @@ export default function Register({ onUserRegistered }) {
             })
             .catch((error) => {
                 if (error.response && error.response.status === 409) {
+                    //console.log(error.response.data.message);
                     errorAlert(
-                        "Email already in use!"
+                        error.response.data.message
                     );
                 } else {
                     console.log(error);
