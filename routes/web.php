@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     })->name('allorder-component');
 
     Route::get('/userManagement', function () {
-        return Inertia::render('Profile/UserManagement');
+        return Inertia::render('userManagement/UserManagement');
     })->name('usermanagement-component');
     
 });

@@ -8,7 +8,7 @@ import { Head } from "@inertiajs/react";
 
 import { Button, Input, Text } from "@chakra-ui/react";
 
-import RegisterNewUser from "../Auth/RegisterNewUser";
+import RegisterNewUser from "./RegisterNewUser";
 
 import {
     Table,
