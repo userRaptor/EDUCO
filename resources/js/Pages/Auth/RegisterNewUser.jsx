@@ -5,7 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Bounce, toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 import { Button, Text } from "@chakra-ui/react";
 
@@ -34,7 +34,13 @@ export default function Register({ onUserRegistered }) {
                 successAlert("User registered successfully!");
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response && error.response.status === 409) {
+                    errorAlert(
+                        "Email already in use!"
+                    );
+                } else {
+                    console.log(error);
+                }
             });
     };
 
@@ -51,6 +57,20 @@ export default function Register({ onUserRegistered }) {
             transition: Bounce,
         });
     };
+
+    const errorAlert = (infoError) => {
+        toast.error(infoError, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
+      };
 
     return (
         <div>
