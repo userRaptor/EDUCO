@@ -11,7 +11,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 
 import RegisterNewUser from "./RegisterNewUser";
-import ResetPasswordByAdmin from "./ResetPasswordByAdmin";
 
 import {
     Table,
@@ -39,6 +38,10 @@ function UserManagement({ auth }) {
     //const { isOpen, onOpen, onClose } = useDisclosure();
     const [isOpen, setIsOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
+
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
 
     const [users, setUsers] = React.useState([]);
     const [searchByName, setSearchByName] = React.useState("");
@@ -83,6 +86,15 @@ function UserManagement({ auth }) {
             });
     };
 
+    const handleSave = async () => {
+        if (password !== confirmPassword) {
+            setError("Passwords do not match");
+        } else {
+            setError("");
+            
+        }
+    };
+
     const filteredUsers = users.filter((user) =>
         user.name.startsWith(searchByName)
     );
@@ -122,9 +134,6 @@ function UserManagement({ auth }) {
                             <RegisterNewUser
                                 onUserRegistered={handleNewUserRegistered}
                             />
-                        </div>
-                        <div style={{ margin: "20px" }}>
-                            <ResetPasswordByAdmin />
                         </div>
                     </div>
                 </div>
@@ -224,10 +233,30 @@ function UserManagement({ auth }) {
                     <ModalCloseButton />
                     <ModalBody>
                         <Text>New Password:</Text>
-                        <Input placeholder="..." />
-                        <Text style={{marginTop: 15}}>Confirm Password:</Text>
-                        <Input placeholder="..." />
-                        <Button style={{marginTop: 30, marginLeft: 10}}>Save</Button>
+                        <Input
+                            placeholder="..."
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Text style={{ marginTop: 15 }}>Confirm Password:</Text>
+                        <Input
+                            placeholder="..."
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        {error && (
+                            <Text style={{ color: "red", marginTop: 5 }}>
+                                {error}
+                            </Text>
+                        )}
+                        <Button
+                            style={{ marginTop: 30, marginLeft: 10 }}
+                            onClick={handleSave}
+                        >
+                            Save
+                        </Button>
                     </ModalBody>
 
                     <ModalFooter>
