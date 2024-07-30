@@ -83,8 +83,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/groceries_order', [GroceriesOrderController::class, 'store'])->name('addGroceriesToOrder');
     Route::post('/api/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::post('/api/copyitems', [OrderController::class, 'copyItems'])->name('copyItems');
+    Route::post('/api/register', [UserController::class, 'storeNewUser'])->name('registerNewUser');
 
     Route::put('/api/orders/{orderid}', [OrderController::class, 'updateIncludeSummary'])->name('orders.updateIncludeSummary');
+    Route::put('/api/newpassword/{userid}', [UserController::class, 'updatePassword'])->name('updatePassword');
 
     Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
     Route::get('/api/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
@@ -99,7 +101,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
     Route::delete('/api/users/{id}', [UserController::class, 'destroyUserById'])->name('users.deleteByID');
 
-    Route::post('/api/register', [UserController::class, 'storeNewUser'])->name('registerNewUser');
 });
 
 

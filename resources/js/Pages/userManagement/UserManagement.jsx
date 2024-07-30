@@ -6,7 +6,7 @@ import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-import { Button, Input, Text } from "@chakra-ui/react";
+import { Button, Input, Text, Flex } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -35,13 +35,13 @@ import {
 } from "@chakra-ui/react";
 
 function UserManagement({ auth }) {
-    //const { isOpen, onOpen, onClose } = useDisclosure();
     const [isOpen, setIsOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const [users, setUsers] = React.useState([]);
     const [searchByName, setSearchByName] = React.useState("");
@@ -54,7 +54,21 @@ function UserManagement({ auth }) {
     const onClose = () => {
         setIsOpen(false);
         setCurrentUser(null);
+        setPassword("");
+        setConfirmPassword("");
+        setError("");
+        setSuccess("");
     };
+
+    const changeInputPassword = (e) => {
+        setPassword(e.target.value);
+        setSuccess("");
+    };
+
+    const changeInputConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+        setSuccess("");
+    }
 
     const deleteUserById = (userId) => {
         if (
@@ -89,9 +103,28 @@ function UserManagement({ auth }) {
     const handleSave = async () => {
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            setSuccess("");
         } else {
             setError("");
-            
+
+            const payload = {
+                password: password,
+                password_confirmation: confirmPassword,
+            };
+
+            axios
+                .put(`/api/newpassword/${currentUser.id}`, payload)
+                .then((response) => {
+                    setSuccess("Password successfully changed");
+                    //onClose();
+                })
+                .catch((error) => {
+                    if (error.response.status === 422) {
+                        setError("Password must be at least 8 characters long");
+                        setSuccess("");
+                    }
+                    console.log(error);
+                });
         }
     };
 
@@ -223,6 +256,7 @@ function UserManagement({ auth }) {
                 </div>
             </div>
 
+            {/* Modal for changing password */}
             <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -237,26 +271,31 @@ function UserManagement({ auth }) {
                             placeholder="..."
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={changeInputPassword}
                         />
                         <Text style={{ marginTop: 15 }}>Confirm Password:</Text>
                         <Input
                             placeholder="..."
                             type="password"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={changeInputConfirmPassword}
                         />
                         {error && (
                             <Text style={{ color: "red", marginTop: 5 }}>
                                 {error}
                             </Text>
                         )}
-                        <Button
-                            style={{ marginTop: 30, marginLeft: 10 }}
-                            onClick={handleSave}
-                        >
-                            Save
-                        </Button>
+
+                        <Flex align="center" mt={8}>
+                            <Button onClick={handleSave} colorScheme="teal">
+                                Save
+                            </Button>
+                            {success && (
+                                <Text color="green.500" ml={3}>
+                                    {success}
+                                </Text>
+                            )}
+                        </Flex>
                     </ModalBody>
 
                     <ModalFooter>

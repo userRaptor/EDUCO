@@ -9,6 +9,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rules\Password;
 
 
 class UserController extends Controller
@@ -58,21 +60,23 @@ class UserController extends Controller
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
 
-    public function updatePassword(Request $request, int $userId): RedirectResponse
+    public function updatePassword(Request $request, int $userId): JsonResponse
     {
-        // Validate the new password
         $validated = $request->validate([
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        // Find user by ID
         $user = User::findOrFail($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
 
         // Update the password
         $user->update([
             'password' => Hash::make($validated['password']),
         ]);
 
-        return back();
+        return response()->json(['message' => 'Password updated successfully']);
     }
 }
