@@ -35,11 +35,13 @@ export default function Register({ onUserRegistered }) {
             })
             .catch((error) => {
                 if (error.response && error.response.status === 409) {
-                    //console.log(error.response.data.message);
                     errorAlert(
                         error.response.data.message
                     );
                 } else {
+                    errorAlert(
+                        error.response.data.message
+                    );
                     console.log(error);
                 }
             });

@@ -57,4 +57,22 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
+
+    public function updatePassword(Request $request, int $userId): RedirectResponse
+    {
+        // Validate the new password
+        $validated = $request->validate([
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        // Find user by ID
+        $user = User::findOrFail($userId);
+
+        // Update the password
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back();
+    }
 }

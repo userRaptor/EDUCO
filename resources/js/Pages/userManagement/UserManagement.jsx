@@ -7,8 +7,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 import { Button, Input, Text } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 
 import RegisterNewUser from "./RegisterNewUser";
+import ResetPasswordByAdmin from "./ResetPasswordByAdmin";
 
 import {
     Table,
@@ -22,7 +24,18 @@ import {
     TableContainer,
 } from "@chakra-ui/react";
 
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from "@chakra-ui/react";
+
 function UserManagement({ auth }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [users, setUsers] = React.useState([]);
     const [searchByName, setSearchByName] = React.useState("");
 
@@ -92,7 +105,12 @@ function UserManagement({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div style={{ margin: "20px" }}>
-                            <RegisterNewUser onUserRegistered={handleNewUserRegistered} />
+                            <RegisterNewUser
+                                onUserRegistered={handleNewUserRegistered}
+                            />
+                        </div>
+                        <div style={{ margin: "20px" }}>
+                            <ResetPasswordByAdmin />
                         </div>
                     </div>
                 </div>
@@ -154,6 +172,7 @@ function UserManagement({ auth }) {
                                                         style={{
                                                             marginRight: "10px",
                                                         }}
+                                                        onClick={onOpen}
                                                     >
                                                         Edit
                                                     </Button>
@@ -178,6 +197,26 @@ function UserManagement({ auth }) {
                     </div>
                 </div>
             </div>
+
+            <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text fontWeight="bold" mb="1rem">
+                            You can scroll the content behind the modal
+                        </Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                        <Button variant="ghost">Secondary Action</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </AuthenticatedLayout>
     );
 }
