@@ -8,6 +8,7 @@ import { Head } from "@inertiajs/react";
 
 import { Button, Input, Text } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import { useState } from "react";
 
 import RegisterNewUser from "./RegisterNewUser";
 import ResetPasswordByAdmin from "./ResetPasswordByAdmin";
@@ -35,9 +36,22 @@ import {
 } from "@chakra-ui/react";
 
 function UserManagement({ auth }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    //const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isOpen, setIsOpen] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+
     const [users, setUsers] = React.useState([]);
     const [searchByName, setSearchByName] = React.useState("");
+
+    const onOpen = (user) => {
+        setCurrentUser(user);
+        setIsOpen(true);
+    };
+
+    const onClose = () => {
+        setIsOpen(false);
+        setCurrentUser(null);
+    };
 
     const deleteUserById = (userId) => {
         if (
@@ -172,7 +186,9 @@ function UserManagement({ auth }) {
                                                         style={{
                                                             marginRight: "10px",
                                                         }}
-                                                        onClick={onOpen}
+                                                        onClick={() =>
+                                                            onOpen(user)
+                                                        }
                                                     >
                                                         Edit
                                                     </Button>
@@ -201,19 +217,23 @@ function UserManagement({ auth }) {
             <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalHeader>
+                        New password for:{" "}
+                        {currentUser ? currentUser.name : "userNotFound"}
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Text fontWeight="bold" mb="1rem">
-                            You can scroll the content behind the modal
-                        </Text>
+                        <Text>New Password:</Text>
+                        <Input placeholder="..." />
+                        <Text style={{marginTop: 15}}>Confirm Password:</Text>
+                        <Input placeholder="..." />
+                        <Button style={{marginTop: 30, marginLeft: 10}}>Save</Button>
                     </ModalBody>
 
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={onClose}>
                             Close
                         </Button>
-                        <Button variant="ghost">Secondary Action</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
