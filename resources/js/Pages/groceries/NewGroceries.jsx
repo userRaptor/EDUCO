@@ -61,13 +61,16 @@ function NewGroceries({ auth }) {
     const [renderKey, setRenderKey] = useState(0);
 
     const [isAlertOpen, setIsAlertOpen] = React.useState(false);
+    const [newGroceriesSaved, setNewGroceriesSaved] = React.useState("");
 
     const handleChangeUnit = (event) => {
         setGroceriesUnit(event);
+        setNewGroceriesSaved("");
     };
 
     const handleChangeCategory = (event) => {
         setGroceriesCategory(event);
+        setNewGroceriesSaved("");
     };
 
     const saveGroceries = () => {
@@ -90,6 +93,7 @@ function NewGroceries({ auth }) {
             axios
                 .post("/api/groceries", payload)
                 .then((response) => {
+                    setNewGroceriesSaved("saved");
                     setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
                     successAlert("The product was added successfully!");
                 })
@@ -123,7 +127,6 @@ function NewGroceries({ auth }) {
             warningAlert("No csv file was selected!");
         }
     };
-    
 
     const successAlert = (infoSuccess) => {
         toast.success(infoSuccess, {
@@ -383,6 +386,15 @@ function NewGroceries({ auth }) {
                                                     >
                                                         ADD
                                                     </Button>
+                                                    {newGroceriesSaved && (
+                                                        <Text
+                                                            color="green.500"
+                                                            ml={2}
+                                                            mt={2}
+                                                        >
+                                                            {newGroceriesSaved}
+                                                        </Text>
+                                                    )}
                                                 </Td>
                                             </Tr>
                                         </Tbody>

@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+import { toast, ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 
@@ -68,7 +71,7 @@ function UserManagement({ auth }) {
     const changeInputConfirmPassword = (e) => {
         setConfirmPassword(e.target.value);
         setSuccess("");
-    }
+    };
 
     const deleteUserById = (userId) => {
         if (
@@ -82,9 +85,11 @@ function UserManagement({ auth }) {
                 .delete(`/api/users/${userId}`)
                 .then((response) => {
                     fetchUsers();
+                    successAlert("User successfully deleted");
                 })
                 .catch((error) => {
                     console.log(error);
+                    errorAlert("Error deleting user");
                 });
         }
     };
@@ -149,6 +154,34 @@ function UserManagement({ auth }) {
         fetchUsers();
     }, []);
 
+    const successAlert = (infoSuccess) => {
+        toast.success(infoSuccess, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
+    };
+
+    const errorAlert = (infoError) => {
+        toast.error(infoError, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -159,6 +192,20 @@ function UserManagement({ auth }) {
             }
         >
             <Head title="UserManagement" />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
 
             <div className="py-2 mt-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
