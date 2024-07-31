@@ -9,7 +9,8 @@ import AvailableGroceries from "../newOrder/AvailableGroceries";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-import { Box, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Box, SkeletonCircle, SkeletonText , Text} from "@chakra-ui/react";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 
 function MainReuseOrder({ auth }) {
     const parsePageId = (path) => path.substring(path.lastIndexOf('/') + 1) // Get last part of URL path
@@ -37,11 +38,12 @@ function MainReuseOrder({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    REUSE ORDER: {orderId}
+                    REUSE ORDER: <ArrowRightIcon /> ID: {orderId}
                 </h2>
             }
         >
             <Head title="Reuse Order" />
+
             <NewOrder
                 auth={auth}
                 setOrderAlreadyExistsToParent={handleOrderAlreadyExists}
