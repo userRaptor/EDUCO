@@ -91,8 +91,6 @@ export default function Register({ onUserRegistered }) {
                 transition={Bounce}
             />
 
-            <Head title="Register" />
-
             <Text fontSize="xl" style={{ marginBottom: "10px" }}>
                 Register new user:
             </Text>

@@ -135,8 +135,8 @@ function GetGroceries() {
                             <div
                                 style={{
                                     display: "flex",
-                                    justifyContent: "center",
-                                    marginBottom: "50px",
+                                    marginTop: "20px",
+                                    marginBottom: "20px",
                                 }}
                             >
                                 <Input

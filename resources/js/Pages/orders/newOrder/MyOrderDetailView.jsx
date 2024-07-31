@@ -60,7 +60,6 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
     };
 
     const deleteGroceriesOrderById = (groceriesOrder) => {
-        console.log(groceriesOrder);
         axios
             .delete(`/api/groceries_order/${groceriesOrder.id}`)
             .then((response) => {

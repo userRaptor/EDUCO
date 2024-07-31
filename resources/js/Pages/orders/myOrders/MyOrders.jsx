@@ -149,8 +149,7 @@ function MyOrders({ auth }) {
                             <div
                                 style={{
                                     display: "flex",
-                                    justifyContent: "center",
-                                    marginBottom: "50px",
+                                    marginBottom: "20px",
                                 }}
                             >
                                 <Input

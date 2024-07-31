@@ -88,12 +88,13 @@ function NewGroceries({ auth }) {
             errorAlert("Supplier field cannot be empty!");
         } else {
             axios
-                .post("/groceries", payload)
+                .post("/api/groceries", payload)
                 .then((response) => {
                     setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
                     successAlert("The product was added successfully!");
                 })
                 .catch((error) => {
+                    errorAlert(error.response.data.message);
                     console.log(error.response?.data || error.message);
                 });
         }
@@ -180,7 +181,7 @@ function NewGroceries({ auth }) {
                 </h2>
             }
         >
-            <Head title="New Groceries" />
+            <Head title="Groceries" />
 
             <ToastContainer
                 position="bottom-right"
