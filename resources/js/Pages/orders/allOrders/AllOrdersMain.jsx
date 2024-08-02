@@ -155,7 +155,11 @@ function AllOrdersMain({ auth }) {
                 doc.setTextColor(0, 0, 255); // Blau
                 doc.setFont("helvetica", "bold");
                 doc.text(
-                    `Order ID: ${order.id}, ${order.purpose}, ${order.weekday}, ${formatDate(order.date)}, ${order.time}, -> ${order.schoolClass}, ${order.location}`,
+                    `Order ID: ${order.id}, ${order.purpose}, ${
+                        order.weekday
+                    }, ${formatDate(order.date)}, ${order.time}, -> ${
+                        order.schoolClass
+                    }, ${order.location}`,
                     10,
                     35
                 );
@@ -167,41 +171,36 @@ function AllOrdersMain({ auth }) {
                 let currentY = yOffset;
 
                 // Groceries Table
-                if (order.groceries && order.groceries.length > 0) {
-                    autoTable(doc, {
-                        head: [tableColumn],
-                        body: order.groceries.map((grocery) => [
-                            grocery.name,
-                            grocery.pivot.quantity,
-                            grocery.unit,
-                            grocery.category,
-                            grocery.supplier,
-                            grocery.pivot.comment,
-                        ]),
-                        startY: currentY,
-                        styles: { fontSize: 10 }, // Adjust font size if needed
-                        didDrawPage: (data) => {
-                            doc.setFontSize(10);
-                            doc.text(
-                                "Page " + doc.internal.getNumberOfPages(),
-                                20,
-                                doc.internal.pageSize.height - 10
-                            );
-                            doc.text(
-                                "Year: " +
-                                    getCalendarWeekAndYear().year +
-                                    ", CalendarWeek: " +
-                                    getCalendarWeekAndYear().week,
-                                70,
-                                doc.internal.pageSize.height - 10
-                            );
-                        },
-                    });
-                    currentY = doc.autoTable.previous.finalY + 10; // Update yOffset after table
-                } else {
-                    doc.text("No groceries for this order.", 20, currentY);
-                    currentY += 10; // Update yOffset
-                }
+                autoTable(doc, {
+                    head: [tableColumn],
+                    body: order.groceries.map((grocery) => [
+                        grocery.name,
+                        grocery.pivot.quantity,
+                        grocery.unit,
+                        grocery.category,
+                        grocery.supplier,
+                        grocery.pivot.comment,
+                    ]),
+                    startY: currentY,
+                    styles: { fontSize: 10 }, // Adjust font size if needed
+                    didDrawPage: (data) => {
+                        doc.setFontSize(10);
+                        doc.text(
+                            "Page " + doc.internal.getNumberOfPages(),
+                            20,
+                            doc.internal.pageSize.height - 10
+                        );
+                        doc.text(
+                            "Year: " +
+                                getCalendarWeekAndYear().year +
+                                ", CalendarWeek: " +
+                                getCalendarWeekAndYear().week,
+                            70,
+                            doc.internal.pageSize.height - 10
+                        );
+                    },
+                });
+                currentY = doc.autoTable.previous.finalY + 10; // Update yOffset after table
             });
 
             // Footer
