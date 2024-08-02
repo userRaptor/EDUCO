@@ -119,20 +119,16 @@ function AllOrdersMain({ auth }) {
             "Supplier",
             "Comment",
         ];
-    
+
         const pageHeight = doc.internal.pageSize.height;
         const footerHeight = 20; // Height reserved for footer
         const margin = 10;
-    
+
         // Function to add footer
         const addFooter = () => {
             const currentPage = doc.internal.getNumberOfPages();
             doc.setFontSize(10);
-            doc.text(
-                "Page " + currentPage,
-                margin,
-                pageHeight - margin
-            );
+            doc.text("Page " + currentPage, margin, pageHeight - margin);
             doc.text(
                 "Year: " +
                     getCalendarWeekAndYear().year +
@@ -142,7 +138,7 @@ function AllOrdersMain({ auth }) {
                 pageHeight - margin
             );
         };
-    
+
         // Group orders by teacher
         const ordersByTeacher = filteredOrders
             .filter((order) => order.includeSummary)
@@ -150,15 +146,15 @@ function AllOrdersMain({ auth }) {
                 (acc[order.user.name] = acc[order.user.name] || []).push(order);
                 return acc;
             }, {});
-    
+
         // Loop through each teacher
         Object.keys(ordersByTeacher).forEach((teacher, index) => {
             if (index > 0) {
                 doc.addPage(); // Add a new page for each teacher
             }
-    
+
             let currentY = 20; // Initial Y position for content
-    
+
             // Title and Subtitle
             doc.setFontSize(20);
             doc.text(`Orders for ${teacher}`, margin, currentY); // Title
@@ -170,41 +166,45 @@ function AllOrdersMain({ auth }) {
                 currentY
             ); // Subtitle
             currentY += 15; // Adjust vertical space after subtitle
-    
+
             // Add Orders and Groceries
             ordersByTeacher[teacher].forEach((order, orderIndex) => {
                 if (orderIndex > 0) {
                     currentY += 20; // Add space between orders
                 }
-    
+
                 // Check if there is enough space for the order details and table
                 if (currentY + footerHeight > pageHeight - margin) {
                     addFooter();
                     doc.addPage();
                     currentY = 20; // Reset currentY on new page
                 }
-    
+
                 // Order Details
                 doc.setFontSize(11);
                 doc.setTextColor(0, 0, 255); // Blue
                 doc.setFont("helvetica", "bold");
                 doc.text(
-                    `Order ID: ${order.id}, ${order.purpose}, ${order.weekday}, ${formatDate(order.date)}, ${order.time}, -> ${order.schoolClass}, ${order.location}`,
+                    `Order ID: ${order.id}, ${order.purpose}, ${
+                        order.weekday
+                    }, ${formatDate(order.date)} - ${formatTime(order.time)}, -> ${
+                        order.schoolClass
+                    }, ${order.location}`,
                     margin,
                     currentY
                 );
                 doc.setTextColor(0, 0, 0); // Black
-    
+
                 // Update currentY position for groceries table
                 currentY += 10; // Add space between order details and table
-    
+
                 // Check if there is enough space for the table
                 if (currentY + footerHeight > pageHeight - margin) {
                     addFooter();
                     doc.addPage();
                     currentY = 20; // Reset currentY on new page
                 }
-    
+
                 // Groceries Table
                 autoTable(doc, {
                     head: [tableColumn],
@@ -222,22 +222,20 @@ function AllOrdersMain({ auth }) {
                         addFooter();
                     },
                 });
-    
+
                 // Update currentY position after table
                 currentY = doc.autoTable.previous.finalY + 10; // Update yOffset after table
             });
-    
+
             // After finishing all orders for the teacher, add space before the next teacher
             currentY += 20; // Add space between teachers
         });
-    
+
         // Add footer to the last page
         addFooter();
-    
+
         doc.save(`report_week${getCalendarWeekAndYear().week}.pdf`);
     };
-    
-    
 
     //////////////////////////////////////////////////////////////
     const exportPdfBySupplier = () => {
@@ -313,6 +311,11 @@ function AllOrdersMain({ auth }) {
         }
         const [year, month, day] = dateString.split("-");
         return `${day}.${month}.${year}`;
+    };
+
+    const formatTime = (time) => {
+        const [hours, minutes] = time.split(":");
+        return `${hours}:${minutes}`;
     };
 
     function getCalendarWeekAndYear() {
@@ -467,7 +470,7 @@ function AllOrdersMain({ auth }) {
                                                         {formatDate(order.date)}
                                                     </Td>
                                                     <Td>{order.weekday}</Td>
-                                                    <Td>{order.time}</Td>
+                                                    <Td>{formatTime(order.time)}</Td>
                                                     <Td>{order.schoolClass}</Td>
                                                     <Td>{order.location}</Td>
                                                     <Td>{order.user.name}</Td>
