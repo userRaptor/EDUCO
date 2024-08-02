@@ -109,7 +109,7 @@ function AllOrdersMain({ auth }) {
         pages.push(i);
     }
 
-    const exportPDF = () => {
+    const exportPDFByPerson = () => {
         const doc = new jsPDF();
         const tableColumn = [
             "Id",
@@ -121,56 +121,62 @@ function AllOrdersMain({ auth }) {
             "Teacher",
             "Purpose",
         ];
-        const tableRows = [];
 
-        filteredOrders
+        // Group orders by teacher
+        const ordersByTeacher = filteredOrders
             .filter((order) => order.includeSummary)
-            .map((order) => {
-                const orderData = [
-                    order.id,
-                    order.date,
-                    order.weekday,
-                    order.time,
-                    order.schoolClass,
-                    order.location,
-                    order.user.name,
-                    order.purpose,
-                ];
-                tableRows.push(orderData);
+            .reduce((acc, order) => {
+                (acc[order.user.name] = acc[order.user.name] || []).push(order);
+                return acc;
+            }, {});
+
+        // Loop through each teacher
+        Object.keys(ordersByTeacher).forEach((teacher, index) => {
+            if (index > 0) {
+                doc.addPage(); // Add a new page for each teacher
+            }
+
+            const tableRows = ordersByTeacher[teacher].map((order) => [
+                order.id,
+                order.date,
+                order.weekday,
+                order.time,
+                order.schoolClass,
+                order.location,
+                order.user.name,
+                order.purpose,
+            ]);
+
+            doc.setFontSize(20);
+            doc.text(`Orders for ${teacher}`, 20, 15); // Title
+            doc.setFontSize(12);
+            doc.text(
+                `From: ${formatDate(startDate)} to: ${formatDate(endDate)}`,
+                20,
+                25
+            ); // Subtitle
+
+            autoTable(doc, {
+                head: [tableColumn],
+                body: tableRows,
+                startY: 35,
+                didDrawPage: function (data) {
+                    doc.setFontSize(10);
+                    doc.text(
+                        "Page " + doc.internal.getNumberOfPages(),
+                        data.settings.margin.left,
+                        doc.internal.pageSize.height - 10
+                    );
+                    doc.text(
+                        "Year: " +
+                            getCalendarWeekAndYear().year +
+                            ", CalendarWeek: " +
+                            getCalendarWeekAndYear().week,
+                        data.settings.margin.left + 50,
+                        doc.internal.pageSize.height - 10
+                    );
+                },
             });
-
-        doc.setFontSize(20);
-        doc.text(
-            "Orders from: " +
-                formatDate(startDate) +
-                " to: " +
-                formatDate(endDate),
-            20,
-            15
-        ); // Title
-        doc.setFontSize(12);
-        doc.text("ID: ", 15, 30); // Subtitle
-
-        autoTable(doc, {
-            head: [tableColumn],
-            body: tableRows,
-            startY: 35,
-            didDrawPage: function (data) {
-                doc.setFontSize(10);
-                doc.text(
-                    "Page " + doc.internal.getNumberOfPages(),
-                    data.settings.margin.left,
-                    doc.internal.pageSize.height - 10
-                );
-                doc.text(
-                    "Year: " +
-                        getCalendarWeekAndYear().year +
-                        ", CalendarWeek: " +
-                        getCalendarWeekAndYear().week,
-                    data.settings.margin.left + 50,
-                    doc.internal.pageSize.height - 10
-                );
-            },
         });
 
         doc.save(`report_week${getCalendarWeekAndYear().week}.pdf`);
@@ -348,7 +354,7 @@ function AllOrdersMain({ auth }) {
                                     <Button
                                         backgroundColor="#FFA500"
                                         style={{ marginLeft: "40px" }}
-                                        onClick={exportPDF}
+                                        onClick={exportPDFByPerson}
                                     >
                                         Export by person
                                         <DownloadIcon
