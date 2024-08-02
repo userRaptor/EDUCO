@@ -108,18 +108,16 @@ function AllOrdersMain({ auth }) {
     for (let i = 1; i <= Math.ceil(filteredOrders.length / itemsPerPage); i++) {
         pages.push(i);
     }
-
+    ///////////////////////////////////////////////////////
     const exportPDFByPerson = () => {
         const doc = new jsPDF();
         const tableColumn = [
-            "Id",
-            "Date",
-            "Weekday",
-            "Time",
-            "Class",
-            "Location",
-            "Teacher",
-            "Purpose",
+            "Name",
+            "Quantity",
+            "Unit",
+            "Category",
+            "Supplier",
+            "Comment",
         ];
 
         // Group orders by teacher
@@ -136,17 +134,7 @@ function AllOrdersMain({ auth }) {
                 doc.addPage(); // Add a new page for each teacher
             }
 
-            const tableRows = ordersByTeacher[teacher].map((order) => [
-                order.id,
-                order.date,
-                order.weekday,
-                order.time,
-                order.schoolClass,
-                order.location,
-                order.user.name,
-                order.purpose,
-            ]);
-
+            // Title and Subtitle
             doc.setFontSize(20);
             doc.text(`Orders for ${teacher}`, 20, 15); // Title
             doc.setFontSize(12);
@@ -156,32 +144,85 @@ function AllOrdersMain({ auth }) {
                 25
             ); // Subtitle
 
-            autoTable(doc, {
-                head: [tableColumn],
-                body: tableRows,
-                startY: 35,
-                didDrawPage: function (data) {
-                    doc.setFontSize(10);
-                    doc.text(
-                        "Page " + doc.internal.getNumberOfPages(),
-                        data.settings.margin.left,
-                        doc.internal.pageSize.height - 10
-                    );
-                    doc.text(
-                        "Year: " +
-                            getCalendarWeekAndYear().year +
-                            ", CalendarWeek: " +
-                            getCalendarWeekAndYear().week,
-                        data.settings.margin.left + 50,
-                        doc.internal.pageSize.height - 10
-                    );
-                },
+            // Add Orders and Groceries
+            ordersByTeacher[teacher].forEach((order, orderIndex) => {
+                if (orderIndex > 0) {
+                    doc.addPage(); // Add a new page for each order if needed
+                }
+
+                // Order Details
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(
+                    `Order ID: ${order.id}, Date: ${order.date}, Weekday: ${order.weekday}, Time: ${order.time}, Class: ${order.schoolClass}, Location: ${order.location}, Teacher: ${order.user.name}, Purpose: ${order.purpose}`,
+                    20,
+                    35
+                );
+
+                // Add a space between order details and groceries table
+                doc.setFont("helvetica", "normal");
+                const yOffset = 45; // Adjust based on your content
+                let currentY = yOffset;
+
+                // Groceries Table
+                if (order.groceries && order.groceries.length > 0) {
+                    autoTable(doc, {
+                        head: [tableColumn],
+                        body: order.groceries.map((grocery) => [
+                            grocery.name,
+                            grocery.pivot.quantity,
+                            grocery.unit,
+                            grocery.category,
+                            grocery.supplier,
+                            grocery.pivot.comment,
+                        ]),
+                        startY: currentY,
+                        styles: { fontSize: 10 }, // Adjust font size if needed
+                        didDrawPage: (data) => {
+                            doc.setFontSize(10);
+                            doc.text(
+                                "Page " + doc.internal.getNumberOfPages(),
+                                20,
+                                doc.internal.pageSize.height - 10
+                            );
+                            doc.text(
+                                "Year: " +
+                                    getCalendarWeekAndYear().year +
+                                    ", CalendarWeek: " +
+                                    getCalendarWeekAndYear().week,
+                                70,
+                                doc.internal.pageSize.height - 10
+                            );
+                        },
+                    });
+                    currentY = doc.autoTable.previous.finalY + 10; // Update yOffset after table
+                } else {
+                    doc.text("No groceries for this order.", 20, currentY);
+                    currentY += 10; // Update yOffset
+                }
             });
+
+            // Footer
+            doc.setFontSize(10);
+            doc.text(
+                "Page " + doc.internal.getNumberOfPages(),
+                20,
+                doc.internal.pageSize.height - 10
+            );
+            doc.text(
+                "Year: " +
+                    getCalendarWeekAndYear().year +
+                    ", CalendarWeek: " +
+                    getCalendarWeekAndYear().week,
+                70,
+                doc.internal.pageSize.height - 10
+            );
         });
 
         doc.save(`report_week${getCalendarWeekAndYear().week}.pdf`);
     };
 
+    //////////////////////////////////////////////////////////////
     const exportPdfBySupplier = () => {
         const doc = new jsPDF();
         const tableColumn = [
