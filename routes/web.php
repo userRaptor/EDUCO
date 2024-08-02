@@ -91,7 +91,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder'); //?
 
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
-
+    //sicherheitsproblem?? wenn eine andere userId übergeben wird?
+    Route::delete('api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');  
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
 });
 

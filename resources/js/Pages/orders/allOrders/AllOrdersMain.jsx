@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useState } from "react";
 import { Button, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 
@@ -59,6 +62,24 @@ function AllOrdersMain({ auth }) {
             .catch((error) => {
                 console.log(error);
             });
+    };
+
+    const deleteAllOrders = () => {
+        if (
+            window.confirm(
+                "Are you sure to delete all orders? \nYou can't undo this action afterwards."
+            )
+        ) {
+            axios
+                .delete("/api/orders")
+                .then((response) => {
+                    fetchOrders();
+                    successAlert("All orders have been deleted successfully!");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     };
 
     const changeIncludeSummary = (order) => {
@@ -187,9 +208,9 @@ function AllOrdersMain({ auth }) {
                 doc.text(
                     `Order ID: ${order.id}, ${order.purpose}, ${
                         order.weekday
-                    }, ${formatDate(order.date)} - ${formatTime(order.time)}, -> ${
-                        order.schoolClass
-                    }, ${order.location}`,
+                    }, ${formatDate(order.date)} - ${formatTime(
+                        order.time
+                    )}, -> ${order.schoolClass}, ${order.location}`,
                     margin,
                     currentY
                 );
@@ -241,69 +262,171 @@ function AllOrdersMain({ auth }) {
     const exportPdfBySupplier = () => {
         const doc = new jsPDF();
         const tableColumn = [
-            "Id",
-            "Date",
-            "Weekday",
-            "Time",
-            "Class",
-            "Location",
-            "Teacher",
-            "Purpose",
+            "Name",
+            "Quantity",
+            "Unit",
+            "Category",
+            "Supplier",
+            "Comment",
         ];
-        const tableRows = [];
 
-        filteredOrders
+        const pageHeight = doc.internal.pageSize.height;
+        const footerHeight = 20; // Höhe für Footer
+        const margin = 10;
+
+        // Funktion zum Hinzufügen des Footers
+        const addFooter = () => {
+            const currentPage = doc.internal.getNumberOfPages();
+            doc.setFontSize(10);
+            doc.text("Page " + currentPage, margin, pageHeight - margin);
+            doc.text(
+                "Year: " +
+                    getCalendarWeekAndYear().year +
+                    ", CalendarWeek: " +
+                    getCalendarWeekAndYear().week,
+                70,
+                pageHeight - margin
+            );
+        };
+
+        // Bestellungen nach Lieferant gruppieren
+        const ordersBySupplier = filteredOrders
             .filter((order) => order.includeSummary)
-            .map((order) => {
-                const orderData = [
-                    order.id,
-                    order.date,
-                    order.weekday,
-                    order.time,
-                    order.schoolClass,
-                    order.location,
-                    order.user.name,
-                    order.purpose,
-                ];
-                tableRows.push(orderData);
+            .reduce((acc, order) => {
+                (acc[order.supplier] = acc[order.supplier] || []).push(order);
+                return acc;
+            }, {});
+
+        // Innerhalb jedes Lieferanten nach Wochentagen sortieren
+        Object.keys(ordersBySupplier).forEach((supplier, index) => {
+            if (index > 0) {
+                doc.addPage(); // Neue Seite für jeden Lieferanten
+            }
+
+            let currentY = 20; // Initiale Y-Position für Inhalte
+
+            // Titel und Untertitel
+            doc.setFontSize(20);
+            doc.text(`Orders from Supplier: ${supplier}`, margin, currentY); // Titel
+            currentY += 15; // Vertikaler Abstand nach Titel
+            doc.setFontSize(12);
+            doc.text(
+                `From: ${formatDate(startDate)} to: ${formatDate(endDate)}`,
+                margin,
+                currentY
+            ); // Untertitel
+            currentY += 15; // Vertikaler Abstand nach Untertitel
+
+            // Bestellungen nach Wochentagen sortieren
+            const ordersByWeekday = ordersBySupplier[supplier].reduce(
+                (acc, order) => {
+                    const weekday = order.weekday; // Annahme: Wochentag als String oder Nummer
+                    (acc[weekday] = acc[weekday] || []).push(order);
+                    return acc;
+                },
+                {}
+            );
+
+            // Bestellungen nach Wochentag hinzufügen
+            [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+            ].forEach((day) => {
+                const ordersForDay = ordersByWeekday[day] || [];
+
+                if (ordersForDay.length > 0) {
+                    if (currentY + footerHeight > pageHeight - margin) {
+                        addFooter();
+                        doc.addPage();
+                        currentY = 20; // Y-Position auf neuer Seite zurücksetzen
+                    }
+
+                    // Wochentag-Überschrift
+                    doc.setFontSize(16);
+                    doc.text(day, margin, currentY); // Wochentag
+                    currentY += 10; // Abstand nach Wochentag-Überschrift
+
+                    // Bestellungen des Wochentages
+                    ordersForDay.forEach((order, orderIndex) => {
+                        if (orderIndex > 0) {
+                            currentY += 20; // Abstand zwischen Bestellungen
+                        }
+
+                        // Prüfen, ob genug Platz für Bestellungsdetails und Tabelle vorhanden ist
+                        if (currentY + footerHeight > pageHeight - margin) {
+                            addFooter();
+                            doc.addPage();
+                            currentY = 20; // Y-Position auf neuer Seite zurücksetzen
+                        }
+
+                        // Bestellungsdetails
+                        doc.setFontSize(11);
+                        doc.setTextColor(0, 0, 255); // Blau
+                        doc.setFont("helvetica", "bold");
+                        doc.text(
+                            `Order ID: ${order.id}, ${order.purpose}, ${
+                                order.weekday
+                            }, ${formatDate(order.date)} - ${formatTime(
+                                order.time
+                            )}, -> ${order.schoolClass}, ${order.location}`,
+                            margin,
+                            currentY
+                        );
+                        doc.setTextColor(0, 0, 0); // Schwarz
+
+                        // Y-Position nach Bestellungsdetails aktualisieren
+                        currentY += 10; // Abstand zwischen Bestellungsdetails und Tabelle
+
+                        // Prüfen, ob genug Platz für Tabelle vorhanden ist
+                        if (currentY + footerHeight > pageHeight - margin) {
+                            addFooter();
+                            doc.addPage();
+                            currentY = 20; // Y-Position auf neuer Seite zurücksetzen
+                        }
+
+                        // Tabelle für Einkäufe
+                        autoTable(doc, {
+                            head: [tableColumn],
+                            body: order.groceries.map((grocery) => [
+                                grocery.name,
+                                grocery.pivot.quantity,
+                                grocery.unit,
+                                grocery.category,
+                                grocery.supplier,
+                                grocery.pivot.comment,
+                            ]),
+                            startY: currentY,
+                            styles: { fontSize: 10 }, // Schriftgröße anpassen, falls nötig
+                            didDrawPage: (data) => {
+                                addFooter();
+                            },
+                        });
+
+                        // Y-Position nach Tabelle aktualisieren
+                        currentY = doc.autoTable.previous.finalY + 10; // Y-Offset nach Tabelle aktualisieren
+                    });
+
+                    // Abstand nach den Bestellungen eines Wochentages
+                    currentY += 20;
+                }
             });
 
-        doc.setFontSize(20);
-        doc.text(
-            "Orders from: " +
-                formatDate(startDate) +
-                " to: " +
-                formatDate(endDate),
-            20,
-            15
-        ); // Title
-        doc.setFontSize(12);
-        doc.text("ID: ", 15, 30); // Subtitle
-
-        autoTable(doc, {
-            head: [tableColumn],
-            body: tableRows,
-            startY: 35,
-            didDrawPage: function (data) {
-                doc.setFontSize(10);
-                doc.text(
-                    "Page " + doc.internal.getNumberOfPages(),
-                    data.settings.margin.left,
-                    doc.internal.pageSize.height - 10
-                );
-                doc.text(
-                    "Year: " +
-                        getCalendarWeekAndYear().year +
-                        ", CalendarWeek: " +
-                        getCalendarWeekAndYear().week,
-                    data.settings.margin.left + 50,
-                    doc.internal.pageSize.height - 10
-                );
-            },
+            // Nach Beendigung aller Bestellungen eines Lieferanten, Abstand vor dem nächsten Lieferanten
+            currentY += 20;
         });
+
+        // Footer auf der letzten Seite hinzufügen
+        addFooter();
 
         doc.save(`report_week${getCalendarWeekAndYear().week}.pdf`);
     };
+
+    //////////////////////////////////////////////////////////////
 
     const formatDate = (dateString) => {
         if (!dateString) {
@@ -333,6 +456,20 @@ function AllOrdersMain({ auth }) {
         return { year: tempDate.getUTCFullYear(), week: weekNo };
     }
 
+    const successAlert = (infoSuccess) => {
+        toast.success(infoSuccess, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
+    };
+
     useEffect(() => {
         fetchOrders();
     }, []);
@@ -348,6 +485,21 @@ function AllOrdersMain({ auth }) {
             }
         >
             <Head title="AllOrders" />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
+
             <div className="py-2 mt-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -470,7 +622,9 @@ function AllOrdersMain({ auth }) {
                                                         {formatDate(order.date)}
                                                     </Td>
                                                     <Td>{order.weekday}</Td>
-                                                    <Td>{formatTime(order.time)}</Td>
+                                                    <Td>
+                                                        {formatTime(order.time)}
+                                                    </Td>
                                                     <Td>{order.schoolClass}</Td>
                                                     <Td>{order.location}</Td>
                                                     <Td>{order.user.name}</Td>
@@ -536,6 +690,22 @@ function AllOrdersMain({ auth }) {
                                         {number}
                                     </Button>
                                 ))}
+                            </div>
+
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    marginBottom: "50px",
+                                }}
+                            >
+                                <Button
+                                    isDisabled
+                                    colorScheme="red"
+                                    onClick={deleteAllOrders}
+                                >
+                                    DELETE ALL
+                                </Button>
                             </div>
                         </div>
                     </div>

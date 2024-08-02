@@ -116,6 +116,17 @@ class OrderController extends Controller
         return response()->json(null, 204);
     }
 
+    public function deleteOrdersByUserId($userId)
+    {
+        $deletedCount = Order::where('user_id', $userId)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Alle Bestellungen für den Benutzer wurden erfolgreich gelöscht.',
+            'deleted_count' => $deletedCount
+        ]);
+    }
+
     public function deleteAll()
     {
         Order::query()->delete();
