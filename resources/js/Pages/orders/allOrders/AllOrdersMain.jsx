@@ -261,169 +261,49 @@ function AllOrdersMain({ auth }) {
     //////////////////////////////////////////////////////////////
     const exportPdfBySupplier = () => {
         const doc = new jsPDF();
-        const tableColumn = [
-            "Name",
-            "Quantity",
-            "Unit",
-            "Category",
-            "Supplier",
-            "Comment",
-        ];
 
-        const pageHeight = doc.internal.pageSize.height;
-        const footerHeight = 20; // Höhe für Footer
-        const margin = 10;
+        // Titel des Dokuments
+        doc.text("Übersicht der Lebensmittel", 10, 10);
 
-        // Funktion zum Hinzufügen des Footers
-        const addFooter = () => {
-            const currentPage = doc.internal.getNumberOfPages();
-            doc.setFontSize(10);
-            doc.text("Page " + currentPage, margin, pageHeight - margin);
-            doc.text(
-                "Year: " +
-                    getCalendarWeekAndYear().year +
-                    ", CalendarWeek: " +
-                    getCalendarWeekAndYear().week,
-                70,
-                pageHeight - margin
-            );
-        };
+        // Array zur Speicherung aller Lebensmittelinformationen
+        const groceriesData = [];
 
-        // Bestellungen nach Lieferant gruppieren
-        const ordersBySupplier = filteredOrders
-            .filter((order) => order.includeSummary)
-            .reduce((acc, order) => {
-                (acc[order.supplier] = acc[order.supplier] || []).push(order);
-                return acc;
-            }, {});
-
-        // Innerhalb jedes Lieferanten nach Wochentagen sortieren
-        Object.keys(ordersBySupplier).forEach((supplier, index) => {
-            if (index > 0) {
-                doc.addPage(); // Neue Seite für jeden Lieferanten
+        // Durchlaufen aller Bestellungen und Extrahieren der Lebensmittelinformationen
+        orders.forEach((order) => {
+            if (order.groceries) {
+                order.groceries.forEach((grocery) => {
+                    groceriesData.push([
+                        grocery.name,
+                        grocery.pivot.quantity,
+                        grocery.unit,
+                        grocery.category,
+                        grocery.supplier,
+                        grocery.pivot.comment,
+                        order.weekday
+                    ]);
+                });
             }
-
-            let currentY = 20; // Initiale Y-Position für Inhalte
-
-            // Titel und Untertitel
-            doc.setFontSize(20);
-            doc.text(`Orders from Supplier: ${supplier}`, margin, currentY); // Titel
-            currentY += 15; // Vertikaler Abstand nach Titel
-            doc.setFontSize(12);
-            doc.text(
-                `From: ${formatDate(startDate)} to: ${formatDate(endDate)}`,
-                margin,
-                currentY
-            ); // Untertitel
-            currentY += 15; // Vertikaler Abstand nach Untertitel
-
-            // Bestellungen nach Wochentagen sortieren
-            const ordersByWeekday = ordersBySupplier[supplier].reduce(
-                (acc, order) => {
-                    const weekday = order.weekday; // Annahme: Wochentag als String oder Nummer
-                    (acc[weekday] = acc[weekday] || []).push(order);
-                    return acc;
-                },
-                {}
-            );
-
-            // Bestellungen nach Wochentag hinzufügen
-            [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-            ].forEach((day) => {
-                const ordersForDay = ordersByWeekday[day] || [];
-
-                if (ordersForDay.length > 0) {
-                    if (currentY + footerHeight > pageHeight - margin) {
-                        addFooter();
-                        doc.addPage();
-                        currentY = 20; // Y-Position auf neuer Seite zurücksetzen
-                    }
-
-                    // Wochentag-Überschrift
-                    doc.setFontSize(16);
-                    doc.text(day, margin, currentY); // Wochentag
-                    currentY += 10; // Abstand nach Wochentag-Überschrift
-
-                    // Bestellungen des Wochentages
-                    ordersForDay.forEach((order, orderIndex) => {
-                        if (orderIndex > 0) {
-                            currentY += 20; // Abstand zwischen Bestellungen
-                        }
-
-                        // Prüfen, ob genug Platz für Bestellungsdetails und Tabelle vorhanden ist
-                        if (currentY + footerHeight > pageHeight - margin) {
-                            addFooter();
-                            doc.addPage();
-                            currentY = 20; // Y-Position auf neuer Seite zurücksetzen
-                        }
-
-                        // Bestellungsdetails
-                        doc.setFontSize(11);
-                        doc.setTextColor(0, 0, 255); // Blau
-                        doc.setFont("helvetica", "bold");
-                        doc.text(
-                            `Order ID: ${order.id}, ${order.purpose}, ${
-                                order.weekday
-                            }, ${formatDate(order.date)} - ${formatTime(
-                                order.time
-                            )}, -> ${order.schoolClass}, ${order.location}`,
-                            margin,
-                            currentY
-                        );
-                        doc.setTextColor(0, 0, 0); // Schwarz
-
-                        // Y-Position nach Bestellungsdetails aktualisieren
-                        currentY += 10; // Abstand zwischen Bestellungsdetails und Tabelle
-
-                        // Prüfen, ob genug Platz für Tabelle vorhanden ist
-                        if (currentY + footerHeight > pageHeight - margin) {
-                            addFooter();
-                            doc.addPage();
-                            currentY = 20; // Y-Position auf neuer Seite zurücksetzen
-                        }
-
-                        // Tabelle für Einkäufe
-                        autoTable(doc, {
-                            head: [tableColumn],
-                            body: order.groceries.map((grocery) => [
-                                grocery.name,
-                                grocery.pivot.quantity,
-                                grocery.unit,
-                                grocery.category,
-                                grocery.supplier,
-                                grocery.pivot.comment,
-                            ]),
-                            startY: currentY,
-                            styles: { fontSize: 10 }, // Schriftgröße anpassen, falls nötig
-                            didDrawPage: (data) => {
-                                addFooter();
-                            },
-                        });
-
-                        // Y-Position nach Tabelle aktualisieren
-                        currentY = doc.autoTable.previous.finalY + 10; // Y-Offset nach Tabelle aktualisieren
-                    });
-
-                    // Abstand nach den Bestellungen eines Wochentages
-                    currentY += 20;
-                }
-            });
-
-            // Nach Beendigung aller Bestellungen eines Lieferanten, Abstand vor dem nächsten Lieferanten
-            currentY += 20;
         });
 
-        // Footer auf der letzten Seite hinzufügen
-        addFooter();
+        // Hinzufügen der Tabelle zum PDF
+        autoTable(doc, {
+            head: [
+                [
+                    "Name",
+                    "Menge",
+                    "Einheit",
+                    "Kategorie",
+                    "Lieferant",
+                    "Kommentar",
+                    "Wochentag"
+                ],
+            ],
+            body: groceriesData,
+            startY: 20,
+        });
 
-        doc.save(`report_week${getCalendarWeekAndYear().week}.pdf`);
+        // Speichern des PDF
+        doc.save("groceries.pdf");
     };
 
     //////////////////////////////////////////////////////////////
