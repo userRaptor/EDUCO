@@ -263,8 +263,8 @@ function AllOrdersMain({ auth }) {
         const doc = new jsPDF();
     
         // Titel des Dokuments
-        doc.text(`Report suppliers: From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, 10);
-
+        //doc.text(`Report suppliers: From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, 10);
+    
         // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten und Wochentagen
         const groceriesDataBySupplierAndWeekday = {};
     
@@ -296,22 +296,28 @@ function AllOrdersMain({ auth }) {
             }
         });
     
-        // Variable zur Nachverfolgung der Y-Position im PDF
-        let currentY = 20;
-    
         // Wochentage in der Reihenfolge Montag bis Sonntag
         const weekdaysOrder = [
             'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
         ];
+
+        // Definierter Abstand vom oberen Rand
+        const topMargin = 20;
+
     
         // Durchlaufen der Lieferanten und Erstellen von Tabellen
-        Object.keys(groceriesDataBySupplierAndWeekday).forEach((supplier) => {
+        Object.keys(groceriesDataBySupplierAndWeekday).forEach((supplier, index) => {
+            // Wenn es nicht der erste Lieferant ist, eine neue Seite hinzufügen
+            if (index > 0) {
+                doc.addPage();
+            }
+    
             // Überschrift für jeden Lieferanten
             doc.setFontSize(13);
             doc.setTextColor(0, 0, 255); // Blue
             doc.setFont("helvetica", "bold");
-            doc.text(`Supplier: ${supplier}`, 10, currentY);
-            currentY += 10;
+            doc.text(`Supplier: ${supplier} => From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, topMargin);
+            let currentY = topMargin + 10;
     
             // Durchlaufen der Wochentage und Erstellen von Tabellen
             weekdaysOrder.forEach((weekday) => {
@@ -352,6 +358,7 @@ function AllOrdersMain({ auth }) {
         // Speichern des PDF
         doc.save("groceries_by_supplier.pdf");
     };
+    
     
 
     //////////////////////////////////////////////////////////////
