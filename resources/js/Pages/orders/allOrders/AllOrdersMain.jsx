@@ -134,22 +134,23 @@ function AllOrdersMain({ auth }) {
                 doc.addPage(); // Add a new page for each teacher
             }
 
+            // Reset currentY to the initial value for each new teacher
+            let currentY = 20; // Adjust this value based on where you want the content to start
+
             // Title and Subtitle
             doc.setFontSize(20);
-            doc.text(`Orders for ${teacher}`, 20, 15); // Title
+            doc.text(`Orders for ${teacher}`, 20, currentY); // Title
+            currentY += 15; // Adjust vertical space after title
             doc.setFontSize(12);
             doc.text(
                 `From: ${formatDate(startDate)} to: ${formatDate(endDate)}`,
                 20,
-                25
+                currentY
             ); // Subtitle
+            currentY += 15; // Adjust vertical space after subtitle
 
             // Add Orders and Groceries
-            ordersByTeacher[teacher].forEach((order, orderIndex) => {
-                if (orderIndex > 0) {
-                    doc.addPage(); // Add a new page for each order if needed
-                }
-
+            ordersByTeacher[teacher].forEach((order) => {
                 // Order Details
                 doc.setFontSize(11);
                 doc.setTextColor(0, 0, 255); // Blau
@@ -161,14 +162,12 @@ function AllOrdersMain({ auth }) {
                         order.schoolClass
                     }, ${order.location}`,
                     10,
-                    35
+                    currentY
                 );
                 doc.setTextColor(0, 0, 0); // Schwarz
 
-                // Add a space between order details and groceries table
-                doc.setFont("helvetica", "normal");
-                const yOffset = 40; // Adjust based on your content
-                let currentY = yOffset;
+                // Update currentY position for groceries table
+                currentY += 10; // Add space between order details and table
 
                 // Groceries Table
                 autoTable(doc, {
@@ -200,6 +199,8 @@ function AllOrdersMain({ auth }) {
                         );
                     },
                 });
+
+                // Update currentY position after table
                 currentY = doc.autoTable.previous.finalY + 10; // Update yOffset after table
             });
 
