@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'EDUCO'),   // if APP_NAME is not set in .env file, then default value is 'EDUCO'
 
     /*
     |--------------------------------------------------------------------------
