@@ -2,6 +2,9 @@ import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
+import { toast, ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import NewOrder from "./NewOrder";
 import AvailableGroceries from "./AvailableGroceries";
 import MyOrderDetailView from "./MyOrderDetailView";
@@ -35,6 +38,20 @@ function MainNewOrderGroceries({ auth }) {
             }
         >
             <Head title="NewOrder" />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
 
             <NewOrder
                 auth={auth}

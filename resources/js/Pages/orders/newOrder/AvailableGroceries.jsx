@@ -28,7 +28,6 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
 
     const [quantity, setQuantity] = React.useState({});
     const [comment, setComment] = React.useState({});
-    const [isLoadingToSendData, setIsLoadingToSendData] = React.useState(false);
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
     const itemsPerPage = 20; // Pagination
@@ -57,23 +56,17 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
         if (payload.quantity === undefined || payload.quantity === "") {
             errorAlert("Quantity field cannot be empty!");
         } else {
-            toast.dismiss();
-            setIsLoadingToSendData(true);
-            setTimeout(() => {
-                axios
-                    .post("/api/groceries_order", payload)
-                    .then((response) => {
-                        setBooleanUpdateGroceriesOrder();
-                        setIsLoadingToSendData(false);
-                        setTimeout(() => {
-                            successAlert("Grocery added to order!");
-                        }, 400);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        setIsLoadingToSendData(false);
-                    });
-            }, 800); // Delay of 1000 Milliseconds
+            axios
+                .post("/api/groceries_order", payload)
+                .then((response) => {
+                    setBooleanUpdateGroceriesOrder();
+                    setTimeout(() => {
+                        successAlert(`${groceries.name} added to order!`);
+                    }, 400);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 
@@ -141,19 +134,6 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
     ///////////////////////////////////////////////////////////////////////////////////////
     return (
         <div>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                transition={Bounce}
-            />
             <div className="py-2 mt-0">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -225,15 +205,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                                 display="flex"
                                                 justifyContent="center"
                                             >
-                                                {isLoadingToSendData ? (
-                                                    <CircularProgress
-                                                        isIndeterminate
-                                                        color="green.300"
-                                                        size="20px"
-                                                    />
-                                                ) : (
-                                                    "ADD"
-                                                )}
+                                                ADD
                                             </Th>
                                         </Tr>
                                     </Thead>
@@ -291,9 +263,6 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                                                 addGroceryToOrder(
                                                                     grocery
                                                                 )
-                                                            }
-                                                            isDisabled={
-                                                                isLoadingToSendData
                                                             }
                                                         >
                                                             ADD

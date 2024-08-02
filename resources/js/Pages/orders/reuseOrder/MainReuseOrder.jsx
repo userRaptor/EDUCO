@@ -12,6 +12,9 @@ import { Head } from "@inertiajs/react";
 import { Box, SkeletonCircle, SkeletonText , Text} from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 
+import { toast, ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function MainReuseOrder({ auth }) {
     const parsePageId = (path) => path.substring(path.lastIndexOf('/') + 1) // Get last part of URL path
     const orderId = parsePageId(window.location.pathname)        // Get last part of URL path
@@ -43,6 +46,20 @@ function MainReuseOrder({ auth }) {
             }
         >
             <Head title="Reuse Order" />
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
 
             <NewOrder
                 auth={auth}

@@ -63,20 +63,7 @@ function CopyGroceries({toCopyOrderId, actualOrderId}) {
 
 
     return(
-        <div style={{marginTop: '10px', marginLeft: '20px', marginBottom: '20px'}}>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                transition={Bounce}
-            />           
+        <div style={{marginTop: '10px', marginLeft: '20px', marginBottom: '20px'}}>        
             
         </div>
 
