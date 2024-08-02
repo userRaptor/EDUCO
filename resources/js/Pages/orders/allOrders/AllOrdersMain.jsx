@@ -265,45 +265,64 @@ function AllOrdersMain({ auth }) {
         // Titel des Dokuments
         doc.text("Übersicht der Lebensmittel", 10, 10);
 
-        // Array zur Speicherung aller Lebensmittelinformationen
-        const groceriesData = [];
+        // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten
+        const groceriesDataBySupplier = {};
 
         // Durchlaufen aller Bestellungen und Extrahieren der Lebensmittelinformationen
         orders.forEach((order) => {
             if (order.groceries) {
                 order.groceries.forEach((grocery) => {
-                    groceriesData.push([
+                    const supplier = grocery.supplier;
+
+                    if (!groceriesDataBySupplier[supplier]) {
+                        groceriesDataBySupplier[supplier] = [];
+                    }
+
+                    groceriesDataBySupplier[supplier].push([
                         grocery.name,
                         grocery.pivot.quantity,
                         grocery.unit,
                         grocery.category,
                         grocery.supplier,
                         grocery.pivot.comment,
-                        order.weekday
+                        order.weekday,
                     ]);
                 });
             }
         });
 
-        // Hinzufügen der Tabelle zum PDF
-        autoTable(doc, {
-            head: [
-                [
-                    "Name",
-                    "Menge",
-                    "Einheit",
-                    "Kategorie",
-                    "Lieferant",
-                    "Kommentar",
-                    "Wochentag"
+        // Variable zur Nachverfolgung der Y-Position im PDF
+        let currentY = 20;
+
+        // Durchlaufen der Lieferanten und Erstellen von Tabellen
+        Object.keys(groceriesDataBySupplier).forEach((supplier) => {
+            // Überschrift für jeden Lieferanten
+            doc.text(`Lieferant: ${supplier}`, 10, currentY);
+            currentY += 10;
+
+            // Hinzufügen der Tabelle zum PDF für den aktuellen Lieferanten
+            autoTable(doc, {
+                head: [
+                    [
+                        "Name",
+                        "Menge",
+                        "Einheit",
+                        "Kategorie",
+                        "Lieferant",
+                        "Kommentar",
+                        "Wochentag",
+                    ],
                 ],
-            ],
-            body: groceriesData,
-            startY: 20,
+                body: groceriesDataBySupplier[supplier],
+                startY: currentY,
+            });
+
+            // Aktualisieren der Y-Position für die nächste Tabelle
+            currentY = doc.previousAutoTable.finalY + 10;
         });
 
         // Speichern des PDF
-        doc.save("groceries.pdf");
+        doc.save("groceries_by_supplier.pdf");
     };
 
     //////////////////////////////////////////////////////////////
