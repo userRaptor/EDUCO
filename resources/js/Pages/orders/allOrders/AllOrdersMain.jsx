@@ -262,8 +262,19 @@ function AllOrdersMain({ auth }) {
     const exportPDFBySupplier = () => {
         const doc = new jsPDF();
     
-        // Titel des Dokuments
-        //doc.text(`Report suppliers: From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, 10);
+        // Funktion zum Hinzufügen der Fußzeile
+        const addFooter = () => {
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 10;
+            const currentPage = doc.internal.getNumberOfPages();
+            doc.setFontSize(10);
+            doc.text("Page " + currentPage, margin, pageHeight - margin);
+            doc.text(
+                "Year: " + getCalendarWeekAndYear().year + ", CalendarWeek: " + getCalendarWeekAndYear().week,
+                70,
+                pageHeight - margin
+            );
+        };
     
         // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten und Wochentagen
         const groceriesDataBySupplierAndWeekday = {};
@@ -300,10 +311,11 @@ function AllOrdersMain({ auth }) {
         const weekdaysOrder = [
             'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
         ];
-
+    
         // Definierter Abstand vom oberen Rand
         const topMargin = 20;
-
+        const footerHeight = 20; // Höhe, die für die Fußzeile reserviert ist
+        let currentY;
     
         // Durchlaufen der Lieferanten und Erstellen von Tabellen
         Object.keys(groceriesDataBySupplierAndWeekday).forEach((supplier, index) => {
@@ -314,20 +326,27 @@ function AllOrdersMain({ auth }) {
     
             // Überschrift für jeden Lieferanten
             doc.setFontSize(13);
-            doc.setTextColor(0, 0, 255); // Blue
+            doc.setTextColor(0, 0, 255); // Blau
             doc.setFont("helvetica", "bold");
             doc.text(`Supplier: ${supplier} => From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, topMargin);
-            let currentY = topMargin + 10;
+            currentY = topMargin + 10;
     
             // Durchlaufen der Wochentage und Erstellen von Tabellen
             weekdaysOrder.forEach((weekday) => {
                 if (groceriesDataBySupplierAndWeekday[supplier][weekday]) {
                     // Überschrift für jeden Wochentag
                     doc.setFontSize(10);
-                    doc.setTextColor(0, 0, 0); // black
+                    doc.setTextColor(0, 0, 0); // Schwarz
                     doc.setFont("helvetica", "bold");
                     doc.text(`${weekday}:`, 10, currentY);
                     currentY += 10;
+    
+                    // Überprüfen, ob genug Platz für die Tabelle vorhanden ist
+                    if (currentY + footerHeight > doc.internal.pageSize.height) {
+                        addFooter();
+                        doc.addPage();
+                        currentY = topMargin; // Y-Position für die neue Seite zurücksetzen
+                    }
     
                     // Hinzufügen der Tabelle zum PDF für den aktuellen Wochentag
                     autoTable(doc, {
@@ -344,10 +363,11 @@ function AllOrdersMain({ auth }) {
                         ],
                         body: groceriesDataBySupplierAndWeekday[supplier][weekday],
                         startY: currentY,
+                        didDrawPage: addFooter, // Fügt die Fußzeile bei jedem Seitenwechsel hinzu
                     });
     
                     // Aktualisieren der Y-Position für die nächste Tabelle
-                    currentY = doc.previousAutoTable.finalY + 10;
+                    currentY = doc.autoTable.previous.finalY + 10;
                 }
             });
     
@@ -355,9 +375,13 @@ function AllOrdersMain({ auth }) {
             currentY += 10;
         });
     
-        // Speichern des PDF
+        // Fügt die Fußzeile zur letzten Seite hinzu
+        addFooter();
+    
+        // Speichern des PDFs
         doc.save("groceries_by_supplier.pdf");
     };
+    
     
     
 
