@@ -48,3 +48,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { jsPDF } from "jspdf"; und import autoTable from "jspdf-autotable";
 install:  npm install jspdf jspdf-autotable
 
+FAVICON.ico
+Datei in public/favicon
+implementiert in app.blade.php
