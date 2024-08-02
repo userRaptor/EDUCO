@@ -295,6 +295,7 @@ function AllOrdersMain({ auth }) {
                     }
     
                     groceriesDataBySupplierAndWeekday[supplier][weekday].push([
+                        grocery.id,
                         grocery.name,
                         grocery.pivot.quantity,
                         grocery.unit,
@@ -352,6 +353,7 @@ function AllOrdersMain({ auth }) {
                     autoTable(doc, {
                         head: [
                             [
+                                "ID",
                                 "Name",
                                 "Quantity",
                                 "Unit",
