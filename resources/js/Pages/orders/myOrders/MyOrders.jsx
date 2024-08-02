@@ -84,11 +84,6 @@ function MyOrders({ auth }) {
         // navigate(`/reuseorder/${orderId}`);
     };
 
-    const formatDate = (dateString) => {
-        const [year, month, day] = dateString.split("-");
-        return `${day}.${month}.${year}`;
-    };
-
     const successAlert = (infoSuccess) => {
         toast.success(infoSuccess, {
             position: "bottom-right",
@@ -112,6 +107,16 @@ function MyOrders({ auth }) {
     for (let i = 1; i <= Math.ceil(filteredOrders.length / itemsPerPage); i++) {
         pages.push(i);
     }
+
+    const formatDate = (dateString) => {
+        const [year, month, day] = dateString.split("-");
+        return `${day}.${month}.${year}`;
+    };
+
+    const formatTime = (time) => {
+        const [hours, minutes] = time.split(":");
+        return `${hours}:${minutes}`;
+    };
 
     useEffect(() => {
         getOrdersById(auth.user.id);
@@ -197,7 +202,7 @@ function MyOrders({ auth }) {
                                                     <Td>
                                                         {formatDate(order.date)}
                                                     </Td>
-                                                    <Td>{order.time}</Td>
+                                                    <Td>{formatTime(order.time)}</Td>
                                                     <Td>{order.schoolClass}</Td>
                                                     <Td>
                                                         <Button
