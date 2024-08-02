@@ -307,14 +307,20 @@ function AllOrdersMain({ auth }) {
         // Durchlaufen der Lieferanten und Erstellen von Tabellen
         Object.keys(groceriesDataBySupplierAndWeekday).forEach((supplier) => {
             // Überschrift für jeden Lieferanten
-            doc.text(`Lieferant: ${supplier}`, 10, currentY);
+            doc.setFontSize(13);
+            doc.setTextColor(0, 0, 255); // Blue
+            doc.setFont("helvetica", "bold");
+            doc.text(`Supplier: ${supplier}`, 10, currentY);
             currentY += 10;
     
             // Durchlaufen der Wochentage und Erstellen von Tabellen
             weekdaysOrder.forEach((weekday) => {
                 if (groceriesDataBySupplierAndWeekday[supplier][weekday]) {
                     // Überschrift für jeden Wochentag
-                    doc.text(weekday, 10, currentY);
+                    doc.setFontSize(10);
+                    doc.setTextColor(0, 0, 0); // black
+                    doc.setFont("helvetica", "bold");
+                    doc.text(`${weekday}:`, 10, currentY);
                     currentY += 10;
     
                     // Hinzufügen der Tabelle zum PDF für den aktuellen Wochentag
