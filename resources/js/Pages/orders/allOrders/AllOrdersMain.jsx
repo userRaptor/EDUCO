@@ -259,12 +259,12 @@ function AllOrdersMain({ auth }) {
     };
 
     //////////////////////////////////////////////////////////////
-    const exportPdfBySupplier = () => {
+    const exportPDFBySupplier = () => {
         const doc = new jsPDF();
     
         // Titel des Dokuments
-        doc.text("Übersicht der Lebensmittel", 10, 10);
-    
+        doc.text(`Report suppliers: From: ${formatDate(startDate)} to: ${formatDate(endDate)}`, 10, 10);
+
         // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten und Wochentagen
         const groceriesDataBySupplierAndWeekday = {};
     
@@ -322,12 +322,12 @@ function AllOrdersMain({ auth }) {
                         head: [
                             [
                                 "Name",
-                                "Menge",
-                                "Einheit",
-                                "Kategorie",
-                                "Lieferant",
-                                "Kommentar",
-                                "Wochentag",
+                                "Quantity",
+                                "Unit",
+                                "Category",
+                                "Supplier",
+                                "Comment",
+                                "Weekday",
                             ],
                         ],
                         body: groceriesDataBySupplierAndWeekday[supplier][weekday],
@@ -478,7 +478,7 @@ function AllOrdersMain({ auth }) {
                                     <Button
                                         backgroundColor="#FFA500"
                                         style={{ marginLeft: "40px" }}
-                                        onClick={exportPdfBySupplier}
+                                        onClick={exportPDFBySupplier}
                                     >
                                         Export by supplier
                                         <DownloadIcon
