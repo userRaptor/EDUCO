@@ -79,4 +79,22 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password updated successfully']);
     }
+
+    public function updateRole(Request $request, $id)
+    {
+        // Validate request data
+        $request->validate([
+            'role' => 'required|string|in:admin,user', // Specify valid roles here
+        ]);
+
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Update the role
+        $user->role = $request->role;
+        $user->save();
+
+        // Optionally, you may return a response or redirect to a different URL
+        return response()->json(['message' => 'User role updated successfully']);
+    }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
-import { toast, ToastContainer, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
@@ -10,6 +10,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 import { Button, Input, Text, Flex } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -92,6 +93,27 @@ function UserManagement({ auth }) {
                     errorAlert("Error deleting user");
                 });
         }
+    };
+
+    const updateUserRoleByUserId = (userId, role) => {
+        const payload = {
+            role: role,
+        };
+
+        if(userId === auth.user.id) {
+            errorAlert("You can't change your own role!");
+            return;
+        }
+
+        axios
+            .put(`/api/userrole/${userId}`, payload)
+            .then((response) => {
+                fetchUsers();
+                successAlert("User role successfully updated");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     const fetchUsers = () => {
@@ -262,7 +284,25 @@ function UserManagement({ auth }) {
                                                 <Td>{user.id}</Td>
                                                 <Td>{user.name}</Td>
                                                 <Td>{user.email}</Td>
-                                                <Td>{user.role}</Td>
+                                                <Td>
+                                                    <Select
+                                                        placeholder="Select option"
+                                                        value={user.role}
+                                                        onChange={(e) =>
+                                                            updateUserRoleByUserId(
+                                                                user.id,
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    >
+                                                        <option value="user">
+                                                            User
+                                                        </option>
+                                                        <option value="admin">
+                                                            Admin
+                                                        </option>
+                                                    </Select>
+                                                </Td>
                                                 <Td>
                                                     {formatDate(
                                                         user.created_at

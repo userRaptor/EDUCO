@@ -71,6 +71,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::put('/api/orders/{orderid}', [OrderController::class, 'updateIncludeSummary'])->name('orders.updateIncludeSummary');
     Route::put('/api/newpassword/{userid}', [UserController::class, 'updatePassword'])->name('updatePassword');
+    Route::put('/api/userrole/{userid}', [UserController::class, 'updateRole'])->name('users.updateRole');
 
     Route::get('/api/orders', [OrderController::class, 'getAllOrders'])->name('orders.all');
     Route::get('/api/users', [UserController::class, 'getAllUsers'])->name('users.all');
