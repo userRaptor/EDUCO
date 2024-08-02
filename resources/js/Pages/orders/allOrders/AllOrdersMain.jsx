@@ -291,19 +291,25 @@ function AllOrdersMain({ auth }) {
                     }
     
                     if (!groceriesDataBySupplierAndWeekday[supplier][weekday]) {
-                        groceriesDataBySupplierAndWeekday[supplier][weekday] = [];
+                        groceriesDataBySupplierAndWeekday[supplier][weekday] = {};
                     }
     
-                    groceriesDataBySupplierAndWeekday[supplier][weekday].push([
-                        grocery.id,
-                        grocery.name,
-                        grocery.pivot.quantity,
-                        grocery.unit,
-                        grocery.category,
-                        grocery.supplier,
-                        grocery.pivot.comment,
-                        weekday,
-                    ]);
+                    const key = grocery.id + (grocery.pivot.comment ? `_${grocery.pivot.comment}` : '');
+    
+                    if (!groceriesDataBySupplierAndWeekday[supplier][weekday][key]) {
+                        groceriesDataBySupplierAndWeekday[supplier][weekday][key] = {
+                            id: grocery.id,
+                            name: grocery.name,
+                            quantity: 0,
+                            unit: grocery.unit,
+                            category: grocery.category,
+                            supplier: grocery.supplier,
+                            comment: grocery.pivot.comment,
+                            weekday: weekday,
+                        };
+                    }
+    
+                    groceriesDataBySupplierAndWeekday[supplier][weekday][key].quantity += grocery.pivot.quantity;
                 });
             }
         });
@@ -349,6 +355,9 @@ function AllOrdersMain({ auth }) {
                         currentY = topMargin; // Y-Position für die neue Seite zurücksetzen
                     }
     
+                    // Umwandeln der zusammengeführten Daten in ein Array für die Tabelle
+                    const tableData = Object.values(groceriesDataBySupplierAndWeekday[supplier][weekday]);
+    
                     // Hinzufügen der Tabelle zum PDF für den aktuellen Wochentag
                     autoTable(doc, {
                         head: [
@@ -363,7 +372,16 @@ function AllOrdersMain({ auth }) {
                                 "Weekday",
                             ],
                         ],
-                        body: groceriesDataBySupplierAndWeekday[supplier][weekday],
+                        body: tableData.map(item => [
+                            item.id,
+                            item.name,
+                            item.quantity,
+                            item.unit,
+                            item.category,
+                            item.supplier,
+                            item.comment,
+                            item.weekday,
+                        ]),
                         startY: currentY,
                         didDrawPage: addFooter, // Fügt die Fußzeile bei jedem Seitenwechsel hinzu
                     });
@@ -383,6 +401,7 @@ function AllOrdersMain({ auth }) {
         // Speichern des PDFs
         doc.save("groceries_by_supplier.pdf");
     };
+    
     
     
     
