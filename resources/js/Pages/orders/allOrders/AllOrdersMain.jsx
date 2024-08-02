@@ -151,17 +151,19 @@ function AllOrdersMain({ auth }) {
                 }
 
                 // Order Details
-                doc.setFontSize(12);
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 255); // Blau
                 doc.setFont("helvetica", "bold");
                 doc.text(
-                    `Order ID: ${order.id}, Date: ${order.date}, Weekday: ${order.weekday}, Time: ${order.time}, Class: ${order.schoolClass}, Location: ${order.location}, Teacher: ${order.user.name}, Purpose: ${order.purpose}`,
-                    20,
+                    `Order ID: ${order.id}, ${order.purpose}, ${order.weekday}, ${formatDate(order.date)}, ${order.time}, -> ${order.schoolClass}, ${order.location}`,
+                    10,
                     35
                 );
+                doc.setTextColor(0, 0, 0); // Schwarz
 
                 // Add a space between order details and groceries table
                 doc.setFont("helvetica", "normal");
-                const yOffset = 45; // Adjust based on your content
+                const yOffset = 40; // Adjust based on your content
                 let currentY = yOffset;
 
                 // Groceries Table
