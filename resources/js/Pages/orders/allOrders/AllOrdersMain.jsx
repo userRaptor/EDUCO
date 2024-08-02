@@ -261,69 +261,92 @@ function AllOrdersMain({ auth }) {
     //////////////////////////////////////////////////////////////
     const exportPdfBySupplier = () => {
         const doc = new jsPDF();
-
+    
         // Titel des Dokuments
         doc.text("Übersicht der Lebensmittel", 10, 10);
-
-        // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten
-        const groceriesDataBySupplier = {};
-
+    
+        // Objekt zur Speicherung aller Lebensmittelinformationen nach Lieferanten und Wochentagen
+        const groceriesDataBySupplierAndWeekday = {};
+    
         // Durchlaufen aller Bestellungen und Extrahieren der Lebensmittelinformationen
         orders.forEach((order) => {
             if (order.groceries) {
                 order.groceries.forEach((grocery) => {
                     const supplier = grocery.supplier;
-
-                    if (!groceriesDataBySupplier[supplier]) {
-                        groceriesDataBySupplier[supplier] = [];
+                    const weekday = order.weekday;
+    
+                    if (!groceriesDataBySupplierAndWeekday[supplier]) {
+                        groceriesDataBySupplierAndWeekday[supplier] = {};
                     }
-
-                    groceriesDataBySupplier[supplier].push([
+    
+                    if (!groceriesDataBySupplierAndWeekday[supplier][weekday]) {
+                        groceriesDataBySupplierAndWeekday[supplier][weekday] = [];
+                    }
+    
+                    groceriesDataBySupplierAndWeekday[supplier][weekday].push([
                         grocery.name,
                         grocery.pivot.quantity,
                         grocery.unit,
                         grocery.category,
                         grocery.supplier,
                         grocery.pivot.comment,
-                        order.weekday,
+                        weekday,
                     ]);
                 });
             }
         });
-
+    
         // Variable zur Nachverfolgung der Y-Position im PDF
         let currentY = 20;
-
+    
+        // Wochentage in der Reihenfolge Montag bis Sonntag
+        const weekdaysOrder = [
+            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+        ];
+    
         // Durchlaufen der Lieferanten und Erstellen von Tabellen
-        Object.keys(groceriesDataBySupplier).forEach((supplier) => {
+        Object.keys(groceriesDataBySupplierAndWeekday).forEach((supplier) => {
             // Überschrift für jeden Lieferanten
             doc.text(`Lieferant: ${supplier}`, 10, currentY);
             currentY += 10;
-
-            // Hinzufügen der Tabelle zum PDF für den aktuellen Lieferanten
-            autoTable(doc, {
-                head: [
-                    [
-                        "Name",
-                        "Menge",
-                        "Einheit",
-                        "Kategorie",
-                        "Lieferant",
-                        "Kommentar",
-                        "Wochentag",
-                    ],
-                ],
-                body: groceriesDataBySupplier[supplier],
-                startY: currentY,
+    
+            // Durchlaufen der Wochentage und Erstellen von Tabellen
+            weekdaysOrder.forEach((weekday) => {
+                if (groceriesDataBySupplierAndWeekday[supplier][weekday]) {
+                    // Überschrift für jeden Wochentag
+                    doc.text(weekday, 10, currentY);
+                    currentY += 10;
+    
+                    // Hinzufügen der Tabelle zum PDF für den aktuellen Wochentag
+                    autoTable(doc, {
+                        head: [
+                            [
+                                "Name",
+                                "Menge",
+                                "Einheit",
+                                "Kategorie",
+                                "Lieferant",
+                                "Kommentar",
+                                "Wochentag",
+                            ],
+                        ],
+                        body: groceriesDataBySupplierAndWeekday[supplier][weekday],
+                        startY: currentY,
+                    });
+    
+                    // Aktualisieren der Y-Position für die nächste Tabelle
+                    currentY = doc.previousAutoTable.finalY + 10;
+                }
             });
-
-            // Aktualisieren der Y-Position für die nächste Tabelle
-            currentY = doc.previousAutoTable.finalY + 10;
+    
+            // Platz für den nächsten Lieferanten
+            currentY += 10;
         });
-
+    
         // Speichern des PDF
         doc.save("groceries_by_supplier.pdf");
     };
+    
 
     //////////////////////////////////////////////////////////////
 
