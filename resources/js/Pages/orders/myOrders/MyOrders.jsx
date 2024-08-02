@@ -1,8 +1,7 @@
 import React from "react";
 import { Inertia } from "@inertiajs/inertia";
-import { usePage } from '@inertiajs/react';
-import axios from 'axios'; 
-
+import { usePage } from "@inertiajs/react";
+import axios from "axios";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
@@ -15,10 +14,14 @@ import { toast } from "react-toastify";
 import { Button, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, DownloadIcon } from "@chakra-ui/icons";
 
 import DetailViewOrder from "../allOrders/DetailViewOrder";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import autoTable from "jspdf-autotable";
 
 import {
     Table,
@@ -38,7 +41,7 @@ function MyOrders({ auth }) {
 
     const [currentPage, setCurrentPage] = useState(1); // Pagination
     const itemsPerPage = 10; // Pagination
-    
+
     const getOrdersById = (userId) => {
         axios
             .get(`/api/orders/${userId}`)
@@ -49,15 +52,22 @@ function MyOrders({ auth }) {
                 console.log(error);
             });
     };
-    
 
     const deleteOrderById = (order) => {
-        if (window.confirm("Are you sure to delete the order with ID " + order.id + " ? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete the order with ID " +
+                    order.id +
+                    " ? \nYou can't undo this action afterwards."
+            )
+        ) {
             axios
                 .delete(`/api/orders/${order.id}`)
                 .then((response) => {
-                    getOrdersById(auth.user.id); 
-                    successAlert(`Order ${order.id} has been deleted successfully!`);
+                    getOrdersById(auth.user.id);
+                    successAlert(
+                        `Order ${order.id} has been deleted successfully!`
+                    );
                 })
                 .catch((error) => {
                     console.log(error);
@@ -66,7 +76,11 @@ function MyOrders({ auth }) {
     };
 
     const deleteAllOrders = () => {
-        if (window.confirm("Are you sure to delete all orders? \nYou can't undo this action afterwards.")) {
+        if (
+            window.confirm(
+                "Are you sure to delete all orders? \nYou can't undo this action afterwards."
+            )
+        ) {
             axios
                 .delete("/api/orders")
                 .then((response) => {
@@ -117,6 +131,55 @@ function MyOrders({ auth }) {
         const [hours, minutes] = time.split(":");
         return `${hours}:${minutes}`;
     };
+
+    const exportOrderPDF = async (order) => {
+        const doc = new jsPDF();
+    
+        // Titel hinzufügen
+        const title = `Order ID: ${order.id} - ${order.purpose}`;
+        doc.setFontSize(18);
+        doc.text(title, 14, 20);
+    
+        // Untertitel hinzufügen
+        const subtitle = `Date: ${formatDate(order.date)} | Time: ${formatTime(order.time)} | Class: ${order.schoolClass} | Location: ${order.location} | User: ${auth.user.name}`;
+        doc.setFontSize(12);
+        doc.text(subtitle, 14, 30);
+    
+        // Detail View
+        const detailColumns = [
+            { header: 'Name', dataKey: 'name' },
+            { header: 'Quantity', dataKey: 'quantity' },
+            { header: 'Unit', dataKey: 'unit' },
+            { header: 'Category', dataKey: 'category' },
+            { header: 'Supplier', dataKey: 'supplier' },
+            { header: 'Comment', dataKey: 'comment' },
+        ];
+    
+        const detailRows = order.groceries.map(grocery => ({
+            name: grocery.name,
+            quantity: grocery.pivot.quantity,
+            unit: grocery.unit,
+            category: grocery.category,
+            supplier: grocery.supplier,
+            comment: grocery.pivot.comment,
+        }));
+    
+        autoTable(doc, {
+            head: [detailColumns.map(col => col.header)],
+            body: detailRows.map(row => detailColumns.map(col => row[col.dataKey])),
+            startY: 40, // Start unterhalb des Titels und Untertitels
+            didDrawPage: function (data) {
+                // Seitenzahl unten links hinzufügen
+                const pageNumber = data.pageNumber;
+                doc.setFontSize(10);
+                doc.text(`Page ${pageNumber}`, 14, doc.internal.pageSize.height - 10);
+            },
+        });
+    
+        doc.save(`Order_${order.id}_${order.purpose}.pdf`);
+    };
+    
+    
 
     useEffect(() => {
         getOrdersById(auth.user.id);
@@ -180,6 +243,7 @@ function MyOrders({ auth }) {
                                             <Th>Time:</Th>
                                             <Th>Class:</Th>
                                             <Th>Reuse:</Th>
+                                            <Th>Export:</Th>
                                             <Th>Delete:</Th>
                                         </Tr>
                                     </Thead>
@@ -202,7 +266,9 @@ function MyOrders({ auth }) {
                                                     <Td>
                                                         {formatDate(order.date)}
                                                     </Td>
-                                                    <Td>{formatTime(order.time)}</Td>
+                                                    <Td>
+                                                        {formatTime(order.time)}
+                                                    </Td>
                                                     <Td>{order.schoolClass}</Td>
                                                     <Td>
                                                         <Button
@@ -214,6 +280,18 @@ function MyOrders({ auth }) {
                                                             }
                                                         >
                                                             Reuse
+                                                        </Button>
+                                                    </Td>
+                                                    <Td>
+                                                        <Button
+                                                            colorScheme="blue"
+                                                            onClick={() =>
+                                                                exportOrderPDF(
+                                                                    order
+                                                                )
+                                                            }
+                                                        >
+                                                            <DownloadIcon />
                                                         </Button>
                                                     </Td>
                                                     <Td>
