@@ -109,7 +109,6 @@ function NewGroceries({ auth }) {
     };
 
     const handleSendCsvData = () => {
-        //toast.dismiss();
         console.log(csvData);
         if (csvData) {
             axios

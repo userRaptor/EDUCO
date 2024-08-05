@@ -44,20 +44,32 @@ class GroceriesController extends Controller
         return response()->json($grocery);
     }
 
-    /*
     public function importCsv(Request $request)
     {
         try {
             $data = $request->input('csv');
     
             foreach ($data as $row) {
-                if (is_array($row) && count($row) >= 4) {
+                // Skip empty rows
+                if (empty($row) || !is_array($row) || count(array_filter($row, fn($value) => trim($value) !== '')) === 0) {
+                    continue;
+                }
+
+                // Initialize empty fields with null
+                if (array_filter($row, fn($value) => trim($value) === '') !== []) {
+                    $row = array_map(fn($value) => trim($value) === '' ? null : $value, $row);
+                    //return response()->json(['message' => 'One or more fields are empty.. Each row must have at least 4 elements: name, unit, category, and supplier.'], 400);
+                }
+
+                if (is_array($row) && count($row) == 4) {
                     Groceries::create([
                         'name' => $row[0],
                         'unit' => $row[1],
                         'category' => $row[2],
                         'supplier' => $row[3],
                     ]);
+                } else {
+                    //return response()->json(['message' => 'Each row must have 4 elements: name, unit, category, and supplier.'], 400);
                 }
             }
     
@@ -67,34 +79,6 @@ class GroceriesController extends Controller
             return response()->json(['message' => 'Error importing data', 'error' => $e->getMessage()], 500);
         }
     }
-        */
-
-    public function importCsv(Request $request)
-    {
-        try {
-            $data = $request->input('csv');
-
-            foreach ($data as $row) {
-                if (!is_array($row) || count($row) < 4) {
-                    return response()->json(['message' => 'Invalid CSV structure. Each row must have at least 4 elements: name, unit, category, and supplier.'], 400);
-                }
-
-                Groceries::create([
-                    'name' => $row[0],
-                    'unit' => $row[1],
-                    'category' => $row[2],
-                    'supplier' => $row[3],
-                ]);
-            }
-
-            return response()->json(['message' => 'Imported successfully'], 200);
-
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error importing data', 'error' => $e->getMessage()], 500);
-        }
-    }
-
-    
 
     public function show(Groceries $groceries)
     {
