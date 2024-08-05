@@ -605,11 +605,11 @@ function AllOrdersMain({ auth }) {
                                             <Th>Info:</Th>
                                             <Th>Date:</Th>
                                             <Th>Weekday:</Th>
-                                            <Th>Time:</Th>
+                                            {/*<Th>Time:</Th>*/}
                                             <Th>Class:</Th>
                                             <Th>Location:</Th>
                                             <Th>Teacher:</Th>
-                                            <Th>Purpose:</Th>
+                                            {/*<Th>Purpose:</Th>*/}
                                             <Th>Include Summary:</Th>
                                         </Tr>
                                     </Thead>
@@ -633,13 +633,15 @@ function AllOrdersMain({ auth }) {
                                                         {formatDate(order.date)}
                                                     </Td>
                                                     <Td>{order.weekday}</Td>
+                                                    {/*
                                                     <Td>
                                                         {formatTime(order.time)}
                                                     </Td>
+                                                    */}
                                                     <Td>{order.schoolClass}</Td>
                                                     <Td>{order.location}</Td>
                                                     <Td>{order.user.name}</Td>
-                                                    <Td>{order.purpose}</Td>
+                                                    {/*<Td>{order.purpose}</Td>*/}
                                                     <Td>
                                                         <Button
                                                             colorScheme={
