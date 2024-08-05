@@ -156,7 +156,7 @@ function UserManagement({ auth }) {
     };
 
     const filteredUsers = users.filter((user) =>
-        user.name.startsWith(searchByName)
+        user.name.toLowerCase().includes(searchByName.toLowerCase())
     );
 
     const formatDate = (dateString) => {

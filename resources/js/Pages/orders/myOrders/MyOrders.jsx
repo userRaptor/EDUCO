@@ -113,7 +113,7 @@ function MyOrders({ auth }) {
     };
 
     const filteredOrders = orders.filter((order) =>
-        order.purpose.startsWith(searchByPurpose)
+        order.purpose.toLowerCase().includes(searchByPurpose.toLowerCase())
     );
 
     // Pagination

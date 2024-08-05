@@ -72,9 +72,10 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
 
     const filteredGroceries = groceries.filter(
         (grocery) =>
-            grocery.name.startsWith(searchByName) &&
-            grocery.category.startsWith(searchByCategory)
+            grocery.name.toLowerCase().includes(searchByName.toLowerCase()) &&
+            grocery.category.toLowerCase().includes(searchByCategory.toLowerCase())
     );
+    
 
     // Pagination
     const pages = [];
