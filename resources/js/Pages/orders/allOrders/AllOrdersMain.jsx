@@ -178,7 +178,7 @@ function AllOrdersMain({ auth }) {
 
             // Title and Subtitle
             doc.setFontSize(20);
-            doc.text(`Orders for ${teacher}`, margin, currentY); // Title
+            doc.text(`Orders for ${teacher}:`, margin, currentY); // Title
             currentY += 15; // Adjust vertical space after title
             doc.setFontSize(12);
             doc.text(
@@ -255,7 +255,7 @@ function AllOrdersMain({ auth }) {
         // Add footer to the last page
         addFooter();
 
-        doc.save(`reportByTeacher_week${getCalendarWeekAndYear().week}.pdf`);
+        doc.save(`reportTeacher_week${getCalendarWeekAndYear().week}.pdf`);
     };
 
     //////////////////////////////////////////////////////////////
@@ -434,7 +434,7 @@ function AllOrdersMain({ auth }) {
         addFooter();
 
         // Speichern des PDFs
-        doc.save(`reportBySupplier_week${getCalendarWeekAndYear().week}.pdf`);
+        doc.save(`reportSupplier_week${getCalendarWeekAndYear().week}.pdf`);
     };
 
     //////////////////////////////////////////////////////////////
