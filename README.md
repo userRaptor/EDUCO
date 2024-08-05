@@ -51,3 +51,19 @@ install:  npm install jspdf jspdf-autotable
 FAVICON.ico
 Datei in public/favicon
 implementiert in app.blade.php
+
+
+FEHLERMELDUNG alert:
+```java
+ERROR ALERT:
+    axios
+        .post("/groceries", payload)
+        .then((response) => {
+            setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
+            successAlert("The product was added successfully!");
+        })
+        .catch((error) => {
+            errorAlert(error.response.data.message);
+            console.log(error.response?.data || error.message);
+        });
+```

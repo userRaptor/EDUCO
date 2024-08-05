@@ -60,8 +60,6 @@ ERROR ALERT:
 axios
                 .post("/groceries", payload)
                 .then((response) => {
-                    setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
-                    successAlert("The product was added successfully!");
                 })
                 .catch((error) => {
                     errorAlert(error.response.data.message);

@@ -60,7 +60,6 @@ function NewGroceries({ auth }) {
     const [csvData, setCsvData] = useState(null);
     const [renderKey, setRenderKey] = useState(0);
 
-    const [isAlertOpen, setIsAlertOpen] = React.useState(false);
     const [newGroceriesSaved, setNewGroceriesSaved] = React.useState("");
 
     const handleChangeUnit = (event) => {
@@ -111,16 +110,22 @@ function NewGroceries({ auth }) {
 
     const handleSendCsvData = () => {
         //toast.dismiss();
+        console.log(csvData);
         if (csvData) {
             axios
-                .post("/groceriescsv", { csv: csvData })
+                .post("/api/groceriescsv", { csv: csvData })
                 .then((response) => {
                     setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
                     successAlert("The csv file was imported successfully!");
                 })
                 .catch((error) => {
-                    console.error(error);
-                    errorAlert("Error importing data");
+                    if (error.response) {
+                        errorAlert(error.response.data.message);
+                    } else if (error.request) {
+                        errorAlert('No response received from server');
+                    } else {
+                        errorAlert('Error setting up request: ' + error.message);
+                    }
                 });
             //setCsvData(null);
         } else {
@@ -143,7 +148,6 @@ function NewGroceries({ auth }) {
     };
 
     const errorAlert = (infoError) => {
-        setIsAlertOpen(true);
         toast.error(infoError, {
             position: "bottom-right",
             autoClose: 5000,
@@ -154,7 +158,6 @@ function NewGroceries({ auth }) {
             progress: undefined,
             theme: "colored",
             transition: Bounce,
-            onClose: () => setIsAlertOpen(false),
         });
     };
 
@@ -224,12 +227,10 @@ function NewGroceries({ auth }) {
                                                     <Input
                                                         value={groceriesName}
                                                         onChange={(event) => {
-                                                            if (!isAlertOpen) {
-                                                                setGroceriesName(
-                                                                    event.target
-                                                                        .value
-                                                                );
-                                                            }
+                                                            setGroceriesName(
+                                                                event.target
+                                                                    .value
+                                                            );
                                                         }}
                                                         placeholder="Name ..."
                                                     />
@@ -434,6 +435,7 @@ function NewGroceries({ auth }) {
                                                 <strong>
                                                     name,unit,category,supplier
                                                 </strong>
+                                                
                                             </PopoverBody>
                                         </PopoverContent>
                                     </Popover>

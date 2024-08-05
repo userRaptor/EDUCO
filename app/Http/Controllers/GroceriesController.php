@@ -44,6 +44,7 @@ class GroceriesController extends Controller
         return response()->json($grocery);
     }
 
+    /*
     public function importCsv(Request $request)
     {
         try {
@@ -66,6 +67,33 @@ class GroceriesController extends Controller
             return response()->json(['message' => 'Error importing data', 'error' => $e->getMessage()], 500);
         }
     }
+        */
+
+    public function importCsv(Request $request)
+    {
+        try {
+            $data = $request->input('csv');
+
+            foreach ($data as $row) {
+                if (!is_array($row) || count($row) < 4) {
+                    return response()->json(['message' => 'Invalid CSV structure. Each row must have at least 4 elements: name, unit, category, and supplier.'], 400);
+                }
+
+                Groceries::create([
+                    'name' => $row[0],
+                    'unit' => $row[1],
+                    'category' => $row[2],
+                    'supplier' => $row[3],
+                ]);
+            }
+
+            return response()->json(['message' => 'Imported successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error importing data', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     
 
     public function show(Groceries $groceries)
