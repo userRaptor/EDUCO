@@ -207,13 +207,6 @@ function NewGroceries({ auth }) {
                             <div style={{ margin: "20px" }}>
                                 <Text fontSize="2xl"> Add new Groceries:</Text>
                             </div>
-                            <div className="p-6 text-gray-600">
-                                <InfoOutlineIcon /> When creating new groceries,
-                                please always include the name first. This can
-                                be followed by further details such as: Carrots
-                                small. This makes it easier to find products
-                                using the built-in search function.
-                            </div>
                             <div style={{ margin: "20px" }}>
                                 <TableContainer>
                                     <Table variant="simple">

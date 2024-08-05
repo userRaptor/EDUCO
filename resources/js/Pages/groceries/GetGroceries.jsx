@@ -79,8 +79,10 @@ function GetGroceries() {
     };
 
     const filteredGroceries = groceries.filter((grocery) =>
-        grocery.name.startsWith(search)
+        grocery.name.toLowerCase().includes(search.toLowerCase())
     );
+    
+    
 
     // Pagination
     const pages = [];
