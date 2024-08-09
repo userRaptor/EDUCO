@@ -278,6 +278,24 @@ function NewGroceries({ auth }) {
                                                             <MenuItem
                                                                 onClick={() =>
                                                                     handleChangeUnit(
+                                                                        "Flaschen"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Flasche
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
+                                                                        "Dosen"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Dose
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeUnit(
                                                                         "l"
                                                                     )
                                                                 }
@@ -322,6 +340,15 @@ function NewGroceries({ auth }) {
                                                             <MenuItem
                                                                 onClick={() =>
                                                                     handleChangeCategory(
+                                                                        "Gemüse"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Gemüse
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
                                                                         "Milchprodukte"
                                                                     )
                                                                 }
@@ -340,11 +367,11 @@ function NewGroceries({ auth }) {
                                                             <MenuItem
                                                                 onClick={() =>
                                                                     handleChangeCategory(
-                                                                        "Gemüse"
+                                                                        "Fisch"
                                                                     )
                                                                 }
                                                             >
-                                                                Gemüse
+                                                                Fisch
                                                             </MenuItem>
                                                             <MenuItem
                                                                 onClick={() =>
@@ -354,6 +381,15 @@ function NewGroceries({ auth }) {
                                                                 }
                                                             >
                                                                 Fleisch
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleChangeCategory(
+                                                                        "TrockenLM"
+                                                                    )
+                                                                }
+                                                            >
+                                                                Trockenlebensmittel
                                                             </MenuItem>
                                                         </MenuList>
                                                     </Menu>
