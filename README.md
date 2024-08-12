@@ -67,3 +67,15 @@ ERROR ALERT:
             console.log(error.response?.data || error.message);
         });
 ```
+
+
+
+
+ZUM LAUFEN BRINGEN:
+
+ * node.js installieren: https://nodejs.org/en
+ * Installiere PHP und Composer: https://windows.php.net/download/ 
+ * Nun im Projektordenr folgende befehle ausführen:
+ * $ npm install
+ * $ composer install
+ * 
