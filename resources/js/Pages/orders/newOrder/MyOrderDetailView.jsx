@@ -51,8 +51,7 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
     };
 
     const navigateMyOrders = () => {
-        Inertia.visit("/myorders");     // Leads to a short-term error code 409     
-        //Inertia.visit(route('myorder-component'));
+        window.location.href = "/myorders";
     };
 
     const navigateNewOrder = () => {

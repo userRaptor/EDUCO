@@ -78,4 +78,6 @@ ZUM LAUFEN BRINGEN:
  * Nun im Projektordenr folgende befehle ausführen:
  * $ npm install
  * $ composer install
- * 
+ * MySQL Datenbank herunterladen 
+   * Nutzer mit passwort erstellen. Ihm die rechte für die daetnbank geben
+   * php artisan migrate ausführen 

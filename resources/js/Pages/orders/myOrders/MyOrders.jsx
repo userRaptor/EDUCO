@@ -94,8 +94,7 @@ function MyOrders({ auth }) {
     };
 
     const navigateToReuseOrder = (orderId) => {
-        Inertia.visit(`/reuseorder/${orderId}`);
-        // navigate(`/reuseorder/${orderId}`);
+        window.location.href = `/reuseorder/${orderId}`;
     };
 
     const successAlert = (infoSuccess) => {
