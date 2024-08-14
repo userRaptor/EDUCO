@@ -81,3 +81,39 @@ ZUM LAUFEN BRINGEN:
  * MySQL Datenbank herunterladen 
    * Nutzer mit passwort erstellen. Ihm die rechte für die daetnbank geben
    * php artisan migrate ausführen 
+
+
+ * Docker installieren
+  
+
+## Docker
+DockerFile ->erstellt-> DockerImage ->erstellt-> DockerContainer
+
+Dockerbefehle:
+ * $ docker images
+ * $ docker build -t name . 
+ * $ socker run -d -p 80:80
+
+
+Stoppt alle Container, entfernt sie und löscht die Netzwerke, die docker-compose erstellt wurden. 
+``docker-compose down``
+
+Der Befehl docker-compose build baut die Docker-Images:
+``docker-compose build ``
+
+Der Befehl docker-compose up -d startet die Container im Hintergrund:
+``docker-compose up -d``
+
+Status der Container prüfen:
+``docker-compose ps``
+Anwendung sollte nun unter http://localhost:8000 erreichbar sein.
+
+Logs überprüfen bei Fehlern:
+``docker-compose logs -f app``
+
+
+
+
+Sie müssen eventuell noch Ihre Datenbank migrieren, bevor Sie die Anwendung verwenden können:
+ $ docker-compose exec app php artisan migrate
+
