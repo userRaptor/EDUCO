@@ -68,7 +68,20 @@ ERROR ALERT:
         });
 ```
 
+## MySQL:
+Database settings for **MariaDB** or **MySQL** on Linux:
 
+- To use a GUI we can use **'MySQL Workbench'** under Linux
+1. Terminal Login: **$ sudo mysql -u root**
+2. Create new user: **$ CREATE USER 'newUser'@'localhost' IDENTIFIED BY 'password';**
+3. Assignment of rights: **$ GRANT ALL PRIVILEGES ON dataBaseEduco.\* TO 'newUser'@'localhost';**
+
+- Other input:
+  - $ SHOW DATABASES;
+  - $ USE database_name
+  - $ SHOW TABLES;
+  - $ DROP TABLE table_name;
+  - $ DESCRIBE table_name; OR SHOW COLUMNS FROM table_name;
 
 
 ZUM LAUFEN BRINGEN:
