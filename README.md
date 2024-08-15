@@ -125,8 +125,22 @@ Logs überprüfen bei Fehlern:
 ``docker-compose logs -f app``
 
 
+## Testing in Laravel:
+### tests ausführen:
+``$ ./vendor/bin/phpunit``
+``$ php artisan test``
 
+### Feature-Tests:
+ * Feature-Tests überprüfen, ob eine Funktionalität oder ein "Feature" der Anwendung aus der Perspektive des Benutzers funktioniert. Sie testen, wie verschiedene Teile der Anwendung zusammenarbeiten, um eine vollständige Funktionalität zu bieten.
 
-Sie müssen eventuell noch Ihre Datenbank migrieren, bevor Sie die Anwendung verwenden können:
- $ docker-compose exec app php artisan migrate
-
+### Unit-Tests
+  * Unit-Tests überprüfen die kleinsten Teile einer Anwendung isoliert von anderen Teilen. Das Ziel ist es, sicherzustellen, dass jede einzelne Komponente oder Funktion wie erwartet funktioniert.
+  * In der Regel umfassen Unit-Tests in Laravel:
+    * Controller-Methoden
+    * Middleware
+    * Modelle
+    * Factories (indirekt, durch getestete Modelle)
+    * Migrations (strukturbezogen)
+    * Seeders (indirekt, durch getestete Daten)
+  * In React umfassen Unit-Tests:
+    * Einzelne Komponenten (Pages, Buttons, Forms, etc.)
