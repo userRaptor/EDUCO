@@ -129,6 +129,15 @@ Logs überprüfen bei Fehlern:
 ### tests ausführen:
 ``$ ./vendor/bin/phpunit``
 ``$ php artisan test``
+gezielte ausführung: ``php artisan test tests/Unit/PostModelFunctionalityTest.php``
+
+
+Test erstellen:
+```
+php artisan make:test UserTest --pest
+php artisan make:test UserTest --unit --pest
+```
+
 
 ### Feature-Tests:
  * Feature-Tests überprüfen, ob eine Funktionalität oder ein "Feature" der Anwendung aus der Perspektive des Benutzers funktioniert. Sie testen, wie verschiedene Teile der Anwendung zusammenarbeiten, um eine vollständige Funktionalität zu bieten.
