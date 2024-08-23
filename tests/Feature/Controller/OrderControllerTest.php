@@ -13,12 +13,13 @@ class OrderControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_all_orders()
+    public function get_all_orders_for_admin_test()
     {
-        // Arrange: Create an authenticated user and some orders
-        $user = \App\Models\User::factory()->create();
-        $this->actingAs($user);
-        
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin);
 
         // Arrange: Create some orders
         Order::factory()->count(3)->create();

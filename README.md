@@ -141,6 +141,16 @@ php artisan make:test UserTest --unit --pest
 
 ### Feature-Tests:
  * Feature-Tests überprüfen, ob eine Funktionalität oder ein "Feature" der Anwendung aus der Perspektive des Benutzers funktioniert. Sie testen, wie verschiedene Teile der Anwendung zusammenarbeiten, um eine vollständige Funktionalität zu bieten.
+ * Benutzer für einen Test anlegen und authentifizieren:
+```java
+// Arrange: Erstelle einen Benutzer mit der Rolle 'admin'
+$admin = User::factory()->create([
+  'role' => 'admin',
+  ]);
+
+  // Authentifiziere den Benutzer
+  $this->actingAs($admin);
+´´´
 
 ### Unit-Tests
   * Unit-Tests überprüfen die kleinsten Teile einer Anwendung isoliert von anderen Teilen. Das Ziel ist es, sicherzustellen, dass jede einzelne Komponente oder Funktion wie erwartet funktioniert.
@@ -156,22 +166,23 @@ php artisan make:test UserTest --unit --pest
 
 
 # Factory Modelle:
-Stellen realistische Daten für Tests oder Seeder bereit.
-Erstellen: `php artisan make:factory ModelNameFactory --model=ModelName`
-1) Factory Datei bearbeiten:
-   1) factory nach dem passenden Modell konfigurieren:
-```java
-public function definition()
-{
-  return [
-    'field1' => $this->faker->word,
-    'field2' => $this->faker->numberBetween(1, 100),
-    // Weitere Felder des Modells
-  ];
-}
-```
-   2) Verknüpfte Modelle: n:m Beziehungen im Modell => verknüpfte Modelle in der Factory definieren
-      1) `'related_model_id' => RelatedModel::factory(),` // Erstellt eine neue RelatedModel-Instanz oder referenziert eine vorhandene.
+Um realistische Daten für Tests oder Seeder bereitzustellen.
+Neue Factory erstellen: `php artisan make:factory ModelNameFactory --model=ModelName`
+
+1. Factory Datei bearbeiten:
+   1. Factory nach dem passenden Modell konfigurieren:
+      ```java
+      public function definition()
+      {
+        return [
+          'field1' => $this->faker->word,
+          'field2' => $this->faker->numberBetween(1, 100),
+          'related_model_id' => RelatedModel::factory(),  // Für n:m Beziehungen in Modellen. Erstellt eine neue RelatedModel-Instanz oder referenziert eine vorhandene.
+
+          // Weitere Felder des Modells
+        ];
+      }
+      ```
 2) Im entsprechenden Modell muss ganz zu beginn in der Klasse: `use HasFactory;` eingebunden werden.
 
 ## Verwenden der Factory in Tests oder Seedern:
