@@ -1,5 +1,6 @@
-Multi-User-Authentication:
-https://www.youtube.com/watch?v=b-qEj11h7as&t=296s&ab_channel=Cairocoders
+# EDUCO - Lebensmittelbestellungsprogram
+
+## Installations:
 
 Install Chakra-UI:
  - npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
@@ -8,42 +9,26 @@ Install Chakra-UI:
 React Router zum Projekt hinzufügen:
  - npm install react-router-dom
 
-
 Inertia install: (anstelle von axiosClient)
  - npm install @inertiajs/inertia-react
 
 Install Toastify (alert):
  - npm install --save react-toastify
 
-
 install CSVReader from 'react-csv-reader':
  - npm install react-csv-reader
-
-
-
-
-DEBUGGING:
-```
-$data = $request->all();
-// Debugging: Überprüfen, was in $data enthalten ist
-dd($data);
-```
-
 
 Zwei der am häufigsten verwendeten Bibliotheken für HTTP-Anfragen in React sind axios und die eingebaute fetch-API. 
 Ich verwende die Bibliothek axios.
 
-
 Install:   import "react-calendar/dist/Calendar.css";
 npm install react-calendar
-
 
 React-Toastify:
 npm install --save react-toastify
 imports:
 import { toast, ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 import { jsPDF } from "jspdf"; und import autoTable from "jspdf-autotable";
 install:  npm install jspdf jspdf-autotable
@@ -52,8 +37,12 @@ FAVICON.ico
 Datei in public/favicon
 implementiert in app.blade.php
 
+**Multi-User-Authentication:**
+https://www.youtube.com/watch?v=b-qEj11h7as&t=296s&ab_channel=Cairocoders
 
-FEHLERMELDUNG alert:
+
+### Code Snippets:
+#### Alert Fehlermeldung:
 ```java
 ERROR ALERT:
     axios
@@ -66,6 +55,20 @@ ERROR ALERT:
             errorAlert(error.response.data.message);
             console.log(error.response?.data || error.message);
         });
+```
+
+#### Controller überprüfung, ob ein angemeldeter Nutzer auf die methode zugreift:
+```java
+public function bspControllerFunction($userId)
+{
+    $user = auth()->user();
+
+    if ($user->id != $userId) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+    
+    return response()->json(...);
+}
 ```
 
 ## MySQL:
@@ -95,7 +98,6 @@ ZUM LAUFEN BRINGEN:
    * Nutzer mit passwort erstellen. Ihm die rechte für die daetnbank geben
    * php artisan migrate ausführen 
 
-
  * Docker installieren
   
 
@@ -124,15 +126,24 @@ Anwendung sollte nun unter http://localhost:8000 erreichbar sein.
 Logs überprüfen bei Fehlern:
 ``docker-compose logs -f app``
 
+## HTTP response status codes:
+ * Informational responses (100 – 199)
+ * Successful responses (200 – 299)
+ * Redirection messages (300 – 399)
+ * Client error responses (400 – 499)
+ * Server error responses (500 – 599)
 
-# Testing in Laravel:
-### tests ausführen:
-``$ ./vendor/bin/phpunit``
-``$ php artisan test``
-gezielte ausführung: ``php artisan test tests/Unit/PostModelFunctionalityTest.php``
+
+## Testen:
+### Siehe auch [README_Testen](README_Testen.md)!
+
+### Tests ausführen:
+``$ ./vendor/bin/phpunit`` oder ``$ php artisan test``
+
+Gezielte Ausführung: ``php artisan test tests/Unit/PostModelFunctionalityTest.php``
 
 
-Test erstellen:
+#### Tests erstellen:
 ```
 php artisan make:test UserTest --pest
 php artisan make:test UserTest --unit --pest
@@ -144,13 +155,22 @@ php artisan make:test UserTest --unit --pest
  * Benutzer für einen Test anlegen und authentifizieren:
 ```java
 // Arrange: Erstelle einen Benutzer mit der Rolle 'admin'
-$admin = User::factory()->create([
+$user = User::factory()->create([
   'role' => 'admin',
   ]);
 
   // Authentifiziere den Benutzer
-  $this->actingAs($admin);
-´´´
+  $this->actingAs($user);
+```
+
+### Fehlermeldungen ASSERTS:
+ * // Assert: Check if the response status code is 403, Forbidden
+ * // Assert: Check if the response status code is 302, Redirect  
+   * $response->assertRedirect('/login');    // Assert: Check if the redirect is to the login page
+ * // Assert: Check if the response status code is 200, OK
+ * // Assert: Check if the response status code is 201, OK, Created
+   * $this->assertDatabaseHas('orders', $orderData); // Assert that the database has the new order record
+   * $this->assertDatabaseMissing('orders', $orderData); // Assert that the order is not in the database
 
 ### Unit-Tests
   * Unit-Tests überprüfen die kleinsten Teile einer Anwendung isoliert von anderen Teilen. Das Ziel ist es, sicherzustellen, dass jede einzelne Komponente oder Funktion wie erwartet funktioniert.
@@ -183,7 +203,7 @@ Neue Factory erstellen: `php artisan make:factory ModelNameFactory --model=Model
         ];
       }
       ```
-2) Im entsprechenden Modell muss ganz zu beginn in der Klasse: `use HasFactory;` eingebunden werden.
+2. Im entsprechenden Modell muss ganz zu beginn in der Klasse: `use HasFactory;` eingebunden werden.
 
 ## Verwenden der Factory in Tests oder Seedern:
  * Eine Instanz erstellen (aber nicht speichern):
