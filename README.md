@@ -125,7 +125,7 @@ Logs überprüfen bei Fehlern:
 ``docker-compose logs -f app``
 
 
-## Testing in Laravel:
+# Testing in Laravel:
 ### tests ausführen:
 ``$ ./vendor/bin/phpunit``
 ``$ php artisan test``
@@ -153,3 +153,66 @@ php artisan make:test UserTest --unit --pest
     * Seeders (indirekt, durch getestete Daten)
   * In React umfassen Unit-Tests:
     * Einzelne Komponenten (Pages, Buttons, Forms, etc.)
+
+
+# Factory Modelle:
+Stellen realistische Daten für Tests oder Seeder bereit.
+Erstellen: `php artisan make:factory ModelNameFactory --model=ModelName`
+1) Factory Datei bearbeiten:
+   1) factory nach dem passenden Modell konfigurieren:
+```java
+public function definition()
+{
+  return [
+    'field1' => $this->faker->word,
+    'field2' => $this->faker->numberBetween(1, 100),
+    // Weitere Felder des Modells
+  ];
+}
+```
+   2) Verknüpfte Modelle: n:m Beziehungen im Modell => verknüpfte Modelle in der Factory definieren
+      1) `'related_model_id' => RelatedModel::factory(),` // Erstellt eine neue RelatedModel-Instanz oder referenziert eine vorhandene.
+2) Im entsprechenden Modell muss ganz zu beginn in der Klasse: `use HasFactory;` eingebunden werden.
+
+## Verwenden der Factory in Tests oder Seedern:
+ * Eine Instanz erstellen (aber nicht speichern):
+   * `$model = ModelName::factory()->make();`
+ * Eine Instanz erstellen und in der Datenbank speichern:
+   * `$model = ModelName::factory()->create();`
+ * Mehrere Instanzen erstellen und speichern:
+   * `$models = ModelName::factory()->count(5)->create();`
+ * Feldwerte überschreiben:
+   * `$model = ModelName::factory()->create(['field1' => 'Custom Value']);`
+ 
+
+## Seeder:
+ * Seeder erstellen: `php artisan make:seeder ModelNameSeeder` 
+ * Seeder konfigurieren:
+```java
+use Illuminate\Database\Seeder;
+use App\Models\ModelName;
+
+class ModelNameSeeder extends Seeder
+{
+    public function run()
+    {
+        ModelName::factory()->count(50)->create();
+    }
+}
+```
+ * Seeder ausführen: `php artisan db:seed --class=ModelNameSeeder`
+
+
+## Tests mit Factorys:
+In Tests kannst du Factorys verwenden, um schnell Testdaten zu generieren.
+```java
+public function test_example()
+{
+    $model = ModelName::factory()->create();
+
+    $this->assertDatabaseHas('model_table', [
+        'id' => $model->id,
+        // weitere Assertions
+    ]);
+}
+```
