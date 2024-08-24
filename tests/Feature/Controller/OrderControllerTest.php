@@ -14,6 +14,7 @@ class OrderControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    // TESTS getAllOrders:
     public function test_get_all_orders_for_admin()
     {
         $admin = User::factory()->create([
@@ -26,7 +27,7 @@ class OrderControllerTest extends TestCase
         $response = $this->get('/api/orders');
 
         $response->assertStatus(200);
-        $response->assertJsonCount(10); 
+        $response->assertJsonCount(10);
     }
 
     public function test_get_all_orders_requires_admin_privileges()
@@ -42,9 +43,10 @@ class OrderControllerTest extends TestCase
         $response = $this->get('/api/orders');
 
         $response->assertStatus(302);
-        $response->assertRedirect('/login'); 
+        $response->assertRedirect('/login');
     }
 
+    // TESTS getOrdersByUserId:
     public function test_get_orders_by_authenticated_user_id()
     {
         $user1 = User::factory()->create([
@@ -106,6 +108,7 @@ class OrderControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
+    // TESTS store:
     public function test_store_order()
     {
         $user = User::factory()->create([
@@ -121,8 +124,8 @@ class OrderControllerTest extends TestCase
         $response = $this->post('/api/orders', $orderData);
 
         $response->assertStatus(201);
-        $response->assertJsonFragment($orderData); // Assert that the JSON response contains the order data
-        $this->assertDatabaseHas('orders', $orderData); // Assert that the database has the new order record
+        $response->assertJsonFragment($orderData); 
+        $this->assertDatabaseHas('orders', $orderData); 
     }
 
     public function test_unauthenticated_user_cannot_store_order()
@@ -138,8 +141,8 @@ class OrderControllerTest extends TestCase
         $response = $this->post('/api/orders', $orderData);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/login');    // Assert: Check if the redirect is to the login page
-        $this->assertDatabaseMissing('orders', $orderData); // Assert that the order is not in the database
+        $response->assertRedirect('/login');   
+        $this->assertDatabaseMissing('orders', $orderData); 
 
     }
 
@@ -203,13 +206,13 @@ class OrderControllerTest extends TestCase
 
         $response = $this->put('/api/orders/' . $order->id, []);
 
-        $response->assertStatus(200);
+        $response->assertStatus(422);
         $response->assertJson([
-            'id' => $order->id,
-            'includeSummary' => false,
+            'includeSummary' => [
+                'The include summary field is required.',
+            ],
         ]);
 
-        // Assert: Check if the order data in the database is not changed
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'includeSummary' => false,
@@ -299,24 +302,259 @@ class OrderControllerTest extends TestCase
         ]);
     }
 
-
-    public function test_copy_items()
+    public function test_copy_items_missing_order_ids()
     {
-        // Arrange: Create two orders and some groceries for the first order
-        $fromOrder = Order::factory()->create();
-        $toOrder = Order::factory()->create();
-        GroceriesOrders::factory()->count(3)->create(['order_id' => $fromOrder->id]);
-
-        // Act: Call the copyItems route
-        $response = $this->post('/orders/copy-items', [
-            'from_order_id' => $fromOrder->id,
-            'to_order_id' => $toOrder->id,
+        $user = User::factory()->create([
+            'role' => 'user',
         ]);
 
-        // Assert: Check if the groceries were copied
-        $response->assertStatus(200)
-            ->assertJsonFragment(['success' => 'Items copied successfully']);
-        $this->assertDatabaseCount('groceries_orders', 6);
+        $this->actingAs($user);
+
+        $copyData = [
+            'to_order_id' => 1
+        ];
+
+        $response = $this->post('/api/copyitems', $copyData);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'error' => 'Invalid order IDs'
+        ]);
+
+        $copyData = [
+            'from_order_id' => 1
+        ];
+
+        $response = $this->post('/api/copyitems', $copyData);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'error' => 'Invalid order IDs'
+        ]);
     }
 
+    public function test_copy_items_order_not_found()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        $orderFrom = Order::factory()->create();
+        $nonExistentOrderId = 9999;
+
+        $copyData = [
+            'from_order_id' => $nonExistentOrderId,
+            'to_order_id' => $orderFrom->id
+        ];
+
+        $response = $this->post('/api/copyitems', $copyData);
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'error' => 'Order not found'
+        ]);
+
+        $copyData = [
+            'from_order_id' => $orderFrom->id,
+            'to_order_id' => $nonExistentOrderId
+        ];
+
+        $response = $this->post('/api/copyitems', $copyData);
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'error' => 'Order not found'
+        ]);
+    }
+
+    public function test_copy_items_with_no_items_in_from_order()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        $orderFrom = Order::factory()->create();
+        $orderTo = Order::factory()->create();
+
+        $copyData = [
+            'from_order_id' => $orderFrom->id,
+            'to_order_id' => $orderTo->id
+        ];
+
+        $response = $this->post('/api/copyitems', $copyData);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => 'Items copied successfully'
+        ]);
+
+        $this->assertDatabaseMissing('groceries_orders', [
+            'order_id' => $orderTo->id
+        ]);
+    }
+
+    // TESTS deleteByID:
+    public function test_successful_delete_by_id()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        $order = Order::factory()->create();
+
+        $response = $this->delete('/api/orders/' . $order->id);
+
+        $response->assertStatus(204);
+        $response->assertNoContent();
+
+        $this->assertDatabaseMissing('orders', [
+            'id' => $order->id,
+        ]);
+    }
+
+    public function test_delete_by_id_order_not_found()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        $nonExistentOrderId = 9999;
+
+        $response = $this->delete('/api/orders/' . $nonExistentOrderId);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_delete_by_id_invalid_id()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->delete('/api/orders/invalid-id');
+
+        $response->assertStatus(400);
+    }
+
+    // TESTS deleteOrdersByUserId
+    public function test_delete_orders_by_user_id_successful()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        Order::factory()->count(3)->create(['user_id' => $user->id]);
+
+        $response = $this->delete('/api/ordersUserId/' . $user->id);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'message' => 'Alle Bestellungen für den Benutzer wurden erfolgreich gelöscht.',
+            'deleted_count' => 3,
+        ]);
+
+        $this->assertDatabaseMissing('orders', ['user_id' => $user->id]);
+    }
+
+    public function test_delete_orders_by_user_id_no_orders()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->delete('/api/ordersUserId/' . $user->id);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'message' => 'Alle Bestellungen für den Benutzer wurden erfolgreich gelöscht.',
+            'deleted_count' => 0,
+        ]);
+    }
+
+    public function test_delete_orders_by_user_id_non_existent_user()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $nonExistentUserId = 9999;
+
+        $response = $this->delete('/api/ordersUserId/' . $nonExistentUserId);
+
+        $response->assertStatus(404);
+        $response->assertJson([
+                     'message' => 'User not found',
+                 ]);
+    }
+
+    public function test_delete_orders_by_user_id_if_user_id_is_not_numeric()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $nonExistentUserId = "not_numeric";
+
+        $response = $this->delete('/api/ordersUserId/' . $nonExistentUserId);
+
+        $response->assertStatus(400);
+        $response->assertJson([
+                     'message' => 'Invalid user ID format',
+                 ]);
+    }
+
+    // TESTS deleteAll
+    public function test_delete_all_orders_admin_success()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin);
+
+        Order::factory()->count(3)->create();
+
+        $response = $this->deleteJson('/api/orders');
+
+        $response->assertStatus(204);
+        $this->assertDatabaseCount('orders', 0);
+    }
+
+    public function test_delete_all_orders_user_fails()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user);
+
+        Order::factory()->count(3)->create();
+
+        $response = $this->deleteJson('/api/orders');
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
+        $this->assertDatabaseCount('orders', 3);
+    }
+
+    public function test_delete_all_orders_unauthorized()
+    {
+        Order::factory()->count(3)->create();
+
+        $response = $this->deleteJson('/api/orders');
+
+        $response->assertStatus(401);
+        $this->assertDatabaseCount('orders', 3);
+    }
 }

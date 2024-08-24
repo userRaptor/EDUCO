@@ -3,15 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
 use App\Models\GroceriesOrders;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Log as FacadesLog;
-use Inertia\Inertia;
-
 
 class OrderController extends Controller
 {
@@ -27,7 +22,7 @@ class OrderController extends Controller
         if ($user->id != $userId) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-        
+
         $orders = Order::with(['groceries', 'user'])
             ->where('user_id', $userId)
             ->orderBy('id', 'desc')
@@ -103,10 +98,18 @@ class OrderController extends Controller
         return response()->json(['success' => 'Items copied successfully']);
     }
 
-
     public function deleteByID($id)
     {
+        if (!is_numeric($id)) {
+            return response()->json(['message' => 'Invalid ID format'], 400);
+        }
+
         $grocery = Order::find($id);
+
+        if (!$grocery) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
         $grocery->delete();
 
         return response()->json(null, 204);
@@ -114,6 +117,15 @@ class OrderController extends Controller
 
     public function deleteOrdersByUserId($userId)
     {
+        if (!is_numeric($userId)) {
+            return response()->json(['message' => 'Invalid user ID format'], 400);
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
         $deletedCount = Order::where('user_id', $userId)->delete();
 
         return response()->json([
