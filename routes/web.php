@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('orders/reuseOrder/MainReuseOrder', [
             'orderId' => $orderId,
         ]);
-    })->name('reuseorder-component'); 
+    })->name('reuseorder-component');
 });
 
 
@@ -92,11 +92,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder'); //?
 
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
-    Route::delete('/api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');  
+    Route::delete('/api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
 });
 
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

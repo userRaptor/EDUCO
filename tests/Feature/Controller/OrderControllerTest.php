@@ -124,8 +124,8 @@ class OrderControllerTest extends TestCase
         $response = $this->post('/api/orders', $orderData);
 
         $response->assertStatus(201);
-        $response->assertJsonFragment($orderData); 
-        $this->assertDatabaseHas('orders', $orderData); 
+        $response->assertJsonFragment($orderData);
+        $this->assertDatabaseHas('orders', $orderData);
     }
 
     public function test_unauthenticated_user_cannot_store_order()
@@ -141,8 +141,8 @@ class OrderControllerTest extends TestCase
         $response = $this->post('/api/orders', $orderData);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/login');   
-        $this->assertDatabaseMissing('orders', $orderData); 
+        $response->assertRedirect('/login');
+        $this->assertDatabaseMissing('orders', $orderData);
     }
 
     // TESTS updateIncludeSummary:
@@ -494,8 +494,8 @@ class OrderControllerTest extends TestCase
 
         $response->assertStatus(404);
         $response->assertJson([
-                     'message' => 'User not found',
-                 ]);
+            'message' => 'User not found',
+        ]);
     }
 
     public function test_delete_orders_by_user_id_if_user_id_is_not_numeric()
@@ -509,8 +509,8 @@ class OrderControllerTest extends TestCase
 
         $response->assertStatus(400);
         $response->assertJson([
-                     'message' => 'Invalid user ID format',
-                 ]);
+            'message' => 'Invalid user ID format',
+        ]);
     }
 
     // TESTS deleteAll

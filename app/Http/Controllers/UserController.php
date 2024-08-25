@@ -23,7 +23,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required|string|in:user,admin',
         ]);
@@ -68,11 +68,6 @@ class UserController extends Controller
 
         $user = User::findOrFail($userId);
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        // Update the password
         $user->update([
             'password' => Hash::make($validated['password']),
         ]);
@@ -82,19 +77,15 @@ class UserController extends Controller
 
     public function updateRole(Request $request, $id)
     {
-        // Validate request data
         $request->validate([
-            'role' => 'required|string|in:admin,user', // Specify valid roles here
+            'role' => 'required|string|in:admin,user',
         ]);
 
-        // Find the user by ID
         $user = User::findOrFail($id);
 
-        // Update the role
         $user->role = $request->role;
         $user->save();
 
-        // Optionally, you may return a response or redirect to a different URL
         return response()->json(['message' => 'User role updated successfully']);
     }
 }
