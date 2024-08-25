@@ -133,6 +133,27 @@ Logs überprüfen bei Fehlern:
  * Client error responses (400 – 499)
  * Server error responses (500 – 599)
 
+### Fehlermeldungen ASSERTS:
+#### Assert: Check if the response status code is 403, Forbidden
+```java
+$response->assertStatus(403);
+```
+#### Assert: Check if the response status code is 302, Redirect 
+```java
+$response->assertStatus(302);
+$response->assertRedirect('/login');  // Assert: Check if the redirect is to the login page
+```   
+#### Assert: Check if the response status code is 200, OK
+```java
+$response->assertStatus(200);
+```
+#### Assert: Check if the response status code is 201, OK, Created
+```java
+$response->assertStatus(201);
+$this->assertDatabaseHas('orders', $orderData);     // Assert that the database has the new order record
+$this->assertDatabaseMissing('orders', $orderData); // Assert that the order is not in the database
+```
+  
 
 ## Testen:
 ### Siehe auch [README_Testen](README_Testen.md)!
@@ -140,7 +161,9 @@ Logs überprüfen bei Fehlern:
 ### Tests ausführen:
 ``$ ./vendor/bin/phpunit`` oder ``$ php artisan test``
 
-Gezielte Ausführung: ``php artisan test tests/Unit/PostModelFunctionalityTest.php``
+Gezielte Ausführung: `php artisan test tests/Unit/PostModelFunctionalityTest.php`
+
+`php artisan test tests/Feature/Controller/OrderControllerTest.php`
 
 
 #### Tests erstellen:
@@ -163,14 +186,7 @@ $user = User::factory()->create([
   $this->actingAs($user);
 ```
 
-### Fehlermeldungen ASSERTS:
- * // Assert: Check if the response status code is 403, Forbidden
- * // Assert: Check if the response status code is 302, Redirect  
-   * $response->assertRedirect('/login');    // Assert: Check if the redirect is to the login page
- * // Assert: Check if the response status code is 200, OK
- * // Assert: Check if the response status code is 201, OK, Created
-   * $this->assertDatabaseHas('orders', $orderData); // Assert that the database has the new order record
-   * $this->assertDatabaseMissing('orders', $orderData); // Assert that the order is not in the database
+
 
 ### Unit-Tests
   * Unit-Tests überprüfen die kleinsten Teile einer Anwendung isoliert von anderen Teilen. Das Ziel ist es, sicherzustellen, dass jede einzelne Komponente oder Funktion wie erwartet funktioniert.
@@ -207,6 +223,7 @@ Neue Factory erstellen: `php artisan make:factory ModelNameFactory --model=Model
 
 ## Verwenden der Factory in Tests oder Seedern:
  * Eine Instanz erstellen (aber nicht speichern):
+   * // Verwendung von make() anstelle von create(), um das Model ohne Speicherung zu erstellen
    * `$model = ModelName::factory()->make();`
  * Eine Instanz erstellen und in der Datenbank speichern:
    * `$model = ModelName::factory()->create();`

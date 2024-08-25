@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/copyitems', [OrderController::class, 'copyItems'])->name('copyItems');
     Route::post('/api/groceries_order', [GroceriesOrderController::class, 'store'])->name('addGroceriesToOrder');
 
-    Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
+    Route::get('/api/groceries', [GroceriesController::class, 'getAllGroceries'])->name('groceries.all');
     Route::get('/api/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
     Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder'); //?
 

@@ -143,7 +143,6 @@ class OrderControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('/login');   
         $this->assertDatabaseMissing('orders', $orderData); 
-
     }
 
     // TESTS updateIncludeSummary:

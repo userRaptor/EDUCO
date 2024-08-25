@@ -18,10 +18,10 @@ class GroceriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word, // Erzeugt ein zufälliges Wort als Name
-            'unit' => $this->faker->randomElement(['kg', 'g', 'l', 'ml', 'pcs']), // Zufällige Einheit
-            'category' => $this->faker->randomElement(['Vegetables', 'Fruits', 'Dairy', 'Beverages', 'Bakery']), // Zufällige Kategorie
-            'supplier' => $this->faker->company, // Zufälliger Lieferantenname
+            'name' => $this->faker->word, 
+            'unit' => $this->faker->randomElement(['kg', 'g', 'l', 'ml', 'pcs']), 
+            'category' => $this->faker->randomElement(['Vegetables', 'Fruits', 'Dairy', 'Beverages', 'Bakery']), 
+            'supplier' => $this->faker->company, 
         ];
     }
 }
