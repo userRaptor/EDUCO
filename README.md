@@ -264,3 +264,28 @@ public function test_example()
     ]);
 }
 ```
+
+Wenn Tests fehlschlagen, obwohl sie vorher funktionierten, muss der cache geleert werden:
+```bash
+# Cache leeren
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+
+# Datenbank korrekt zurücksetzen
+php artisan migrate:fresh --seed
+```
+
+
+## Seeder
+Seeder erstellen: `php artisan make:seeder SuperadminSeeder` 
+Seeder in DatabaseSeeder.php hinzufügen.
+
+#### Seeders ausführen:
+* Alle Seeders in der DatabaseSeeder-Klasse ausführen:
+  * `php artisan db:seed`
+* Spezifischen Seeder ausführen:
+  * `php artisan db:seed --class=UserSeeder`
+* Datenbank zurücksetzen und mit einem Seed neu erstellen:
+  * `php artisan migrate:fresh --seed` 
