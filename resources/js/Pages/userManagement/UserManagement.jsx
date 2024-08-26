@@ -51,6 +51,10 @@ function UserManagement({ auth }) {
     const [searchByName, setSearchByName] = React.useState("");
 
     const onOpen = (user) => {
+        if(user.id === auth.user.id) {
+            errorAlert("You can't change your own password!");
+            return;
+        }
         setCurrentUser(user);
         setIsOpen(true);
     };
@@ -75,6 +79,11 @@ function UserManagement({ auth }) {
     };
 
     const deleteUserById = (userId) => {
+        if(userId === auth.user.id) {
+            errorAlert("You can't delete your own profile!");
+            return;
+        }
+
         if (
             window.confirm(
                 "Are you sure to delete the user with ID " +
