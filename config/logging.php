@@ -126,6 +126,29 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        /*
+        Log::channel('abuse')->info('API endpoint abuse', [
+            'userid' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+        ]);
+        */
+        'abuse' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/abuse.log'),
+            'level' =>'debug',
+        ],
+
+        'info' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/info.log'),
+            'level' =>'debug',
+        ],
+
+        'error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/error.log'),
+            'level' =>'debug',
+        ],
 
     ],
 

@@ -12,6 +12,22 @@ use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
+
+    Log::channel('abuse')->warning('API endpoint abuse', [
+        'userid' => 'abuse',
+        'ip_address' => request()->ip(),
+    ]);
+
+    Log::channel('info')->info('API endpoint abuse', [
+        'userid' => 'info',
+        'ip_address' => request()->ip(),
+    ]);
+
+    Log::channel('error')->error('API endpoint abuse', [
+        'userid' => 'error',
+        'ip_address' => request()->ip(),
+    ]);
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
