@@ -4,7 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 import { Input, Text } from "@chakra-ui/react";
-import { Button, Box } from "@chakra-ui/react";
+import { Button, Box, Spinner } from "@chakra-ui/react";
 import { ChevronDownIcon, AddIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 
 import CSVReader from "react-csv-reader";
@@ -56,7 +56,8 @@ function NewGroceries({ auth }) {
     const [groceriesUnit, setGroceriesUnit] = React.useState("");
     const [groceriesCategory, setGroceriesCategory] = React.useState("");
     const [groceriesSupplier, setGroceriesSupplier] = React.useState("");
-
+    
+    const [isImportingCsv, setIsImportingCsv] = useState(false);
     const [csvData, setCsvData] = useState(null);
     const [renderKey, setRenderKey] = useState(0);
 
@@ -104,20 +105,27 @@ function NewGroceries({ auth }) {
     };
 
     const handleCsvInput = (data, fileInfo) => {
-        //console.log(data);
-        setCsvData(data);
+        if (fileInfo.name.endsWith(".csv")) {
+            setCsvData(data); 
+        } else {
+            errorAlert("Only .csv files are accepted!");
+        }
     };
+    
 
     const handleSendCsvData = () => {
-        console.log(csvData);
+        //console.log(csvData);
         if (csvData) {
+            setIsImportingCsv(true);
             axios
                 .post("/api/groceriescsv", { csv: csvData })
                 .then((response) => {
                     setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
+                    setIsImportingCsv(false);
                     successAlert("The csv file was imported successfully!");
                 })
                 .catch((error) => {
+                    setIsImportingCsv(false);
                     if (error.response) {
                         errorAlert(error.response.data.message);
                     } else if (error.request) {
@@ -485,6 +493,7 @@ function NewGroceries({ auth }) {
                                             style={{ marginLeft: "10px" }}
                                         />
                                     </Button>
+                                    {isImportingCsv && <Spinner color="blue.500"/>}
                                 </div>
                             </div>
                         </div>

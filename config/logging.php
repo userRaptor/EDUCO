@@ -147,7 +147,7 @@ return [
             'driver' => 'daily', // Für jeden Tag eigene Log-datei
             'path' => storage_path('logs/info.log'),
             'level' => 'debug',
-            'days' => 14, //Logs automatisch nach x-Tagen löschen
+            'days' => 3, //Logs automatisch nach x-Tagen löschen
         ],
 
         'error' => [
