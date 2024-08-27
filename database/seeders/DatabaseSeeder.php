@@ -18,9 +18,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(SuperadminSeeder::class);
 
+        /*
         Groceries::factory()->count(10)->create();
         GroceriesOrders::factory()->count(5)->create();
         Order::factory()->count(1)->create();
         User::factory()->count(5)->create();
+        */
     }
 }

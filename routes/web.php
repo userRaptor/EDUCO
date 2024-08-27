@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/api/groceries', [GroceriesController::class, 'getAllGroceries'])->name('groceries.all');
     Route::get('/api/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
-    Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder'); //?
+    Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getAllGroceriesByOrderId'])->name('groceries.byorder'); //?
 
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
     Route::delete('/api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');
