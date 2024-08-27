@@ -56,7 +56,7 @@ function NewGroceries({ auth }) {
     const [groceriesUnit, setGroceriesUnit] = React.useState("");
     const [groceriesCategory, setGroceriesCategory] = React.useState("");
     const [groceriesSupplier, setGroceriesSupplier] = React.useState("");
-    
+
     const [isImportingCsv, setIsImportingCsv] = useState(false);
     const [csvData, setCsvData] = useState(null);
     const [renderKey, setRenderKey] = useState(0);
@@ -106,12 +106,12 @@ function NewGroceries({ auth }) {
 
     const handleCsvInput = (data, fileInfo) => {
         if (fileInfo.name.endsWith(".csv")) {
-            setCsvData(data); 
+            setCsvData(data);
         } else {
             errorAlert("Only .csv files are accepted!");
         }
     };
-    
+
 
     const handleSendCsvData = () => {
         //console.log(csvData);
@@ -182,7 +182,7 @@ function NewGroceries({ auth }) {
         });
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => { }, []);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     return (
@@ -232,6 +232,8 @@ function NewGroceries({ auth }) {
                                             <Tr>
                                                 <Td>
                                                     <Input
+                                                        id="groceries-name"
+                                                        name="groceriesName"
                                                         value={groceriesName}
                                                         onChange={(event) => {
                                                             setGroceriesName(
@@ -251,7 +253,7 @@ function NewGroceries({ auth }) {
                                                             }
                                                         >
                                                             {groceriesUnit !==
-                                                            ""
+                                                                ""
                                                                 ? groceriesUnit
                                                                 : "Unit"}
                                                         </MenuButton>
@@ -331,7 +333,7 @@ function NewGroceries({ auth }) {
                                                             }
                                                         >
                                                             {groceriesCategory !==
-                                                            ""
+                                                                ""
                                                                 ? groceriesCategory
                                                                 : "Category"}
                                                         </MenuButton>
@@ -404,6 +406,8 @@ function NewGroceries({ auth }) {
                                                 </Td>
                                                 <Td>
                                                     <Input
+                                                        id="groceries-supplier"
+                                                        name="groceriesSupplier"
                                                         value={
                                                             groceriesSupplier
                                                         }
@@ -478,7 +482,7 @@ function NewGroceries({ auth }) {
                                                 <strong>
                                                     name,unit,category,supplier
                                                 </strong>
-                                                
+
                                             </PopoverBody>
                                         </PopoverContent>
                                     </Popover>
@@ -493,7 +497,7 @@ function NewGroceries({ auth }) {
                                             style={{ marginLeft: "10px" }}
                                         />
                                     </Button>
-                                    {isImportingCsv && <Spinner color="blue.500"/>}
+                                    {isImportingCsv && <Spinner color="blue.500" />}
                                 </div>
                             </div>
                         </div>

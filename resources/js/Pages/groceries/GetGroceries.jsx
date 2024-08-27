@@ -81,8 +81,8 @@ function GetGroceries() {
     const filteredGroceries = groceries.filter((grocery) =>
         grocery.name.toLowerCase().includes(search.toLowerCase())
     );
-    
-    
+
+
 
     // Pagination
     const pages = [];
@@ -128,6 +128,8 @@ function GetGroceries() {
                                 }}
                             >
                                 <Input
+                                    id="search-by-name"
+                                    name="search"
                                     variant="outline"
                                     placeholder="Search by name..."
                                     style={{ width: "30%" }}
@@ -155,7 +157,7 @@ function GetGroceries() {
                                         {filteredGroceries
                                             .slice(
                                                 (currentPage - 1) *
-                                                    itemsPerPage,
+                                                itemsPerPage,
                                                 currentPage * itemsPerPage
                                             ) // Pagination
                                             .map((grocery) => (

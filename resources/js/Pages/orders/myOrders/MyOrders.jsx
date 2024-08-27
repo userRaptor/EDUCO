@@ -57,8 +57,8 @@ function MyOrders({ auth }) {
         if (
             window.confirm(
                 "Are you sure to delete the order with ID " +
-                    order.id +
-                    " ? \nYou can't undo this action afterwards."
+                order.id +
+                " ? \nYou can't undo this action afterwards."
             )
         ) {
             axios
@@ -142,9 +142,8 @@ function MyOrders({ auth }) {
         // Untertitel hinzufügen
         const subtitle = `Date: ${formatDate(order.date)} | Time: ${formatTime(
             order.time
-        )} | Class: ${order.schoolClass} | Location: ${
-            order.location
-        } | User: ${auth.user.name}`;
+        )} | Class: ${order.schoolClass} | Location: ${order.location
+            } | User: ${auth.user.name}`;
         doc.setFontSize(12);
         doc.text(subtitle, 14, 30);
 
@@ -228,6 +227,8 @@ function MyOrders({ auth }) {
                                 }}
                             >
                                 <Input
+                                    id="search-input"
+                                    name="searchPurpose"
                                     variant="outline"
                                     placeholder="Search by purpose ..."
                                     style={{ width: "30%" }}
@@ -258,7 +259,7 @@ function MyOrders({ auth }) {
                                         {filteredOrders
                                             .slice(
                                                 (currentPage - 1) *
-                                                    itemsPerPage,
+                                                itemsPerPage,
                                                 currentPage * itemsPerPage
                                             ) // Pagination
                                             .map((order) => (
