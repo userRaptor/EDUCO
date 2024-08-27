@@ -21,16 +21,19 @@ class GroceriesOrderController extends Controller
         return response()->json($groceriesOrder, 201);
     }
 
-    public function getByOrderId($order_id)
+    public function getAllGroceriesByOrderId($order_id)
     {
-        $order = GroceriesOrders::with('groceries')->where('order_id', $order_id)->first();
+        $orders = GroceriesOrders::with('groceries')->where('order_id', $order_id)->get();
 
-        if (!$order) {
-            return response()->json(['error' => 'Order not found'], 404);
+        /* LEADS TO ERRORS IN THE FRONTEND
+        if ($orders->isEmpty()) {
+            return response()->json(['error' => "Order not found. OrderID: $order_id"], 404);
         }
+        */
 
-        return response()->json($order);
+        return response()->json($orders);
     }
+
 
     public function deleteByID($id)
     {
@@ -39,4 +42,5 @@ class GroceriesOrderController extends Controller
 
         return response()->json(null, 204);
     }
+
 }
