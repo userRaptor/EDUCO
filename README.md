@@ -334,3 +334,13 @@ php artisan make:listener LogSuccessfulLogout
    - **Strukturierte Logs:** Verwende strukturierte Logformate (z.B. JSON), um eine bessere Verarbeitung und Analyse der Logs zu ermöglichen.
    - **Log-Level:** Verwende verschiedene Log-Level (z.B. `info`, `warning`, `error`) für unterschiedliche Arten von Informationen, um die Logs übersichtlich zu halten.
    - **Log-Rotation:** Stelle sicher, dass die Logs regelmäßig archiviert oder gelöscht werden, um Speicherplatz zu sparen.
+
+
+
+
+
+
+## Visual Studio Code
+Shortcuts:
+ * Search global: `Strg + Shift + F`
+ * Format Document: `Strg + Shift + P` -> `Format Document`
