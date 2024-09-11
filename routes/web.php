@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('orders/reuseOrder/MainReuseOrder', [
             'orderId' => $orderId,
         ]);
-    })->name('reuseorder-component'); 
+    })->name('reuseorder-component');
 });
 
 
@@ -87,17 +87,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/copyitems', [OrderController::class, 'copyItems'])->name('copyItems');
     Route::post('/api/groceries_order', [GroceriesOrderController::class, 'store'])->name('addGroceriesToOrder');
 
-    Route::get('/api/groceries', [GroceriesController::class, 'index'])->name('groceries.all');
+    Route::get('/api/groceries', [GroceriesController::class, 'getAllGroceries'])->name('groceries.all');
     Route::get('/api/orders/{userId}', [OrderController::class, 'getOrdersByUserId'])->name('orders.byuser');
-    Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getByOrderId'])->name('groceries.byorder'); //?
+    Route::get('/api/groceries_order/{orderId}', [GroceriesOrderController::class, 'getAllGroceriesByOrderId'])->name('groceries.byorder'); //?
 
     Route::delete('/api/orders/{id}', [OrderController::class, 'deleteByID'])->name('orders.deleteByID');
-    //sicherheitsproblem?? wenn eine andere userId übergeben wird?
-    Route::delete('api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');  
+    Route::delete('/api/ordersUserId/{userId}', [OrderController::class, 'deleteOrdersByUserId'])->name('orders.deleteByUserId');
     Route::delete('/api/groceries_order/{id}', [GroceriesOrderController::class, 'deleteByID'])->name('deleteGroceriesInTheOrderByOrderId');
 });
 
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

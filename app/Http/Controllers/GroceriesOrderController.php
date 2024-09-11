@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 
 class GroceriesOrderController extends Controller
 {
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -25,10 +21,19 @@ class GroceriesOrderController extends Controller
         return response()->json($groceriesOrder, 201);
     }
 
-    public function getByOrderId($order_id)
+    public function getAllGroceriesByOrderId($order_id)
     {
-        return GroceriesOrders::with('groceries')->where('order_id', $order_id)->get();
+        $orders = GroceriesOrders::with('groceries')->where('order_id', $order_id)->get();
+
+        /* LEADS TO ERRORS IN THE FRONTEND
+        if ($orders->isEmpty()) {
+            return response()->json(['error' => "Order not found. OrderID: $order_id"], 404);
+        }
+        */
+
+        return response()->json($orders);
     }
+
 
     public function deleteByID($id)
     {
@@ -37,4 +42,5 @@ class GroceriesOrderController extends Controller
 
         return response()->json(null, 204);
     }
+
 }

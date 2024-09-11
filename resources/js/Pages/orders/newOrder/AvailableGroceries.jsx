@@ -60,9 +60,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                 .post("/api/groceries_order", payload)
                 .then((response) => {
                     setBooleanUpdateGroceriesOrder();
-                    setTimeout(() => {
-                        successAlert(`${groceries.name} added to order!`);
-                    }, 400);
+                    successAlert(`${groceries.name} added to order!`);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -75,7 +73,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
             grocery.name.toLowerCase().includes(searchByName.toLowerCase()) &&
             grocery.category.toLowerCase().includes(searchByCategory.toLowerCase())
     );
-    
+
 
     // Pagination
     const pages = [];
@@ -168,6 +166,8 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                 >
                                     <Text>Search by name ...</Text>
                                     <Input
+                                        id="search-name-input"
+                                        name="searchName"
                                         variant="outline"
                                         placeholder="Search ..."
                                         value={searchByName}
@@ -180,6 +180,8 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                 <div style={{ width: "40%" }}>
                                     <Text>Search by category ...</Text>
                                     <Input
+                                        id="search-category-input"
+                                        name="searchCategory"
                                         variant="outline"
                                         placeholder="Search ..."
                                         value={searchByCategory}
@@ -214,7 +216,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                         {filteredGroceries
                                             .slice(
                                                 (currentPage - 1) *
-                                                    itemsPerPage,
+                                                itemsPerPage,
                                                 currentPage * itemsPerPage
                                             ) // Pagination
                                             .map((grocery) => (
@@ -222,6 +224,8 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                                     <Td>{grocery.name}</Td>
                                                     <Td>
                                                         <Input
+                                                            id={`quantity-input-${grocery.id}`}
+                                                            name={`quantity-${grocery.id}`}
                                                             style={{
                                                                 border: "1px solid grey",
                                                             }}
@@ -242,6 +246,8 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                                     <Td>{grocery.category}</Td>
                                                     <Td>
                                                         <Input
+                                                            id={`comment-input-${grocery.id}`}
+                                                            name={`comment-${grocery.id}`}
                                                             style={{
                                                                 border: "1px solid grey",
                                                             }}

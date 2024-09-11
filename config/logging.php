@@ -89,7 +89,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
@@ -125,6 +125,35 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        // Custom Logs:
+        /*
+        Log::channel('abuse')->info('API endpoint abuse', [
+            'userid' => Auth::user()->id,
+            'ip_address' => request()->ip(),
+        ]);
+        */
+
+        /*
+        'info' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/info.log'),
+            'level' => 'debug',
+        ],
+        */
+
+        'info' => [
+            'driver' => 'daily', // Für jeden Tag eigene Log-datei
+            'path' => storage_path('logs/info.log'),
+            'level' => 'debug',
+            'days' => 3, //Logs automatisch nach x-Tagen löschen
+        ],
+
+        'error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/error.log'),
+            'level' => 'debug',
         ],
 
     ],

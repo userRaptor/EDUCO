@@ -46,6 +46,7 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
                 setGroceriesOrders(response.data);
             })
             .catch((error) => {
+                console.log(error.response?.data || error.message);
                 console.log(error);
             });
     };
@@ -146,11 +147,7 @@ function MyOrderDetailView({ orderId, booleanUpdateGroceriesOrder }) {
                                             <Td>
                                                 <Button
                                                     colorScheme="red"
-                                                    onClick={() =>
-                                                        deleteGroceriesOrderById(
-                                                            order
-                                                        )
-                                                    }
+                                                    onClick={() => deleteGroceriesOrderById(order)}
                                                 >
                                                     <Center>
                                                         <DeleteIcon />

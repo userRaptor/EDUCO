@@ -162,7 +162,7 @@ function NewOrder({
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     return (
-        <div>            
+        <div>
             <div className="py-2 mt-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -205,6 +205,8 @@ function NewOrder({
                                         <Tr>
                                             <Td>
                                                 <Input
+                                                    id="date-time-input"
+                                                    name="dateTime"
                                                     placeholder="Select Date and Time"
                                                     type="datetime-local"
                                                     min={minDate}
@@ -218,6 +220,8 @@ function NewOrder({
                                             </Td>
                                             <Td>
                                                 <Input
+                                                    id="class-input"
+                                                    name="schoolClass"
                                                     placeholder="Class ..."
                                                     disabled={
                                                         orderAlreadyExists
@@ -231,6 +235,8 @@ function NewOrder({
                                             </Td>
                                             <Td>
                                                 <Input
+                                                    id="location-input"
+                                                    name="location"
                                                     placeholder="Location ..."
                                                     disabled={
                                                         orderAlreadyExists
@@ -244,6 +250,8 @@ function NewOrder({
                                             </Td>
                                             <Td>
                                                 <Input
+                                                    id="purpose-input"
+                                                    name="purpose"
                                                     placeholder="Purpose ..."
                                                     disabled={
                                                         orderAlreadyExists
