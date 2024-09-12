@@ -346,4 +346,5 @@ Shortcuts:
  * Format Document: `Strg + Shift + P` -> `Format Document`
 
 ## Abhängigkeiten im Projekt aktualisieren
-`npm update`
+`npm update` (package.json)
+`composer update` (composer.json) -> Laravel und seine Abhängigkeiten aktualisieren.
