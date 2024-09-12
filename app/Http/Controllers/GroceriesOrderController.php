@@ -24,13 +24,6 @@ class GroceriesOrderController extends Controller
     public function getAllGroceriesByOrderId($order_id)
     {
         $orders = GroceriesOrders::with('groceries')->where('order_id', $order_id)->get();
-
-        /* LEADS TO ERRORS IN THE FRONTEND
-        if ($orders->isEmpty()) {
-            return response()->json(['error' => "Order not found. OrderID: $order_id"], 404);
-        }
-        */
-
         return response()->json($orders);
     }
 

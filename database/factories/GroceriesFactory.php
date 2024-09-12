@@ -18,7 +18,7 @@ class GroceriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word, 
+            'name' => $this->faker->word(), 
             'unit' => $this->faker->randomElement(['kg', 'g', 'l', 'ml', 'pcs']), 
             'category' => $this->faker->randomElement(['Vegetables', 'Fruits', 'Dairy', 'Beverages', 'Bakery']), 
             'supplier' => $this->faker->company, 
