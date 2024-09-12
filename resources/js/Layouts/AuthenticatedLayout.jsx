@@ -14,12 +14,28 @@ export default function Authenticated({ user, header, children }) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            
+
                             <div className="shrink-0 flex items-center">
-                                {/*<Link href="/">*/}
-                                <Link href="https://www.savoy.berufsschule.it/de/home">
+                                {/*
+                                <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
+                                */}
+
+                                <a href="https://www.savoy.berufsschule.it/de/home" rel="noopener noreferrer">
+                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+
+                                    {/*
+                                    <div style={{ padding: '20px 0' }}>
+                                        <img
+                                            src="/images/logo_savoy_de.png"
+                                            alt="Beschreibung des Bildes"
+                                            style={{ width: '200px', height: 'auto' }}
+                                        />
+                                    </div>
+                                    */}
+                                </a>
+
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -51,7 +67,7 @@ export default function Authenticated({ user, header, children }) {
                                         </NavLink>
                                     </>
                                 )}
-                                
+
                             </div>
                         </div>
 
@@ -116,7 +132,7 @@ export default function Authenticated({ user, header, children }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div >
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
@@ -140,15 +156,16 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav >
 
             {header && (
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                 </header>
-            )}
+            )
+            }
 
             <main>{children}</main>
-        </div>
+        </div >
     );
 }
