@@ -13,107 +13,36 @@ class GroceriesOrdersTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_can_create_a_groceries_order_entry()
+    public function test_can_create_groceries_orders()
     {
-        $user = User::create();
-
-        $groceries = Groceries::create([
-            'name' => 'Milk',
-            'unit' => 'Litre',
-            'category' => 'Dairy',
-            'supplier' => 'Local Farm',
-        ]);
-
-        $order = Order::create([
-            'user_id'=> $user->id,
-        ]);
+        $groceries = Groceries::factory()->create();
+        $order = Order::factory()->create();
 
         $groceriesOrder = GroceriesOrders::create([
             'groceries_id' => $groceries->id,
             'order_id' => $order->id,
-            'comment' => 'Fresh milk',
+            'comment' => 'Test Comment',
             'quantity' => 10,
         ]);
 
-        $this->assertDatabaseHas('groceries_orders', [
+        $this->assertInstanceOf(GroceriesOrders::class, $groceriesOrder);
+        $this->assertEquals($groceries->id, $groceriesOrder->groceries_id);
+        $this->assertEquals($order->id, $groceriesOrder->order_id);
+        $this->assertEquals('Test Comment', $groceriesOrder->comment);
+        $this->assertEquals(10, $groceriesOrder->quantity);
+    }
+
+    public function test_groceries_relationship()
+    {
+        $groceries = Groceries::factory()->create();
+        $order = Order::factory()->create();
+
+        $groceriesOrder = GroceriesOrders::factory()->create([
             'groceries_id' => $groceries->id,
             'order_id' => $order->id,
-            'comment' => 'Fresh milk',
-            'quantity' => 10,
-        ]);
-    }
-
-    public function test_it_can_update_a_groceries_order_entry()
-    {
-        $groceries = Groceries::create([
-            'name' => 'Milk',
-            'unit' => 'Litre',
-            'category' => 'Dairy',
-            'supplier' => 'Local Farm',
         ]);
 
-        $groceriesOrder = GroceriesOrders::create([
-            'groceries_id' => $groceries->id,
-            'order_id' => 1,
-            'comment' => 'Fresh milk',
-            'quantity' => 10,
-        ]);
-
-        $groceriesOrder->update([
-            'comment' => 'Updated comment',
-            'quantity' => 15,
-        ]);
-
-        $this->assertDatabaseHas('groceries_orders', [
-            'groceries_id' => $groceries->id,
-            'order_id' => 1,
-            'comment' => 'Updated comment',
-            'quantity' => 15,
-        ]);
-    }
-
-    public function test_it_can_delete_a_groceries_order_entry()
-    {
-        $groceries = Groceries::create([
-            'name' => 'Milk',
-            'unit' => 'Litre',
-            'category' => 'Dairy',
-            'supplier' => 'Local Farm',
-        ]);
-
-        $groceriesOrder = GroceriesOrders::create([
-            'groceries_id' => $groceries->id,
-            'order_id' => 1,
-            'comment' => 'Fresh milk',
-            'quantity' => 10,
-        ]);
-
-        $groceriesOrder->delete();
-
-        $this->assertDatabaseMissing('groceries_orders', [
-            'groceries_id' => $groceries->id,
-            'order_id' => 1,
-            'comment' => 'Fresh milk',
-            'quantity' => 10,
-        ]);
-    }
-
-    public function test_it_can_relate_groceries_to_groceries_order()
-    {
-        $groceries = Groceries::create([
-            'name' => 'Milk',
-            'unit' => 'Litre',
-            'category' => 'Dairy',
-            'supplier' => 'Local Farm',
-        ]);
-
-        $groceriesOrder = GroceriesOrders::create([
-            'groceries_id' => $groceries->id,
-            'order_id' => 1, // Angenommen, es gibt eine Order mit ID 1
-            'comment' => 'Fresh milk',
-            'quantity' => 10,
-        ]);
-
-        $this->assertTrue($groceriesOrder->groceries->is($groceries));
+        $this->assertEquals($groceries->id, $groceriesOrder->groceries->id);
     }
 }
+

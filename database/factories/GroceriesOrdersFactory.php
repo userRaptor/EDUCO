@@ -20,8 +20,8 @@ class GroceriesOrdersFactory extends Factory
     public function definition(): array
     {
         return [
-            'groceries_id' => Groceries::factory(), // Erstellt eine neue Groceries-Instanz oder referenziert eine vorhandene
-            'order_id' => Order::factory(), // Erstellt eine neue Order-Instanz oder referenziert eine vorhandene
+            'groceries_id' => Groceries::factory(),
+            'order_id' => Order::factory(),
             'comment' => $this->faker->sentence,
             'quantity' => $this->faker->numberBetween(1, 100), 
         ];
