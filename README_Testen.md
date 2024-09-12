@@ -1,8 +1,8 @@
 ### 1. **Unit Tests (Einheitstests)**
    - **Laravel (Backend):**
-     - [ ] **Modelle**: Teste die Modelle, um sicherzustellen, dass sie korrekt mit der Datenbank interagieren. Dies umfasst das Testen von Beziehungen, Mutatoren und Zugriffsmethoden.
-     -  **Services**: Teste individuelle Service-Klassen und deren Methoden.
-     - [ ] **Helper-Funktionen**: Teste alle benutzerdefinierten Helper-Funktionen, die du geschrieben hast.
+     - [X] **Modelle**: Teste die Modelle, um sicherzustellen, dass sie korrekt mit der Datenbank interagieren. Dies umfasst das Testen von Beziehungen, Mutatoren und Zugriffsmethoden.
+     - [ ] **Services**: Teste individuelle Service-Klassen und deren Methoden.
+     - [X] **Helper-Funktionen**: Teste alle benutzerdefinierten Helper-Funktionen, die du geschrieben hast.
 
    - **React (Frontend):**
      - [ ] **Komponenten**: Teste einzelne React-Komponenten. Stelle sicher, dass sie korrekt rendern, insbesondere mit verschiedenen Props.
