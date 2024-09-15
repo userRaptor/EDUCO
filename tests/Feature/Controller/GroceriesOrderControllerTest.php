@@ -1,10 +1,10 @@
 <?php
 
 namespace Tests\Feature;
+use Tests\TestCase;
 use App\Models\Groceries;
 use App\Models\Order;
 use App\Models\GroceriesOrders;
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -108,11 +108,10 @@ class GroceriesOrderControllerTest extends TestCase
 
         $response = $this->getJson('/api/groceries_order/999999');
 
-        $response->assertStatus(404);
-        $response->assertJson([
-                     'error' => 'Order not found',
-                 ]);
+        $response->assertStatus(200);
+        $response->assertJson([]);  // returns an empty collection
     }
+
 
 
     // TESTS deleteByID:

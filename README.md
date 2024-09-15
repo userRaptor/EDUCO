@@ -344,3 +344,7 @@ php artisan make:listener LogSuccessfulLogout
 Shortcuts:
  * Search global: `Strg + Shift + F`
  * Format Document: `Strg + Shift + P` -> `Format Document`
+
+## Abhängigkeiten im Projekt aktualisieren
+`npm update` (package.json)
+`composer update` (composer.json) -> Laravel und seine Abhängigkeiten aktualisieren.

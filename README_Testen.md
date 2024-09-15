@@ -1,12 +1,12 @@
 ### 1. **Unit Tests (Einheitstests)**
    - **Laravel (Backend):**
-     - **Modelle**: Teste die Modelle, um sicherzustellen, dass sie korrekt mit der Datenbank interagieren. Dies umfasst das Testen von Beziehungen, Mutatoren und Zugriffsmethoden.
-     - **Services**: Teste individuelle Service-Klassen und deren Methoden.
-     - **Helper-Funktionen**: Teste alle benutzerdefinierten Helper-Funktionen, die du geschrieben hast.
+     - [X] **Modelle**: Teste die Modelle, um sicherzustellen, dass sie korrekt mit der Datenbank interagieren. Dies umfasst das Testen von Beziehungen, Mutatoren und Zugriffsmethoden.
+     - [ ] **Services**: Teste individuelle Service-Klassen und deren Methoden.
+     - [X] **Helper-Funktionen**: Teste alle benutzerdefinierten Helper-Funktionen, die du geschrieben hast.
 
    - **React (Frontend):**
-     - **Komponenten**: Teste einzelne React-Komponenten. Stelle sicher, dass sie korrekt rendern, insbesondere mit verschiedenen Props.
-     - **Utility-Funktionen**: Teste alle Funktionen, die in React-Komponenten verwendet werden, um sicherzustellen, dass sie das gewünschte Verhalten zeigen.
+     - [ ] **Komponenten**: Teste einzelne React-Komponenten. Stelle sicher, dass sie korrekt rendern, insbesondere mit verschiedenen Props.
+     - [ ] **Utility-Funktionen**: Teste alle Funktionen, die in React-Komponenten verwendet werden, um sicherzustellen, dass sie das gewünschte Verhalten zeigen.
 
    **Tools:**
    - Laravel: PHPUnit (integriert in Laravel)
@@ -14,13 +14,13 @@
 
 ### 2. **Feature Tests (Funktions- und Integrations-Tests)**
    - **Laravel:**
-     - **Controller**: Teste die Routen und die Controller-Logik, um sicherzustellen, dass Endpunkte korrekt arbeiten.
-     - **Middleware**: Teste Middleware, um sicherzustellen, dass sie korrekt ausgelöst wird (z. B. Authentifizierung, Validierung).
-     - **Datenbank**: Teste die Integration mit der Datenbank, einschließlich Abfragen, Einfügeoperationen und Aktualisierungen.
+     - [X] **Controller**: Teste die Routen und die Controller-Logik, um sicherzustellen, dass Endpunkte korrekt arbeiten.
+     - [X] **Middleware**: Teste Middleware, um sicherzustellen, dass sie korrekt ausgelöst wird (z. B. Authentifizierung, Validierung).
+     - [ ] **Datenbank**: Teste die Integration mit der Datenbank, einschließlich Abfragen, Einfügeoperationen und Aktualisierungen.
 
    - **React:**
-     - **Komponenten-Interaktion**: Teste das Zusammenspiel verschiedener Komponenten, insbesondere bei komplexen Formulierungen und Benutzerinteraktionen.
-     - **Routing**: Teste den React-Router und die Navigation innerhalb der Anwendung.
+     - [ ] **Komponenten-Interaktion**: Teste das Zusammenspiel verschiedener Komponenten, insbesondere bei komplexen Formulierungen und Benutzerinteraktionen.
+     - [ ] **Routing**: Teste den React-Router und die Navigation innerhalb der Anwendung.
 
    **Tools:**
    - Laravel: PHPUnit, Laravel Dusk (für Browser-Tests)

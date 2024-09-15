@@ -2,10 +2,11 @@
 
 namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-use PHPUnit\Framework\TestCase;
+
 
 class UserTest extends TestCase
 {
@@ -41,24 +42,44 @@ class UserTest extends TestCase
         ], $casts);
     }
 
-    public function test_it_can_create_and_retrieve_a_user()
+    public function test_can_create_user()
     {
         $user = User::factory()->create();
 
-        $response = User::find($user->id);
-
-        $response->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ]);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertNotNull($user->name);
+        $this->assertNotNull($user->email);
+        $this->assertNotNull($user->password);
+        $this->assertNotNull($user->role);
     }
 
-    public function test_it_hashes_password_when_creating_user()
+    public function test_password_is_hashed()
     {
-        $password = 'plainpassword';
-        $user = User::factory()->create(['password' => bcrypt($password)]);
+        $user = User::factory()->create([
+            'password' => 'plainpassword',
+        ]);
 
-        $this->assertTrue(Hash::check($password, $user->password));
+        $this->assertTrue(Hash::check('plainpassword', $user->password));
+    }
+
+    public function test_user_factory_admin()
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->assertEquals('admin', $admin->role);
+    }
+
+    public function test_fillable_properties()
+    {
+        $user = User::create([
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
+            'password' => 'password',
+            'role' => 'user',
+        ]);
+
+        $this->assertEquals('Test User', $user->name);
+        $this->assertEquals('testuser@example.com', $user->email);
+        $this->assertEquals('user', $user->role);
     }
 }
