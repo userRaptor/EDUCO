@@ -330,7 +330,7 @@ function UserManagement({ auth }) {
                                                             onOpen(user)
                                                         }
                                                     >
-                                                        Change Password
+                                                        Reset password
                                                     </Button>
 
                                                     <Button
