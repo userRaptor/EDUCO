@@ -41,6 +41,13 @@ RUN npm run build
 # Führe Datenbank-Migrationen aus
 RUN php artisan migrate --force
 
+# Setze die richtigen Berechtigungen für den public-Ordner
+RUN chown -R www-data:www-data /var/www/html/public
+RUN chmod -R 755 /var/www/html/public
+
+# Kopiere die benutzerdefinierte Apache-Konfigurationsdatei
+COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
 # Setze den Standard-Befehl
 CMD ["apache2-foreground"]
 
