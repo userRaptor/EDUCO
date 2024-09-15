@@ -1,5 +1,5 @@
-# Verwende ein Basis-Image für PHP mit Apache
-FROM php:8.2-apache
+# Verwende ein Basis-Image für PHP
+FROM php:8.2-fpm
 
 # Installiere System-Abhängigkeiten und PHP-Erweiterungen
 RUN apt-get update && apt-get install -y \
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Arbeitsverzeichnis im Container setzen
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 # Kopiere die Composer-Datei und installiere Abhängigkeiten
 COPY composer.json composer.lock ./
@@ -42,7 +42,7 @@ RUN npm run build
 RUN php artisan migrate --force
 
 # Setze den Standard-Befehl
-CMD ["apache2-foreground"]
+CMD ["php-fpm"]
 
 # Exponiere den Port
 EXPOSE 80
