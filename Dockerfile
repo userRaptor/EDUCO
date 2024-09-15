@@ -1,5 +1,5 @@
-# Verwende ein Basis-Image für PHP mit Apache
-FROM php:8.2-apache
+# Verwende ein Basis-Image für PHP mit Nginx
+FROM php:8.2-fpm
 
 # Installiere System-Abhängigkeiten und PHP-Erweiterungen
 RUN apt-get update && apt-get install -y \
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     unzip \
+    nginx \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip pdo pdo_pgsql
 
@@ -38,17 +39,17 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
 # Baue das React-Frontend
 RUN npm run build
 
-# Kopiere die benutzerdefinierte Apache-Konfigurationsdatei
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# Setze die Berechtigungen für das Arbeitsverzeichnis
-RUN chown -R www-data:www-data /var/www/html
-
 # Führe Datenbank-Migrationen aus
 RUN php artisan migrate --force
 
+# Setze Verzeichnisberechtigungen
+RUN chown -R www-data:www-data /var/www/html /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Kopiere benutzerdefinierte Nginx-Konfiguration
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Setze den Standard-Befehl
-CMD ["apache2-foreground"]
+CMD ["php-fpm"]
 
 # Exponiere den Port
 EXPOSE 80
