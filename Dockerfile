@@ -41,12 +41,8 @@ RUN npm run build
 # Führe Datenbank-Migrationen aus
 RUN php artisan migrate --force
 
-# Füge nginx hinzu
-RUN apt-get update && apt-get install -y nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Setze den Standard-Befehl
-CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
+CMD ["php-fpm"]
 
 # Exponiere den Port
 EXPOSE 80
