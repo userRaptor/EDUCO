@@ -45,4 +45,4 @@ RUN php artisan migrate --force
 CMD ["php-fpm"]
 
 # Exponiere den Port
-EXPOSE 80
+EXPOSE 9000
