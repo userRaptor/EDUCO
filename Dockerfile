@@ -8,8 +8,14 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libzip-dev \
     libpq-dev \
+    curl \
+    git \
+    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip pdo pdo_pgsql
+
+# Composer installieren
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Arbeitsverzeichnis im Container setzen
 WORKDIR /var/www
@@ -31,6 +37,9 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
 
 # Baue das React-Frontend
 RUN npm run build
+
+# Führe Datenbank-Migrationen aus
+RUN php artisan migrate --force
 
 # Setze den Standard-Befehl
 CMD ["php-fpm"]
