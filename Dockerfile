@@ -49,9 +49,9 @@ RUN chown -R www-data:www-data /var/www/html /var/www/html/storage /var/www/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Setze den Standard-Befehl
-#CMD ["php-fpm"]
+CMD ["php-fpm"]
 # Setze den Startbefehl, um sowohl PHP-FPM als auch Nginx zu starten
-CMD ["sh", "-c", "nginx && php-fpm"]
+#CMD ["sh", "-c", "nginx && php-fpm"]
 
 # Exponiere den Port
 EXPOSE 80
