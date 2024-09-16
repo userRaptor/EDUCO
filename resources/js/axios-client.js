@@ -2,7 +2,8 @@ import axios from 'axios';
 
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:8000/api/',
+    baseURL: 'http://laravel-container:9000/api',
+    //baseURL: 'http://localhost:8000/api/',
     //baseURL: 'https://educo.onrender.com/api/',
 });
 

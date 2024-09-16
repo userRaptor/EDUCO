@@ -1,0 +1,12 @@
+# Schritt 1: Build-Phase
+FROM node:16-alpine AS build
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build
+
+# Schritt 2: Produktions-Phase
+FROM nginx:alpine
+COPY --from=build /app/public/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
