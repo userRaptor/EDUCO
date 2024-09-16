@@ -1,34 +1,23 @@
 services:
-  laravel:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     ports:
-      - "8000:9000"
+      - "8000:80"
     volumes:
       - .:/var/www/html
-    depends_on:
-      - db
+    env_file:
+      - .env # Diese Datei wird gelesen und ihre Variablen stehen den Containern zur Verfügung
 
-  react:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "3000:80"
-    volumes:
-      - .:/app
-    depends_on:
-      - laravel
-
-  db:
-    image: mariadb:10.6
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: dataBaseEduco
-      MYSQL_USER: newUser
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - ./mysql:/var/lib/mysql
+#  db:
+#    image: mariadb:10.6
+#    ports:
+#      - "3307:3306"
+#    environment:
+#      MYSQL_DATABASE: dataBaseEduco
+#      MYSQL_USER: newUser
+#      MYSQL_PASSWORD: password
+#      MYSQL_ROOT_PASSWORD: password
+#    volumes:
+#      - ./mysql:/var/lib/mysql
