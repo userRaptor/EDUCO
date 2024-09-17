@@ -35,8 +35,12 @@ FROM nginx:alpine
 # Kopiere den Build aus der Frontend-Phase
 COPY --from=frontend-build /app/public/build /usr/share/nginx/html
 
-# Kopiere die Backend-Dateien und Konfiguriere Nginx
+# Kopiere die Backend-Dateien
 COPY --from=backend /var/www/html /var/www/html
+
+# Kopiere die Nginx-Konfigurationsdatei
+COPY nginx.conf /etc/nginx/nginx.conf
+
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

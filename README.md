@@ -105,11 +105,6 @@ ZUM LAUFEN BRINGEN:
 DockerFile ->erstellt-> DockerImage ->erstellt-> DockerContainer
 
 Dockerbefehle:
- * $ docker images
- * $ docker build -t name . 
- * $ socker run -d -p 80:80
-
-
 Stoppt alle Container, entfernt sie und löscht die Netzwerke, die docker-compose erstellt wurden. 
 ``docker-compose down``
 
