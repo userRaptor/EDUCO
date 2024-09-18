@@ -55,6 +55,12 @@ function UserManagement({ auth }) {
             errorAlert("You can't change your own password!");
             return;
         }
+
+        if (user.id === 1) {
+            errorAlert("Editing the Super Admin's data is not permitted!");
+            return;
+        }
+
         setCurrentUser(user);
         setIsOpen(true);
     };
@@ -81,6 +87,11 @@ function UserManagement({ auth }) {
     const deleteUserById = (userId) => {
         if (userId === auth.user.id) {
             errorAlert("You can't delete your own profile!");
+            return;
+        }
+
+        if (userId === 1) {
+            errorAlert("Editing the Super Admin's data is not permitted!");
             return;
         }
 
@@ -111,6 +122,11 @@ function UserManagement({ auth }) {
 
         if (userId === auth.user.id) {
             errorAlert("You can't change your own role!");
+            return;
+        }
+
+        if (userId === 1) {
+            errorAlert("Editing the Super Admin's data is not permitted!");
             return;
         }
 
@@ -330,7 +346,7 @@ function UserManagement({ auth }) {
                                                             onOpen(user)
                                                         }
                                                     >
-                                                        Change Password
+                                                        Reset password
                                                     </Button>
 
                                                     <Button

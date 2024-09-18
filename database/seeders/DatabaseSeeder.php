@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(SuperadminSeeder::class);
+        User::factory()->count(5)->create();
 
         /*
         Groceries::factory()->count(10)->create();
