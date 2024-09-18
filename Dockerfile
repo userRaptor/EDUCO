@@ -32,6 +32,10 @@ RUN npm run build
 # Produktions-Phase
 FROM nginx:alpine
 
+# DELETE THIS SECTION AT ERROR
+# Entferne die Standardkonfiguration
+#RUN rm /etc/nginx/conf.d/default.conf
+
 # Kopiere den Build aus der Frontend-Phase
 COPY --from=frontend-build /app/public/build /usr/share/nginx/html
 
@@ -41,6 +45,5 @@ COPY --from=backend /var/www/html /var/www/html
 # Kopiere die Nginx-Konfigurationsdatei
 COPY nginx.conf /etc/nginx/nginx.conf
 
-
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]

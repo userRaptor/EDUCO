@@ -1,15 +1,17 @@
+version: '3'
 services:
-  app:
+  web:
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - "8000:80"
     volumes:
-      - .:/var/www/html
-    env_file:
-      - .env # Diese Datei wird gelesen und ihre Variablen stehen den Containern zur Verfügung
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      #- .:/var/www/html
+    #env_file:
+      #- .env # Diese Datei wird gelesen und ihre Variablen stehen den Containern zur Verfügung
 
+# Wenn die Datenbank nicht Lokal laufen soll sondern auf Docker. (Anstelle von .env)
 #  db:
 #    image: mariadb:10.6
 #    ports:
