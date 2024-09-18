@@ -211,7 +211,7 @@ function NewGroceries({ auth }) {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div style={{ margin: "20px" }}>
-                                <Text fontSize="2xl"> Add new Groceries:</Text>
+                                <Text fontSize="xl"> Add new Groceries:</Text>
                             </div>
                             <div style={{ margin: "20px" }}>
                                 <TableContainer>

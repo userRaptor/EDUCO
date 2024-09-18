@@ -264,6 +264,7 @@ function UserManagement({ auth }) {
                             <Text fontSize="xl" style={{ marginRight: "30px" }}>
                                 Registered users:
                             </Text>
+                            
                             <Input
                                 id="search-username"
                                 name="search"
@@ -322,7 +323,7 @@ function UserManagement({ auth }) {
                                                                 style={{ marginRight: "10px" }}
                                                                 onClick={() => onOpen(user)}
                                                             >
-                                                                Reset password
+                                                                Reset Password
                                                             </Button>
 
                                                             <Button
