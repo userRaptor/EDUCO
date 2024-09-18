@@ -1,4 +1,8 @@
 ﻿name,unit,category,supplier
-Aal FRISCH (anguilla),kg,NotDefined,NotDefined
-Abate,kg,NotDefined,NotDefined
-Absinth,l,NotDefined,
+Apfel,kg,Obst,Schnitzer
+Zucchini,kg,Gemüse,
+Birne,,Obst,Schnitzer
+Tomate,Obst,Schnitzer
+
+Waldkuchen,Stück,Kuchen,Zuhause
+Pfirsich,jg,Obst,Schnitzer,Obst

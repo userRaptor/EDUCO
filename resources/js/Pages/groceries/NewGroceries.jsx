@@ -61,16 +61,12 @@ function NewGroceries({ auth }) {
     const [csvData, setCsvData] = useState(null);
     const [renderKey, setRenderKey] = useState(0);
 
-    const [newGroceriesSaved, setNewGroceriesSaved] = React.useState("");
-
     const handleChangeUnit = (event) => {
         setGroceriesUnit(event);
-        setNewGroceriesSaved("");
     };
 
     const handleChangeCategory = (event) => {
         setGroceriesCategory(event);
-        setNewGroceriesSaved("");
     };
 
     const saveGroceries = () => {
@@ -93,7 +89,7 @@ function NewGroceries({ auth }) {
             axios
                 .post("/api/groceries", payload)
                 .then((response) => {
-                    setNewGroceriesSaved("saved");
+
                     setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
                     successAlert("The product was added successfully!");
                 })
@@ -427,15 +423,6 @@ function NewGroceries({ auth }) {
                                                     >
                                                         ADD
                                                     </Button>
-                                                    {newGroceriesSaved && (
-                                                        <Text
-                                                            color="green.500"
-                                                            ml={2}
-                                                            mt={2}
-                                                        >
-                                                            {newGroceriesSaved}
-                                                        </Text>
-                                                    )}
                                                 </Td>
                                             </Tr>
                                         </Tbody>
@@ -477,12 +464,17 @@ function NewGroceries({ auth }) {
                                                 Structure of the CSV file!
                                             </PopoverHeader>
                                             <PopoverBody>
-                                                The csv file must have the
+                                                The CSV file must have the
                                                 following structure: <br />{" "}
                                                 <strong>
                                                     name,unit,category,supplier
                                                 </strong>
-
+                                                <br /><br />
+                                                <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                                                    <li>The CSV file must not have a header. (Product listings must begin in the first row)</li>
+                                                    <li>Empty fields will be initialized with null.</li>
+                                                    <li>Products that do not conform to the specified structure will not be included in the database, and no warning will be issued in case of such an error.</li>
+                                                </ul>
                                             </PopoverBody>
                                         </PopoverContent>
                                     </Popover>
