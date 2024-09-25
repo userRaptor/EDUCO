@@ -55,6 +55,7 @@ function UserManagement({ auth }) {
             errorAlert("You can't change your own password!");
             return;
         }
+
         setCurrentUser(user);
         setIsOpen(true);
     };
@@ -263,6 +264,7 @@ function UserManagement({ auth }) {
                             <Text fontSize="xl" style={{ marginRight: "30px" }}>
                                 Registered users:
                             </Text>
+                            
                             <Input
                                 id="search-username"
                                 name="search"
@@ -296,57 +298,47 @@ function UserManagement({ auth }) {
                                                 <Td>{user.name}</Td>
                                                 <Td>{user.email}</Td>
                                                 <Td>
-                                                    <Select
-                                                        placeholder="Select option"
-                                                        value={user.role}
-                                                        onChange={(e) =>
-                                                            updateUserRoleByUserId(
-                                                                user.id,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    >
-                                                        <option value="user">
-                                                            User
-                                                        </option>
-                                                        <option value="admin">
-                                                            Admin
-                                                        </option>
-                                                    </Select>
-                                                </Td>
-                                                <Td>
-                                                    {formatDate(
-                                                        user.created_at
+                                                    {user.id !== 1 ? (
+                                                        <Select
+                                                            placeholder="Select option"
+                                                            value={user.role}
+                                                            onChange={(e) =>
+                                                                updateUserRoleByUserId(user.id, e.target.value)
+                                                            }
+                                                        >
+                                                            <option value="user">User</option>
+                                                            <option value="admin">Admin</option>
+                                                        </Select>
+                                                    ) : (
+                                                        <span>Role hidden</span>
                                                     )}
                                                 </Td>
+                                                <Td>{formatDate(user.created_at)}</Td>
                                                 <Td>
-                                                    <Button
-                                                        colorScheme="blue"
-                                                        variant="outline"
-                                                        style={{
-                                                            marginRight: "10px",
-                                                        }}
-                                                        onClick={() =>
-                                                            onOpen(user)
-                                                        }
-                                                    >
-                                                        Change Password
-                                                    </Button>
+                                                    {user.id !== 1 && (
+                                                        <>
+                                                            <Button
+                                                                colorScheme="blue"
+                                                                variant="outline"
+                                                                style={{ marginRight: "10px" }}
+                                                                onClick={() => onOpen(user)}
+                                                            >
+                                                                Reset Password
+                                                            </Button>
 
-                                                    <Button
-                                                        colorScheme="red"
-                                                        onClick={() =>
-                                                            deleteUserById(
-                                                                user.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </Button>
+                                                            <Button
+                                                                colorScheme="red"
+                                                                onClick={() => deleteUserById(user.id)}
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </Td>
                                             </Tr>
                                         ))}
                                     </Tbody>
+
                                 </Table>
                             </TableContainer>
                         </div>

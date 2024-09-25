@@ -6,6 +6,16 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
+    Button,
+} from '@chakra-ui/react'
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -87,7 +97,6 @@ export default function Login({ status, canResetPassword }) {
                             Forgot your password?
                         </Link>
                     )}
-                    */}
 
                     <Link
                         href={route('register')}
@@ -95,6 +104,34 @@ export default function Login({ status, canResetPassword }) {
                     >
                         Not registered?
                     </Link>
+                    */}
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button
+                                bg="transparent"
+                                color="gray.300"
+                                fontSize="sm"
+                                fontWeight="normal"
+                                px={4}
+                                py={2}
+                                _hover={{
+                                    textDecoration: 'underline',
+                                    bg: 'transparent',
+                                }}
+                            >
+                                Forgot Your Password?
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Password Reset Assistance</PopoverHeader>
+                            <PopoverBody>
+                                If you have forgotten your password, please contact the system administrators.
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Log in

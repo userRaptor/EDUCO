@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/react';
 import { Link, Head } from '@inertiajs/react';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
@@ -11,10 +12,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh',  // Volle Höhe des Viewports
+                height: '100vh',  
                 backgroundColor: 'gray',
-                flexDirection: 'column', // Stellt sicher, dass die Kinder (Bild und Links) untereinander angeordnet werden
-                textAlign: 'center', // Zentriert den Text
+                flexDirection: 'column',
+                textAlign: 'center', 
             }}>
                 <img
                     src="images/EducoLogo.png"
@@ -22,7 +23,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     style={{
                         height: '50%',  
                         width: 'auto',
-                        marginBottom: '20px', // Abstand zwischen Bild und Links
+                        marginBottom: '20px', // Distance between image and links
                     }}
                 />
                 
@@ -42,12 +43,14 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             >
                                 Log in
                             </Link>
+                            {/*
                             <Link
                                 href={route('register')}
                                 className="block rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >
                                 Register
                             </Link>
+                            */}
                         </>
                     )}
                 </div>

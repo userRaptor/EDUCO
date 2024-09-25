@@ -19,5 +19,4 @@ class GroceriesOrders extends Model
     public function groceries() {
         return $this->belongsTo(Groceries::class, 'groceries_id');
     }
-    
 }
