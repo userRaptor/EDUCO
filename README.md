@@ -219,6 +219,14 @@ php artisan make:listener LogSuccessfulLogout
 Shortcuts:
  * Search global: `Strg + Shift + F`
  * Format Document: `Strg + Shift + P` -> `Format Document`
+  
+## GIT
+### Veraltete lokale Branches löschen
+ * Lokale Branches anzeigen: `git branch`
+ * Veralteten Branch löschen: `git branch -d branch-name` oder, wenn der Branch nicht vollständig gemerged ist: `git branch -D branch-name`
+### Neue Branches von GitHub lokal holen
+ * Neuesten Branches von GitHub holen: `git fetch --all`
+ * 
 
 ## Abhängigkeiten im Projekt aktualisieren
 `npm update` (package.json)
