@@ -203,7 +203,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                             <Th>Quantity:</Th>
                                             <Th>Unit:</Th>
                                             <Th>Category:</Th>
-                                            <Th>Comment:</Th>
+                                            <Th>Comment: (max 255 characters)</Th>
                                             <Th
                                                 display="flex"
                                                 justifyContent="center"
@@ -252,6 +252,7 @@ function AvailableGroceries({ orderId, setBooleanUpdateGroceriesOrder }) {
                                                                 border: "1px solid grey",
                                                             }}
                                                             placeholder="Optional comment ... "
+                                                            maxLength={255}
                                                             onChange={(e) =>
                                                                 setComment({
                                                                     ...comment,

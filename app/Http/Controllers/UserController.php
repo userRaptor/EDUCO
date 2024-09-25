@@ -65,6 +65,11 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        // Check if the user ID is 1 and return an error if true
+        if ($user->id == 1) {
+            return response()->json(['message' => 'Cannot delete this user'], 403);
+        }
+
         // Store the user information before deletion for logging
         $userId = $user->id;
         $userEmail = $user->email;
@@ -92,6 +97,11 @@ class UserController extends Controller
 
         $user = User::findOrFail($userId);
 
+        // Check if the user ID is 1 and return an error if true
+        if ($user->id == 1) {
+            return response()->json(['message' => 'Cannot delete this user'], 403);
+        }
+
         $userEmail = $user->email;
         $userRole = $user->role;
 
@@ -117,6 +127,11 @@ class UserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
+
+        // Check if the user ID is 1 and return an error if true
+        if ($user->id == 1) {
+            return response()->json(['message' => 'Cannot delete this user'], 403);
+        }
 
         // Store user information before updating role for logging
         $oldRole = $user->role;

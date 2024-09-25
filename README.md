@@ -1,7 +1,17 @@
 # EDUCO - Lebensmittelbestellungsprogram
 
 ## Installations:
+ * node.js installieren: https://nodejs.org/en
+ * Installiere PHP und Composer: https://windows.php.net/download/ 
+ * Nun im Projektordenr folgende befehle ausführen:
+ * $ npm install
+ * $ composer install
+ * MySQL Datenbank herunterladen 
+   * Nutzer mit passwort erstellen. Ihm die rechte für die daetnbank geben
+   * php artisan migrate ausführen 
 
+ * Docker installieren
+  
 Install Chakra-UI:
  - npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
  - npm install @chakra-ui/icons
@@ -48,8 +58,7 @@ ERROR ALERT:
     axios
         .post("/groceries", payload)
         .then((response) => {
-            setRenderKey((prevKey) => prevKey + 1); // to rerender the GetGroceries component
-            successAlert("The product was added successfully!");
+
         })
         .catch((error) => {
             errorAlert(error.response.data.message);
@@ -85,30 +94,10 @@ Database settings for **MariaDB** or **MySQL** on Linux:
   - $ SHOW TABLES;
   - $ DROP TABLE table_name;
   - $ DESCRIBE table_name; OR SHOW COLUMNS FROM table_name;
-
-
-ZUM LAUFEN BRINGEN:
-
- * node.js installieren: https://nodejs.org/en
- * Installiere PHP und Composer: https://windows.php.net/download/ 
- * Nun im Projektordenr folgende befehle ausführen:
- * $ npm install
- * $ composer install
- * MySQL Datenbank herunterladen 
-   * Nutzer mit passwort erstellen. Ihm die rechte für die daetnbank geben
-   * php artisan migrate ausführen 
-
- * Docker installieren
   
 
 ## Docker
 DockerFile ->erstellt-> DockerImage ->erstellt-> DockerContainer
-
-Dockerbefehle:
- * $ docker images
- * $ docker build -t name . 
- * $ socker run -d -p 80:80
-
 
 Stoppt alle Container, entfernt sie und löscht die Netzwerke, die docker-compose erstellt wurden. 
 ``docker-compose down``
@@ -133,28 +122,6 @@ Logs überprüfen bei Fehlern:
  * Client error responses (400 – 499)
  * Server error responses (500 – 599)
 
-### Fehlermeldungen ASSERTS:
-#### Assert: Check if the response status code is 403, Forbidden
-```java
-$response->assertStatus(403);
-```
-#### Assert: Check if the response status code is 302, Redirect 
-```java
-$response->assertStatus(302);
-$response->assertRedirect('/login');  // Assert: Check if the redirect is to the login page
-```   
-#### Assert: Check if the response status code is 200, OK
-```java
-$response->assertStatus(200);
-```
-#### Assert: Check if the response status code is 201, OK, Created
-```java
-$response->assertStatus(201);
-$this->assertDatabaseHas('orders', $orderData);     // Assert that the database has the new order record
-$this->assertDatabaseMissing('orders', $orderData); // Assert that the order is not in the database
-```
-  
-
 ## Testen:
 ### Siehe auch [README_Testen](README_Testen.md)!
 
@@ -172,54 +139,17 @@ php artisan make:test UserTest --pest
 php artisan make:test UserTest --unit --pest
 ```
 
+Wenn Tests fehlschlagen, obwohl sie vorher funktionierten, muss der cache geleert werden:
+```bash
+# Cache leeren
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
 
-### Feature-Tests:
- * Feature-Tests überprüfen, ob eine Funktionalität oder ein "Feature" der Anwendung aus der Perspektive des Benutzers funktioniert. Sie testen, wie verschiedene Teile der Anwendung zusammenarbeiten, um eine vollständige Funktionalität zu bieten.
- * Benutzer für einen Test anlegen und authentifizieren:
-```java
-// Arrange: Erstelle einen Benutzer mit der Rolle 'admin'
-$user = User::factory()->create([
-  'role' => 'admin',
-  ]);
-
-  // Authentifiziere den Benutzer
-  $this->actingAs($user);
+# Datenbank korrekt zurücksetzen
+php artisan migrate:fresh --seed
 ```
-
-
-
-### Unit-Tests
-  * Unit-Tests überprüfen die kleinsten Teile einer Anwendung isoliert von anderen Teilen. Das Ziel ist es, sicherzustellen, dass jede einzelne Komponente oder Funktion wie erwartet funktioniert.
-  * In der Regel umfassen Unit-Tests in Laravel:
-    * Controller-Methoden
-    * Middleware
-    * Modelle
-    * Factories (indirekt, durch getestete Modelle)
-    * Migrations (strukturbezogen)
-    * Seeders (indirekt, durch getestete Daten)
-  * In React umfassen Unit-Tests:
-    * Einzelne Komponenten (Pages, Buttons, Forms, etc.)
-
-
-# Factory Modelle:
-Um realistische Daten für Tests oder Seeder bereitzustellen.
-Neue Factory erstellen: `php artisan make:factory ModelNameFactory --model=ModelName`
-
-1. Factory Datei bearbeiten:
-   1. Factory nach dem passenden Modell konfigurieren:
-      ```java
-      public function definition()
-      {
-        return [
-          'field1' => $this->faker->word,
-          'field2' => $this->faker->numberBetween(1, 100),
-          'related_model_id' => RelatedModel::factory(),  // Für n:m Beziehungen in Modellen. Erstellt eine neue RelatedModel-Instanz oder referenziert eine vorhandene.
-
-          // Weitere Felder des Modells
-        ];
-      }
-      ```
-2. Im entsprechenden Modell muss ganz zu beginn in der Klasse: `use HasFactory;` eingebunden werden.
 
 ## Verwenden der Factory in Tests oder Seedern:
  * Eine Instanz erstellen (aber nicht speichern):
@@ -231,10 +161,10 @@ Neue Factory erstellen: `php artisan make:factory ModelNameFactory --model=Model
    * `$models = ModelName::factory()->count(5)->create();`
  * Feldwerte überschreiben:
    * `$model = ModelName::factory()->create(['field1' => 'Custom Value']);`
- 
+
 
 ## Seeder:
- * Seeder erstellen: `php artisan make:seeder ModelNameSeeder` 
+ * Seeder erstellen: `php artisan make:seeder SuperadminSeeder` 
  * Seeder konfigurieren:
 ```java
 use Illuminate\Database\Seeder;
@@ -248,47 +178,15 @@ class ModelNameSeeder extends Seeder
     }
 }
 ```
- * Seeder ausführen: `php artisan db:seed --class=ModelNameSeeder`
+ * Seeder in DatabaseSeeder.php hinzufügen.
+ * Seeders ausführen:
+  * Alle Seeders in der DatabaseSeeder-Klasse ausführen:
+    * `php artisan db:seed`
+  * Spezifischen Seeder ausführen:
+    * `php artisan db:seed --class=UserSeeder`
+  * Datenbank zurücksetzen und mit einem Seed neu erstellen:
+    * `php artisan migrate:fresh --seed` 
 
-
-## Tests mit Factorys:
-In Tests kannst du Factorys verwenden, um schnell Testdaten zu generieren.
-```java
-public function test_example()
-{
-    $model = ModelName::factory()->create();
-
-    $this->assertDatabaseHas('model_table', [
-        'id' => $model->id,
-        // weitere Assertions
-    ]);
-}
-```
-
-Wenn Tests fehlschlagen, obwohl sie vorher funktionierten, muss der cache geleert werden:
-```bash
-# Cache leeren
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-
-# Datenbank korrekt zurücksetzen
-php artisan migrate:fresh --seed
-```
-
-
-## Seeder
-Seeder erstellen: `php artisan make:seeder SuperadminSeeder` 
-Seeder in DatabaseSeeder.php hinzufügen.
-
-#### Seeders ausführen:
-* Alle Seeders in der DatabaseSeeder-Klasse ausführen:
-  * `php artisan db:seed`
-* Spezifischen Seeder ausführen:
-  * `php artisan db:seed --class=UserSeeder`
-* Datenbank zurücksetzen und mit einem Seed neu erstellen:
-  * `php artisan migrate:fresh --seed` 
 
 
 ## Logging
@@ -305,29 +203,6 @@ php artisan make:listener LogSuccessfulLogout
    - **Anwendungsfehler:** Wenn bestimmte Logik in deiner Anwendung fehlschlägt, z.B. fehlgeschlagene API-Anfragen, Datenbankfehler oder Probleme bei der Datenvalidierung.
    - **Frontend-Fehler:** JavaScript-Fehler oder UI-Fehler in React sollten ebenfalls geloggt und, wenn möglich, an das Backend gemeldet werden.
 
-### 2. **Sicherheitsrelevante Ereignisse**
-   - **Anmeldungen und Abmeldungen:** Logge alle erfolgreichen und fehlgeschlagenen Anmeldeversuche, einschließlich der verwendeten IP-Adresse und anderer relevanter Informationen.
-   - **Registrierungen:** Neue Benutzerkonten sollten ebenfalls geloggt werden.
-   - **Passwortänderungen:** Jede Änderung eines Passworts sollte erfasst werden, um im Fall eines Sicherheitsvorfalls nachvollziehen zu können, wann und wie Änderungen vorgenommen wurden.
-   - **Sitzungsaktivitäten:** Logge Aktivitäten wie das Erstellen oder Zerstören von Sessions, besonders bei kritischen Anwendungen.
-
-### 3. **Benutzeraktivitäten**
-   - **CRUD-Aktionen:** Erfassung von Erstellen, Lesen, Aktualisieren und Löschen von Ressourcen durch Benutzer. Dies ist besonders wichtig für Anwendungen mit sensiblen Daten.
-   - **Wichtige Interaktionen:** Wenn Benutzer bestimmte, kritische Funktionen der Anwendung verwenden (z.B. Zahlungsvorgänge, Bestellungen), sollte dies geloggt werden.
-   - **Seitenaufrufe:** Logge, welche Seiten aufgerufen werden, insbesondere wenn sie zu kritischen Bereichen der Anwendung gehören.
-
-### 4. **Systemereignisse**
-   - **Systemstarts und -stopps:** Wenn der Server neu gestartet wird, ein Dienst neu gestartet wird oder wichtige Konfigurationsänderungen vorgenommen werden.
-   - **Migrations- und Datenbankoperationen:** Logge Datenbankmigrationen, besonders bei umfangreichen oder kritischen Datenoperationen.
-   - **Hintergrundprozesse:** Aktivitäten von Hintergrundjobs (z.B. Laravel Queues, Cron Jobs) sollten ebenfalls erfasst werden, um deren ordnungsgemäße Ausführung zu überprüfen.
-
-### 5. **Leistungs- und Monitoring-Daten**
-   - **API-Anfragen:** Logge alle eingehenden API-Anfragen, ihre Dauer und die zurückgegebenen Statuscodes. Das hilft bei der Leistungsüberwachung und dem Debugging von API-Problemen.
-   - **Datenbankabfragen:** Wenn du auf Leistungsprobleme stößt, kann das Loggen von langsamen Datenbankabfragen nützlich sein.
-
-### 6. **Audit-Logs**
-   - **Änderungen an wichtigen Einstellungen:** Logge, wenn Systemadministratoren oder Benutzer wichtige Konfigurationen ändern, z.B. Berechtigungen, Rollen oder Systemparameter.
-   - **Datenänderungen durch Administratoren:** Wenn Administratoren oder privilegierte Benutzer Daten ändern, sollte dies in einem speziellen Audit-Log festgehalten werden.
 
 ### Best Practices für Logging
    - **Vertraulichkeit beachten:** Logge keine sensiblen Informationen wie Passwörter oder Kreditkartennummern im Klartext.
