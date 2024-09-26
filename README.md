@@ -102,6 +102,9 @@ DockerFile ->erstellt-> DockerImage ->erstellt-> DockerContainer
 Stoppt alle Container, entfernt sie und löscht die Netzwerke, die docker-compose erstellt wurden. 
 ``docker-compose down``
 
+Kombiniert: build und up
+`docker-compose up --build`
+
 Der Befehl docker-compose build baut die Docker-Images:
 ``docker-compose build ``
 

@@ -6,7 +6,7 @@ import NewOrder from "../newOrder/NewOrder";
 import MyOrderDetailView from "../newOrder/MyOrderDetailView";
 import AvailableGroceries from "../newOrder/AvailableGroceries";
 
-import AuthenticatedLayout from "../../Layouts/AuthenticatedLayout";
+import AuthenticatedLayout from "../../../Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 import { Box, SkeletonCircle, SkeletonText , Text} from "@chakra-ui/react";
