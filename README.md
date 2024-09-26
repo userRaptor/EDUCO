@@ -188,7 +188,6 @@ class ModelNameSeeder extends Seeder
     * `php artisan migrate:fresh --seed` 
 
 
-
 ## Logging
 ### Event Listeners für das protokollieren von ein und ausloggen von Benutzern:
 Listeners erstellen -> Diese Listener werden im folgenden Verzeichnis erstellt: `app/Listeners/`
@@ -211,10 +210,6 @@ php artisan make:listener LogSuccessfulLogout
    - **Log-Rotation:** Stelle sicher, dass die Logs regelmäßig archiviert oder gelöscht werden, um Speicherplatz zu sparen.
 
 
-
-
-
-
 ## Visual Studio Code
 Shortcuts:
  * Search global: `Strg + Shift + F`
@@ -224,9 +219,10 @@ Shortcuts:
 ### Veraltete lokale Branches löschen
  * Lokale Branches anzeigen: `git branch`
  * Veralteten Branch löschen: `git branch -d branch-name` oder, wenn der Branch nicht vollständig gemerged ist: `git branch -D branch-name`
-### Neue Branches von GitHub lokal holen
- * Neuesten Branches von GitHub holen: `git fetch --all`
- * 
+### Neue Branches von GitHub lokal holen:
+ * `git fetch --all`
+### Remote-Branches, die nicht mehr auf GitHub existieren löschen:
+ * `git fetch --prune`
 
 ## Abhängigkeiten im Projekt aktualisieren
 `npm update` (package.json)
