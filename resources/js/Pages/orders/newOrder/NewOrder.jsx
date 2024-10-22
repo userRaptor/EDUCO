@@ -273,7 +273,7 @@ function NewOrder({
                                                         orderAlreadyExists
                                                     }
                                                 >
-                                                    Add groceries
+                                                    Add Groceries
                                                 </Button>
                                             </Td>
                                         </Tr>

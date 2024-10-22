@@ -152,9 +152,9 @@ function AllOrdersMain({ auth }) {
             doc.text("Page " + currentPage, margin, pageHeight - margin);
             doc.text(
                 "Year: " +
-                    getCalendarWeekAndYear().year +
-                    ", CalendarWeek: " +
-                    getCalendarWeekAndYear().week,
+                getCalendarWeekAndYear().year +
+                ", CalendarWeek: " +
+                getCalendarWeekAndYear().week,
                 70,
                 pageHeight - margin
             );
@@ -206,8 +206,7 @@ function AllOrdersMain({ auth }) {
                 doc.setTextColor(0, 0, 255); // Blue
                 doc.setFont("helvetica", "bold");
                 doc.text(
-                    `Order ID: ${order.id}, ${order.purpose}, ${
-                        order.weekday
+                    `Order ID: ${order.id}, ${order.purpose}, ${order.weekday
                     }, ${formatDate(order.date)} - ${formatTime(
                         order.time
                     )}, -> ${order.schoolClass}, ${order.location}`,
@@ -271,9 +270,9 @@ function AllOrdersMain({ auth }) {
             doc.text("Page " + currentPage, margin, pageHeight - margin);
             doc.text(
                 "Year: " +
-                    getCalendarWeekAndYear().year +
-                    ", CalendarWeek: " +
-                    getCalendarWeekAndYear().week,
+                getCalendarWeekAndYear().year +
+                ", CalendarWeek: " +
+                getCalendarWeekAndYear().week,
                 70,
                 pageHeight - margin
             );
@@ -283,52 +282,54 @@ function AllOrdersMain({ auth }) {
         const groceriesDataBySupplierAndWeekday = {};
 
         // Durchlaufen aller Bestellungen und Extrahieren der Lebensmittelinformationen
-        orders.forEach((order) => {
-            if (order.groceries) {
-                order.groceries.forEach((grocery) => {
-                    const supplier = grocery.supplier;
-                    const weekday = order.weekday;
+        orders
+            .filter((order) => order.includeSummary)
+            .forEach((order) => {
+                if (order.groceries) {
+                    order.groceries.forEach((grocery) => {
+                        const supplier = grocery.supplier;
+                        const weekday = order.weekday;
 
-                    if (!groceriesDataBySupplierAndWeekday[supplier]) {
-                        groceriesDataBySupplierAndWeekday[supplier] = {};
-                    }
+                        if (!groceriesDataBySupplierAndWeekday[supplier]) {
+                            groceriesDataBySupplierAndWeekday[supplier] = {};
+                        }
 
-                    if (!groceriesDataBySupplierAndWeekday[supplier][weekday]) {
-                        groceriesDataBySupplierAndWeekday[supplier][weekday] =
-                            {};
-                    }
+                        if (!groceriesDataBySupplierAndWeekday[supplier][weekday]) {
+                            groceriesDataBySupplierAndWeekday[supplier][weekday] =
+                                {};
+                        }
 
-                    const key =
-                        grocery.id +
-                        (grocery.pivot.comment
-                            ? `_${grocery.pivot.comment}`
-                            : "");
+                        const key =
+                            grocery.id +
+                            (grocery.pivot.comment
+                                ? `_${grocery.pivot.comment}`
+                                : "");
 
-                    if (
-                        !groceriesDataBySupplierAndWeekday[supplier][weekday][
+                        if (
+                            !groceriesDataBySupplierAndWeekday[supplier][weekday][
                             key
-                        ]
-                    ) {
+                            ]
+                        ) {
+                            groceriesDataBySupplierAndWeekday[supplier][weekday][
+                                key
+                            ] = {
+                                id: grocery.id,
+                                name: grocery.name,
+                                quantity: 0,
+                                unit: grocery.unit,
+                                category: grocery.category,
+                                supplier: grocery.supplier,
+                                comment: grocery.pivot.comment,
+                                weekday: weekday,
+                            };
+                        }
+
                         groceriesDataBySupplierAndWeekday[supplier][weekday][
                             key
-                        ] = {
-                            id: grocery.id,
-                            name: grocery.name,
-                            quantity: 0,
-                            unit: grocery.unit,
-                            category: grocery.category,
-                            supplier: grocery.supplier,
-                            comment: grocery.pivot.comment,
-                            weekday: weekday,
-                        };
-                    }
-
-                    groceriesDataBySupplierAndWeekday[supplier][weekday][
-                        key
-                    ].quantity += grocery.pivot.quantity;
-                });
-            }
-        });
+                        ].quantity += grocery.pivot.quantity;
+                    });
+                }
+            });
 
         // Wochentage in der Reihenfolge Montag bis Sonntag
         const weekdaysOrder = [
@@ -618,7 +619,7 @@ function AllOrdersMain({ auth }) {
                                         {filteredOrders
                                             .slice(
                                                 (currentPage - 1) *
-                                                    itemsPerPage,
+                                                itemsPerPage,
                                                 currentPage * itemsPerPage
                                             ) // Pagination
                                             .map((order) => (
@@ -646,11 +647,11 @@ function AllOrdersMain({ auth }) {
                                                         <Button
                                                             colorScheme={
                                                                 loadingOrderId ===
-                                                                order.id
+                                                                    order.id
                                                                     ? "gray"
                                                                     : order.includeSummary
-                                                                    ? "green"
-                                                                    : "orange"
+                                                                        ? "green"
+                                                                        : "orange"
                                                             }
                                                             onClick={() =>
                                                                 changeIncludeSummary(

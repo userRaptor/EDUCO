@@ -85,8 +85,11 @@ Database settings for **MariaDB** or **MySQL** on Linux:
 
 - To use a GUI we can use **'MySQL Workbench'** under Linux
 1. Terminal Login: **$ sudo mysql -u root**
-2. Create new user: **$ CREATE USER 'newUser'@'localhost' IDENTIFIED BY 'password';**
-3. Assignment of rights: **$ GRANT ALL PRIVILEGES ON dataBaseEduco.\* TO 'newUser'@'localhost';**
+2. Create Database: **$ CREATE DATABASE dataBaseEduco;**
+3. Create new user: **$ CREATE USER 'newUser'@'localhost' IDENTIFIED BY 'password';**
+`Password: 7W#pQ2e!Xb@9UvL3`
+4. Assignment of rights: **$ GRANT ALL PRIVILEGES ON dataBaseEduco.\* TO 'newUser'@'localhost';**
+5. Berechtigungen neu laden: **$ FLUSH PRIVILEGES;**
 
 - Other input:
   - $ SHOW DATABASES;
@@ -188,7 +191,6 @@ class ModelNameSeeder extends Seeder
     * `php artisan migrate:fresh --seed` 
 
 
-
 ## Logging
 ### Event Listeners für das protokollieren von ein und ausloggen von Benutzern:
 Listeners erstellen -> Diese Listener werden im folgenden Verzeichnis erstellt: `app/Listeners/`
@@ -211,10 +213,6 @@ php artisan make:listener LogSuccessfulLogout
    - **Log-Rotation:** Stelle sicher, dass die Logs regelmäßig archiviert oder gelöscht werden, um Speicherplatz zu sparen.
 
 
-
-
-
-
 ## Visual Studio Code
 Shortcuts:
  * Search global: `Strg + Shift + F`
@@ -224,9 +222,10 @@ Shortcuts:
 ### Veraltete lokale Branches löschen
  * Lokale Branches anzeigen: `git branch`
  * Veralteten Branch löschen: `git branch -d branch-name` oder, wenn der Branch nicht vollständig gemerged ist: `git branch -D branch-name`
-### Neue Branches von GitHub lokal holen
- * Neuesten Branches von GitHub holen: `git fetch --all`
- * 
+### Neue Branches von GitHub lokal holen:
+ * `git fetch --all`
+### Remote-Branches, die nicht mehr auf GitHub existieren löschen:
+ * `git fetch --prune`
 
 ## Abhängigkeiten im Projekt aktualisieren
 `npm update` (package.json)

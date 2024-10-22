@@ -228,6 +228,7 @@ function GetGroceries() {
                                 <Button
                                     mt={"20px"}
                                     colorScheme="red"
+                                    isDisabled
                                     onClick={deleteAll}
                                 >
                                     DELETE ALL
