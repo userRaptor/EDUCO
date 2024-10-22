@@ -87,6 +87,7 @@ Database settings for **MariaDB** or **MySQL** on Linux:
 1. Terminal Login: **$ sudo mysql -u root**
 2. Create Database: **$ CREATE DATABASE dataBaseEduco;**
 3. Create new user: **$ CREATE USER 'newUser'@'localhost' IDENTIFIED BY 'password';**
+`Password: 7W#pQ2e!Xb@9UvL3`
 4. Assignment of rights: **$ GRANT ALL PRIVILEGES ON dataBaseEduco.\* TO 'newUser'@'localhost';**
 5. Berechtigungen neu laden: **$ FLUSH PRIVILEGES;**
 
