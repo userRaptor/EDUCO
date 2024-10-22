@@ -2,7 +2,9 @@
 
 ## Serververbung mit ssh herstellen:
 ```bash
-ssh -i "SchluesselEC2Windows.pem" ubuntu@ec2-54-161-95-106.compute-1.amazonaws.com
+ssh -i "EC2schlussel02.pem" ubuntu@ec2-44-220-81-43.compute-1.amazonaws.com
+
+scp -i EC2schlussel02.pem setup.sh ubuntu@ec2-100-25-44-209.compute-1.amazonaws.com:/home/ubuntu
 ```
 
 
@@ -21,10 +23,7 @@ sudo systemctl enable apache2
 
 ### PHP installieren:
 ```bash
-sudo apt install php8.3-cli
-sudo apt install php8.3-xml php8.3-dom
-
-# sudo apt install -y php php-cli php-fpm php-mbstring php-xml php-bcmath php-json php-mysql php-zip
+sudo apt install -y php php-cli php-fpm php-mbstring php-xml php-bcmath php-json php-mysql php-zip
 ```
 
 
@@ -56,7 +55,7 @@ git clone https://github.com/userRaptor/EDUCO.git
 
 ### Abhängigkeiten installieren:
 ```bash
-composer install
+composer install # composer update
 npm install
 npm run build
 ```
@@ -80,6 +79,56 @@ Wie kann ich nun aber mein projekt anzeigen bzw. starten?
 Lokal verwende ich folgende befehle um die webappliaktion zu starten:
 $ php artisan serve
 $ npm run dev
+Ich möchte Apache verwenden
+
+
+
+### Konfiguriere Apache für Laravel:
+Erstelle eine neue Apache-Konfigurationsdatei für deine Laravel-Anwendung. 
+```bash
+sudo nano /etc/apache2/sites-available/educo.conf
+```
+
+Apache-Konfigurationsdatei:
+https://adeyomoladev.medium.com/how-to-deploy-a-laravel-app-using-apache-and-mysql-4910a07f9a0c
+
+```bash
+<VirtualHost *:80>
+    ServerName 100.25.44.209  # Deine IP-Adresse
+    DocumentRoot /home/ubuntu/EDUCO/public
+
+    <Directory /home/ubuntu/EDUCO/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/educo_error.log
+    CustomLog ${APACHE_LOG_DIR}/educo_access.log combined
+</VirtualHost>
+
+```
+#### Aktiviere die Konfiguration:
+Aktiviere die neue Site und das Rewrite-Modul:
+```bash
+sudo a2ensite educo.conf
+sudo a2enmod rewrite
+sudo systemctl restart apache2
+```
+
+#### Berechtigungen für das Laravel-Projekt setzen:
+Stelle sicher, dass der Apache-Server die richtigen Berechtigungen für dein Laravel-Projekt hat:
+```bash
+sudo chown -R www-data:www-data /home/ubuntu/EDUCO
+sudo chmod -R 755 /home/ubuntu/EDUCO/storage
+sudo chmod -R 755 /home/ubuntu/EDUCO/bootstrap/cache
+```
+
+#### Starte Apache neu
+Starte den Apache-Server neu, um die Änderungen zu übernehmen:
+```bash
+sudo systemctl restart apache2
+```
+
 
 
 
