@@ -19,6 +19,7 @@ sudo apt install apache2 -y
 sudo systemctl start apache2
 sudo systemctl enable apache2
 ```
+Das `index.php`-file von Apache befindet sich in: `/var/www/html/index.html`
 
 
 ### PHP installieren:
@@ -143,3 +144,8 @@ sudo chmod -R 775 bootstrap/cache
 
 
 ### Webserver konfigurieren:
+
+### Deploying Laravel App to AWS EC2 with Apache:
+https://medium.com/@abdullah.khan10032/deploying-laravel-app-to-aws-ec2-with-apache-0270136e979a
+
+#### SSL-Zertifikat für HTTPS:
