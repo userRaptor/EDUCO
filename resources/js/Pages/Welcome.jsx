@@ -50,7 +50,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             {/*
                             <Link
                                 href={route('register')}
-    className="block rounded-md bg-orange-500 px-3 py-2 text-white ring-1 ring-transparent transition hover:bg-orange-400 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"                            >
+    className="block rounded-md bg-orange-500 px-3 py-2 text-white ring-1 ring-transparent transition hover:bg-orange-400 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                                 Register
                             </Link>
                             */}
